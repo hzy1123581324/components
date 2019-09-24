@@ -1,7 +1,7 @@
 <!--components/linklist/index.wxml-->
 <view class="linkList fs{{fontSize}}" wx:for="{{list}}" wx:key="path">
-    <navigator url="{{item.path}}" hover-class="none" openType="{{item.openType|| 'navigate'}}" class="link-item pad_lf_rg_30 h{{linkHeight}} bor_btm">
+    <view class="link-item pad_lf_rg_30 h{{linkHeight}} bor_btm" data-index="{{index}}" bindtap='__jump'>
       <view>{{item.name}}</view>
       <text class="next size{{iconSize}}"></text>
-    </navigator>
+    </view>
 </view>

@@ -39,6 +39,30 @@ Component({
    * 组件的方法列表
    */
   methods: {
+    __jump(e){
+      const {
+        key
+      } = e.currentTarget.dataset;
+      const {
+        items
+      } = this.data;
+      const opentype = items[key].opentype || 'navigateTo'
 
+      const path = items[key].url;
+      console.log(typeof (path));
+      if (path == '#') {
+        if (this[items[key].func]){
+          this[items[key].func]()
+        }else{
+          wx.showToast({
+            title: '该功能暂无开放',
+          })
+        }
+      } else {
+        wx[opentype]({
+          url: path,
+        })
+      }
+    },
   }
 })

@@ -1,6 +1,15 @@
 /* components/linklist/index.wxss */
-.linkList{width:100%}
-.link-item{display:flex;padding:0 30rpx;box-shadow:0 1rpx 0 1rpx #efefef;justify-content:space-between;align-content:center;align-items:center}
+.linkList{width:100%; }
+.link-item{display:flex;padding:0 30rpx;justify-content:space-between;align-content:center;align-items:center;background-color: #fff;position: relative;}
+.link-item::after{
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2rpx;
+  box-shadow: 0 0 0rpx 2rpx #efefef inset;
+}
 .next{position:relative;display:inline-block;width:28rpx;height:28rpx}
 .next:after{position:absolute;top:50%;left:20%;width:60%;height:60%;border:2rpx solid;border-radius:2rpx;content:'';transform:translate(-50%,-50%) rotate(45deg);border-bottom-color:transparent;border-left-color:transparent;-ms-transform:translate(-50%,-50%) rotate(45deg)}
 .h40{height:40rpx!important}
