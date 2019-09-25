@@ -41,18 +41,19 @@ Component({
   methods: {
     __jump(e){
       const {
-        key
+        index:key
       } = e.currentTarget.dataset;
       const {
-        items
+        list
       } = this.data;
-      const opentype = items[key].opentype || 'navigateTo'
+      console.log(list,"********************")
+      const opentype = list[key].opentype || 'navigateTo'
 
-      const path = items[key].url;
+      const {path} = list[key];
       console.log(typeof (path));
       if (path == '#') {
-        if (this[items[key].func]){
-          this[items[key].func]()
+        if (this[list[key].func]){
+          this[list[key].func]()
         }else{
           wx.showToast({
             title: '该功能暂无开放',
