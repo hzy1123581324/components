@@ -1,0 +1,2 @@
+<!--components/timeStr/index.wxml-->
+<text>{{timeStr}}</text>
