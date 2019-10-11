@@ -1,7 +1,10 @@
 <!--components/linklist/index.wxml-->
 <view class="linkList fs{{fontSize}}" wx:for="{{list}}" wx:key="path">
-    <view class="link-item pad_lf_rg_30 h{{linkHeight}} bor_btm" data-index="{{index}}" bindtap='__jump'>
-      <view>{{item.name}}</view>
-      <text class="next size{{iconSize}}"></text>
+    <view class="link-item pad_lf_rg_30 h{{linkHeight}} bor_btm" data-index="{{index}}" bindtap='__jump' style="color:{{color}}">
+        <view class="link-item-txt" >
+            <image class='mar_rg_20' style="width:{{iconSize}}rpx;height: {{iconSize}}rpx" src="{{item.icon}}" wx:if="{{item.icon}}"></image>
+            <text>{{item.name}}</text>
+        </view>
+        <text class="next" style="width:{{nextSize}}rpx;height: {{nextSize}}rpx"></text>
     </view>
 </view>
