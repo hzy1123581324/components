@@ -49,8 +49,17 @@ Component({
                 case 'yyyy-MM-dd HH:mm:ss':
                 timeStr = `${year}-${zeroize(month)}-${zeroize(day)} ${zeroize(hour)}:${zeroize(minute)}:${zeroize(second)}`;
                 break;
+                case 'yyyy/MM/dd HH:mm:ss':
+                timeStr = `${year}/${zeroize(month)}/${zeroize(day)} ${zeroize(hour)}:${zeroize(minute)}:${zeroize(second)}`;
+                break;
                 case 'yyyy-MM-dd':
                 timeStr = `${year}-${zeroize(month)}-${zeroize(day)}`;
+                break;
+                case 'yyyy/MM/dd':
+                timeStr = `${year}/${zeroize(month)}/${zeroize(day)}`;
+                break;
+                case 'HH:mm:ss':
+                timeStr = `${zeroize(hour)}:${zeroize(minute)}:${zeroize(second)}`;
                 break;
             }
             this.setData({
