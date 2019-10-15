@@ -1,0 +1,10 @@
+<!--components/input-list/index.wxml-->
+
+<view>
+  <view class="input_items" wx:for="{{sort}}" wx:key="value">
+    <label for="{{item.value}}" class="input_label">{{item.label}}</label>
+    <input id="{{item.value}}" class="input_init"  type="{{item.type||'text'}}" value="{{param[item.value]}}"
+     placeholder="{{item.placeholder||''}}" placeholder-class="color_999 fs26" maxlength="{{item.len||-1}}" bindinput="__write__"></input>
+     <view class="input_slot"><slot name="{{item.slot}}"></slot></view>
+  </view>
+</view>
