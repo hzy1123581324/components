@@ -1,0 +1,2 @@
+<!--components/html/index.wxml-->
+<view class="postpone bg_main {{!canClick&&'postpone-class'}}" hover-class="none" bindtap="__tap"><slot></slot></view>

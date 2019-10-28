@@ -1,0 +1,14 @@
+/* components/html/index.wxss */
+.postpone{
+    width: auto;
+    height: 80rpx;
+    line-height: 80rpx;
+    text-align: center;
+    font-size: 32rpx;
+    border-radius: 10rpx;
+    color:#fff;
+    margin: 30rpx;
+}
+.postpone-class{
+    opacity: 0.7;
+}
