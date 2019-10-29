@@ -1,5 +1,5 @@
 // components/html/index.js
-const wxParse = require('../../wxParse/wxParse.js');
+const wxParse = require('./wxParse/wxParse.js');
 Component({
     /**
      * 组件的属性列表
