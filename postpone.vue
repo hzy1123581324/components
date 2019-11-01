@@ -7,6 +7,7 @@
 		props:{
 			tap:{
 				type: Function,
+				required: true,
 				// default:(resolve, reject)=>{
 				// 这个是实例
 				// 	console.log(111)

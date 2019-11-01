@@ -13,7 +13,8 @@
 		props: {
 			url:{
 				type: String,
-				default: '../static/code.png'
+				default: '../static/code.png',
+				// required: true,
 			},
 			size: {
 				type: [String,Number,Object],
@@ -21,6 +22,7 @@
 			},
 			colors:{
 				type: [String,Array],
+				// required: true,
 				default: ()=>{return ['#f55','#000','blue','green']},
 			},
 			colorIndex:{
