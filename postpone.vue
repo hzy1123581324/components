@@ -7,6 +7,13 @@
 		props:{
 			tap:{
 				type: Function,
+				// default:(resolve, reject)=>{
+				// 这个是实例
+				// 	console.log(111)
+				// 	setTimeout(()=>{
+				// 		resolve();
+				// 	},10000)
+				// }
 			},
 		},
 		data() {
@@ -56,7 +63,6 @@
 <style scoped lang="stylus">
 	.btn
 		width auto
-		
 		margin 0 30upx
 		height 80upx
 		text-align center
@@ -65,6 +71,11 @@
 		background-color #f55
 		font-size 32upx
 		border-radius 10upx
+		cursor pointer
 	&.active
 		opacity 0.4
 </style>
+<!-- 
+demo
+ <postpone :tap="send"></postpone>
+ -->
