@@ -15,6 +15,10 @@
 				// 	},10000)
 				// }
 			},
+			canClick:{
+				type: Boolean,
+				default: true,
+			}
 		},
 		data() {
 			return {
@@ -23,6 +27,9 @@
 		},
 		onLoad() {
 	
+		},
+		mounted() {
+			this.canclick = this.canClick;
 		},
 		methods: {
 			__tap(){
@@ -50,13 +57,21 @@
 						})
 					}
 				}else{
-					uni.showToast({
-						title: '请不要重复点击',
-						icon: 'none'
-					})
+					if(this.canClick){
+						uni.showToast({
+							title: '请不要重复点击',
+							icon: 'none'
+						})
+					}
 				}
 			}
-		}
+			
+		},
+		watch: {
+			canClick(newValue, oldValue) {
+				this.canclick = newValue;
+			}
+		},
 	}
 </script>
 
@@ -78,4 +93,6 @@
 <!-- 
 demo
  <postpone :tap="send"></postpone>
+demo 初始不能点击
+ <postpone :tap="send" :canClick="false" ></postpone>
  -->

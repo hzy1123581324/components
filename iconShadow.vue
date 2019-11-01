@@ -1,5 +1,5 @@
 <!-- 
-这是利用 
+这是利用 filter实现改变图标颜色的组件，不支持渐变
  -->
 <template>
 	<view class="icon-shadow" id="iconBox" ref='iconBox' @click="__change_color">
