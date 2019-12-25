@@ -16,6 +16,8 @@
 			},
 			getcode:{
 				type: Function,
+				// required: true,
+				
 				// default:(resolve, reject)=>{
 				// 	console.log(222222)
 				// 	setTimeout(()=>{

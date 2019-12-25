@@ -1,5 +1,5 @@
 <!-- 
-这是利用 
+这是利用 filter实现改变图标颜色的组件，不支持渐变
  -->
 <template>
 	<view class="icon-shadow" id="iconBox" ref='iconBox' @click="__change_color">
@@ -13,7 +13,8 @@
 		props: {
 			url:{
 				type: String,
-				default: '../static/code.png'
+				default: '../static/code.png',
+				// required: true,
 			},
 			size: {
 				type: [String,Number,Object],
@@ -21,6 +22,7 @@
 			},
 			colors:{
 				type: [String,Array],
+				// required: true,
 				default: ()=>{return ['#f55','#000','blue','green']},
 			},
 			colorIndex:{
