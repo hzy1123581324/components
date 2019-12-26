@@ -1,11 +1,15 @@
 <template>
-	<view :class="['btn',!canclick&&'active']" hover-class="none" @click="__change"><slot>确定</slot></view>
+	<view :class="['btn',!canclick&&'active']" hover-class="none" @click="__change"><slot>{{title}}</slot></view>
 </template>
 
 <script>
 	export default {
 		props:{
-			tap:{
+			title:{
+				type:String,
+				default: '确定'
+			},
+			tap1:{
 				type: Function,
 				required: true,
 				// default:(resolve, reject)=>{
@@ -33,34 +37,40 @@
 			this.canclick = this.canClick;
 		},
 		methods: {
-			__tap(){
+			 __tap(){
+				
+				//this.$parent.send();
+				
 				return new Promise((resolve, reject)=> {
-					this.tap(resolve,reject)	
-				})
+					console.log('******neibu*********');
+					console.log(this);
+					this.tap1(this.$parent.$root,resolve, reject)
+				});
+				// console.log('&&&&&&&&&&&&&&&&&&&****************&&&&&&&&&&&&&&&&&')
+				// this.canclick = true;
 			},
 			__change(){
 				let {canclick} = this;
-				console.log('&&&&&&&&&&&&&')
 				if(canclick){
-					if(this.tap){
-						this.canclick = false;
+					this.canclick = false;
+					if(this.tap1){
 						this.__tap().then(()=>{
-							console.log(4444)
+							console.log('调用成功了');
 							this.canclick = true;
 						}).catch(()=>{
-							console.log(5555)
+							console.log('这是报错了');
 							this.canclick = true;
 						});
 					}else{
 						uni.showToast({
-							title: '还没有设置方法',
+							title: this.i18n.none,
 							icon: 'none'
 						})
 					}
 				}else{
 					if(this.canClick){
 						uni.showToast({
-							title: '请不要重复点击',
+							title: this.i18n.dianji,
 							icon: 'none'
 						})
 					}
@@ -73,21 +83,29 @@
 				this.canclick = newValue;
 			}
 		},
+		computed: {
+			i18n() {  
+			    return this.$t('postpone');
+			},
+		
+		},
 	}
 </script>
 
 <style scoped lang="stylus">
 	.btn
-		width auto
-		margin 0 30upx
-		height 80upx
-		text-align center
-		line-height 80upx
-		color #FFFFFF
-		background-color #f55
-		font-size 32upx
-		border-radius 10upx
-		cursor pointer
+		width:630upx;
+		height:80upx;
+		line-height: 80upx;
+		background:linear-gradient(0deg,rgba(249,178,36,1) 0%,rgba(255,222,98,1) 100%);
+		box-shadow:0px 4upx 4upx 0px rgba(74,74,74,0.3);
+		border-radius:40upx;
+		font-size:32upx;
+		font-family:PingFang SC;
+		font-weight:bold;
+		color:rgba(255,255,255,1);
+		margin: 0 auto;
+		letter-spacing: 6upx;
 	&.active
 		opacity 0.4
 </style>
