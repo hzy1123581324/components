@@ -108,6 +108,37 @@
 		letter-spacing: 6upx;
 	&.active
 		opacity 0.4
+		
+	/*************弥散投影按钮** 开始************/
+	.bnt_ms{
+		outline: none;
+		/*display: inline-block;*/
+		border-radius: 4px;
+		color: #ffffff;
+		position: relative;
+		transition: all 0.3s ease-out;
+		user-select: none;
+		-webkit-user-select: none;
+		z-index: 0;
+		width: 91.4666666vw;
+		height: 10.666666vw;
+		margin: 14.9333333vw 0;
+	}
+	.bnt_ms:before{
+		content: "";
+		background: inherit;
+		width: calc(100% - 6rem);
+		height: 2rem;
+		border-radius: 4px;
+		display: inline-block;
+		position: absolute;
+		left: 3rem;
+		bottom: 0;
+		z-index: -1;
+		filter: blur(0.6rem);
+		-webkit-filter: blur(0.6rem);
+	}
+	/********************弥散投影按钮** 结束**************************/
 </style>
 <!-- 
 demo
