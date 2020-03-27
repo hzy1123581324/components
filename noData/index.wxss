@@ -1,0 +1,10 @@
+/* components/noData/index.wxss */
+
+.noData {
+  font-weight: 600;
+  text-align: center;
+  width: 100%;
+  padding-top: 150rpx;
+  font-size: 28rpx;
+  color: #515151;
+}

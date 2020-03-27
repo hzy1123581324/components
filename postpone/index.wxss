@@ -1,14 +1,23 @@
-/* components/html/index.wxss */
-.postpone{
-    width: auto;
-    height: 80rpx;
-    line-height: 80rpx;
-    text-align: center;
-    font-size: 32rpx;
-    border-radius: 10rpx;
-    color:#fff;
-    margin: 30rpx;
+/* components/postpone/index.wxss */
+
+.postpone-btn.active {
+  opacity: 0.4;
+  position: relative;
+  left: 2px;
+  bottom: -2px;
 }
-.postpone-class{
-    opacity: 0.7;
+
+.btn-default {
+  max-width: 100%;
+  width: 92vw;
+  margin-left: auto;
+  margin-right: auto;
+  height: 88rpx;
+  line-height: 88rpx;
+  background: rgb(0, 196, 182);
+  border: 0;
+  padding: 0;
+  color: #fff;
+  border-radius: 20rpx;
+  text-align: center;
 }

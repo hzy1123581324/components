@@ -1,2 +1,7 @@
-<!--components/html/index.wxml-->
-<view class="postpone bg_main {{!canClick&&'postpone-class'}}" hover-class="none" bindtap="__tap"><slot></slot></view>
+<!--components/postpone/index.wxml-->
+
+
+  <view class="{{!status && 'postpone-btn active'}}" bindtap="__change">
+    <view class="btn-default" hidden="{{!title}}">{{ title }}</view>
+    <slot ></slot>
+  </view>

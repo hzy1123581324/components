@@ -1,0 +1,17 @@
+<!--components/Confirm/index.wxml-->
+  <view class="Confirm-mask" wx:if="{{show}}">
+    <view class="Confirm-main">
+      <view class="Confirm-head">
+          <view class="confirmTitle">提示</view>
+      </view>
+      <view class="Confirm-body">
+        <slot>{{ message }}</slot>
+      </view>
+      <view class="Confirm-foot">
+          <view class="confirmFoot">
+            <view class="confirmFootBtn" bindtap="__cancel">取消</view>
+            <view class="confirmFootBtn" bindtap="__sure">确定</view>
+          </view>
+      </view>
+    </view>
+  </view>

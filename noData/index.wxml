@@ -1,0 +1,4 @@
+<!--components/noData/index.wxml-->
+<view class="noData">
+    <solt>暂无数据</solt>
+  </view>
