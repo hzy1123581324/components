@@ -9,7 +9,7 @@
 				type:String,
 				default: '确定'
 			},
-			tap1:{
+			tapfun:{
 				type: Function,
 				required: true,
 				// default:(resolve, reject)=>{
@@ -42,9 +42,9 @@
 				//this.$parent.send();
 				
 				return new Promise((resolve, reject)=> {
-					console.log('******neibu*********');
-					console.log(this);
-					this.tap1(this.$parent.$root,resolve, reject)
+					// console.log('******neibu*********');
+					// console.log(this);
+					this.tapfun(this.$parent.$root,resolve, reject)
 				});
 				// console.log('&&&&&&&&&&&&&&&&&&&****************&&&&&&&&&&&&&&&&&')
 				// this.canclick = true;
@@ -53,7 +53,7 @@
 				let {canclick} = this;
 				if(canclick){
 					this.canclick = false;
-					if(this.tap1){
+					if(this.tapfun){
 						this.__tap().then(()=>{
 							console.log('调用成功了');
 							this.canclick = true;
@@ -84,28 +84,26 @@
 			}
 		},
 		computed: {
-			i18n() {  
-			    return this.$t('postpone');
-			},
-		
 		},
 	}
 </script>
 
 <style scoped lang="stylus">
 	.btn
-		width:630upx;
-		height:80upx;
-		line-height: 80upx;
-		background:linear-gradient(0deg,rgba(249,178,36,1) 0%,rgba(255,222,98,1) 100%);
-		box-shadow:0px 4upx 4upx 0px rgba(74,74,74,0.3);
-		border-radius:40upx;
+		width:100%;
+		height:100%;
+		display: flex;
+		align-items: center;
+		justify-content:center;
+		// background:linear-gradient(0deg,rgba(249,178,36,1) 0%,rgba(255,222,98,1) 100%);
+		// box-shadow:0px 4upx 4upx 0px rgba(74,74,74,0.3);
+		border-radius: 8upx;
 		font-size:32upx;
 		font-family:PingFang SC;
-		font-weight:bold;
-		color:rgba(255,255,255,1);
+		font-weight: 500;
+		color: #fff;
 		margin: 0 auto;
-		letter-spacing: 6upx;
+		letter-spacing: 8upx;
 	&.active
 		opacity 0.4
 		
@@ -142,7 +140,7 @@
 </style>
 <!-- 
 demo
- <postpone :tap="send"></postpone>
+ <postpone :tapfun="send"></postpone>
 demo 初始不能点击
- <postpone :tap="send" :canClick="false" ></postpone>
+ <postpone :tapfun="send" :canClick="false" ></postpone>
  -->

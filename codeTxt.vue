@@ -2,7 +2,7 @@
 	<view class="code-box" @click="__getcode">
 		<text class="code-active" v-show="active_time>0">{{active_time}}s</text>
 		<text class="code-default" v-show="active_time<=0">
-			<slot>{{code_txt}}</slot>
+			<slot>{{i18n&&i18n.validation.getCode}}</slot>
 		</text>
 	</view>
 </template>
@@ -14,7 +14,7 @@
 				type: [String, Number],
 				default: 60,
 			},
-			getcode:{
+			getcodefun:{
 				type: Function,
 				// required: true,
 				
@@ -25,42 +25,83 @@
 				// 	},1000)
 				// }
 			},
+			// title:{
+			// 	type: String,
+			// 	default: ,
+			// },
+			codetype: {
+				type: [Number,String],
+				default: 1,//1=电话，2邮箱
+			},
+			quhao:{
+				//区号
+				type: [String,Number],
+				default: '',//1=电话，2邮箱
+			},
 			phone:{
 				type: [String, Number],
-				required: true,
+				// required: true,
+			},
+			email:{
+				type: [String],
+				// required: true,
 			},
 			trigger:{
 				//接口调用后立即处于可点击状态
 				type: [Boolean,Number,],
-				default: true,
+				default: false,
 			},
 		},
 		data() {
 			return {
-				code_txt: '获取验证码',
 				active_time: 0,
 			}
 		},
 		onLoad() {
 
 		},
+		mounted() {
+
+		},
 		methods: {
 			__getcode() {
-				const {active_time,phone} = this;
-				if(!phone){
+				// console.log(this.quhao);
+				// return ;
+				if(this.getcodefun){
+					return 
+				}
+				const {active_time,codetype,phone,email} = this;
+				if(!phone&&codetype==1){
 					return uni.showToast({
-								title: '请输入电话号码',
+								title: this.i18n.phone,
 								icon: 'none',
 							})
 				}
-				if(!(/^1[3456789]\d{9}$/.test(phone+''))){
+				if(!email&&codetype==2){
 					return uni.showToast({
-							title: '手机号码有误，请重填',
+								title: this.i18n.email,
+								icon: 'none',
+							})
+				}
+				// if(!(/^1[3456789]\d{9}$/.test(phone+''))&&codetype==1){
+				// 	return uni.showToast({
+				// 			title: '手机号码有误，请重填',
+				// 			icon: 'none',
+				// 			success:()=> {
+				// 				// this.$emit("checkphone", false);
+				// 				// 以下支持双向数据绑定打开，以上关闭
+				// 				this.$emit("update:phone", '');
+				// 			}
+				// 		})
+				// }
+				if(!(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(email))&&codetype==2){
+					return uni.showToast({
+							title: this.i18n.email1,
 							icon: 'none',
 							success:()=> {
-								this.$emit("checkphone", false);
+								// this.$emit("checkphone", false);
 								// 以下支持双向数据绑定打开，以上关闭
-								// this.$emit("update:phone", '');
+								this.$emit("update:email", '');
 							}
 						})
 				}
@@ -78,11 +119,11 @@
 									clearInterval(timer);
 								}
 							},1000)
-							console.log('&&&&&&&&&&&&&&')
+							// console.log('&&&&&&&&&&&&&&')
 							this.getcode(resolve,reject);
 						}else{
 							return uni.showToast({
-								title: '没定义方法啊，混蛋',
+								title: '?????????',
 								icon: 'none',
 								success() {
 									//防止Promise占用内存，这个不确定
@@ -106,34 +147,68 @@
 					
 				}else{
 					uni.showToast({
-						title: '短信已发送，请稍后操作',
+						title: this.i18n.phone1,
 						icon: 'none'
 					})
 				}
-			}
+			},
+			getcode(resolve,reject){
+				let {codetype} = this;
+				console.log('&&&&&&&&&&&&&&&&&12341234')
+				if(codetype==1){
+					console.log('***************');
+					this.tel_code(resolve,reject);
+				}else{
+					this.email_code(resolve,reject);
+				}
+			},
+			tel_code(resolve,reject){
+				var that = this;
+				var data ={action:'authen',xfrom:'reg'};
+				 data.mobile =this.quhao+this.phone;
+				 this.$net.ajax("/service/sms",data,"POST").then((result)=>{
+				 		// console.log(result)
+					if(result === false){
+						reject();
+					}else{
+						resolve();
+					}
+				 })
+			},
+			email_code(resolve,reject){
+				var that = this;
+				var data ={};
+				data.email =this.email;
+				this.$net.ajax("/service/send_email",data,"POST").then((result)=>{
+					// console.log(result)
+						if(result === false){
+							reject();
+						}else{
+							resolve();
+						}
+					
+				})
+			},
 		},
 		watch: {
 
 		},
 		computed: {
-
-		}
+		},
 	}
 </script>
 <style scoped lang="stylus">
-	
 	.code-box
 		display flex
 		width 100%
 		height 100%
 		justify-content center
 		align-items center
-		font-size 28upx
+		font-size inherit
 	.code-active
-		color #333
-		font-size 28upx
+		color #2E74F3
+		
 	.code-default
-		text-decoration underline
 		cursor pointer
 </style>
 
