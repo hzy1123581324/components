@@ -2,7 +2,7 @@
 	<view class="code-box" @click="__getcode">
 		<text class="code-active" v-show="active_time>0">{{active_time}}s</text>
 		<text class="code-default" v-show="active_time<=0">
-			<slot>{{i18n&&i18n.validation.getCode}}</slot>
+			<slot>{{i18n&&i18n.$validation.getCode}}</slot>
 		</text>
 	</view>
 </template>
@@ -143,7 +143,7 @@
 					
 				}else{
 					
-					return this.toast(this.i18n.validation.getCoded)
+					return this.toast(this.i18n.$validation.getCoded)
 					// uni.showToast({
 					// 	title: this.i18n.phone1,
 					// 	icon: 'none'
