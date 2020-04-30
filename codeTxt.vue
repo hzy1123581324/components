@@ -8,6 +8,7 @@
 </template>
 
 <script>
+	let timer = '';
 	export default {
 		props: {
 			time: {
@@ -64,13 +65,94 @@
 
 		},
 		methods: {
-			__getcode() {
+			async __getcode() {
 				// console.log(this.quhao);
 				// return ;
-				if(this.getcodefun){
-					return 
+				// console.log('++++++++++++++++++++')
+				// if(this.getcodefun){
+				// 	const res = await this.getcodefun();
+				// }else{
+					
+				// }
+				let {active_time} = this;
+				
+				if(active_time<=0){
+					console.log('************');
+					
+					let res = '';
+					if(this.getcodefun){
+							
+						res = await this.getcodefun();
+					}else{
+						res = await this.getcode()
+					}
+	
+					if(res){
+						this.active_time = this.time;
+						timer=setInterval(()=>{
+							let {active_time} = this;
+							this.active_time--;
+							if(this.active_time<=0){
+								clearInterval(timer);
+							}
+						},1000)
+					}else{
+						
+						if(this.trigger){
+							this.active_time = 0;
+							clearInterval(timer);
+						}
+					}
+					
+					// new Promise((resolve, reject)=> {
+					// 	if(this.getcode){
+					// 		this.active_time = this.time;
+					// 		console.log(this.active_time,this.time);
+					// 		timer=setInterval(()=>{
+					// 			let {active_time} = this;
+					// 			this.active_time--;
+					// 			if(this.active_time<=0){
+					// 				clearInterval(timer);
+					// 			}
+					// 		},1000)
+					// 		// console.log('&&&&&&&&&&&&&&')
+					// 		this.getcode(resolve,reject);
+					// 	}else{
+					// 		return uni.showToast({
+					// 			title: '?????????',
+					// 			icon: 'none',
+					// 			success() {
+					// 				//防止Promise占用内存，这个不确定
+					// 				reject('Promise ');
+					// 			}
+					// 		})
+					// 	}
+					// }).then(()=>{
+					// 	if(this.trigger){
+					// 		this.active_time = 0;
+					// 		clearInterval(timer);
+					// 	}	
+					// })
+					// .catch((err)=>{
+					// 	console.log(err);
+					// 	if(this.trigger){
+					// 		this.active_time = 0;
+					// 		clearInterval(timer);
+					// 	}
+					// })
+					
+				}else{
+					
+					return this.toast(this.i18n.validation.getCoded)
+					// uni.showToast({
+					// 	title: this.i18n.phone1,
+					// 	icon: 'none'
+					// })
 				}
-				const {active_time,codetype,phone,email} = this;
+			},
+			async getcode(resolve,reject){
+				let {codetype} = this;
+				let {active_time,phone,email} = this;
 				if(!phone&&codetype==1){
 					return uni.showToast({
 								title: this.i18n.phone,
@@ -105,61 +187,12 @@
 							}
 						})
 				}
-				let timer = '';
-				if(active_time<=0){
-					console.log('************');
-					new Promise((resolve, reject)=> {
-						if(this.getcode){
-							this.active_time = this.time;
-							console.log(this.active_time,this.time);
-							timer=setInterval(()=>{
-								let {active_time} = this;
-								this.active_time--;
-								if(this.active_time<=0){
-									clearInterval(timer);
-								}
-							},1000)
-							// console.log('&&&&&&&&&&&&&&')
-							this.getcode(resolve,reject);
-						}else{
-							return uni.showToast({
-								title: '?????????',
-								icon: 'none',
-								success() {
-									//防止Promise占用内存，这个不确定
-									reject('Promise ');
-								}
-							})
-						}
-					}).then(()=>{
-						if(this.trigger){
-							this.active_time = 0;
-							clearInterval(timer);
-						}	
-					})
-					.catch((err)=>{
-						console.log(err);
-						if(this.trigger){
-							this.active_time = 0;
-							clearInterval(timer);
-						}
-					})
-					
-				}else{
-					uni.showToast({
-						title: this.i18n.phone1,
-						icon: 'none'
-					})
-				}
-			},
-			getcode(resolve,reject){
-				let {codetype} = this;
 				console.log('&&&&&&&&&&&&&&&&&12341234')
 				if(codetype==1){
 					console.log('***************');
-					this.tel_code(resolve,reject);
+					return  this.tel_code(resolve,reject);
 				}else{
-					this.email_code(resolve,reject);
+					return  this.email_code(resolve,reject);
 				}
 			},
 			tel_code(resolve,reject){

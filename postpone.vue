@@ -1,15 +1,17 @@
 <template>
-	<view :class="['btn',!canclick&&'active']" hover-class="none" @click="__change"><slot>{{title}}</slot></view>
+	<view :class="['btn',!canclick&&'active']" hover-class="none" @click="_chenge">
+		<slot>{{title}}</slot>
+	</view>
 </template>
 
 <script>
 	export default {
-		props:{
-			title:{
-				type:String,
+		props: {
+			title: {
+				type: String,
 				default: '确定'
 			},
-			tapfun:{
+			tapfun: {
 				type: Function,
 				required: true,
 				// default:(resolve, reject)=>{
@@ -20,7 +22,7 @@
 				// 	},10000)
 				// }
 			},
-			canClick:{
+			canClick: {
 				type: Boolean,
 				default: true,
 			}
@@ -31,44 +33,78 @@
 			}
 		},
 		onLoad() {
-	
+
 		},
 		mounted() {
 			this.canclick = this.canClick;
 		},
 		methods: {
-			 __tap(){
+			
+			
+			async _chenge(){
+				let {
+					canclick
+				} = this;
 				
+				if (canclick) {
+						this.canclick = false;
+						if (this.tapfun) {
+							await  this.tapfun();
+							this.canclick = true;
+							
+						} else {
+							this.toast(this.i18n.funNull)
+						}
+					} else {
+						canClick&&this.toast(this.i18n.dianji)
+					}
+				
+				const res = await this.tapfun();
+				
+				if(res){
+					
+				}else{
+					
+				}
+			},
+			
+			
+			
+			
+			async __tap() {
+
 				//this.$parent.send();
-				
-				return new Promise((resolve, reject)=> {
+
+				return new Promise((resolve, reject) => {
 					// console.log('******neibu*********');
 					// console.log(this);
-					this.tapfun(this.$parent.$root,resolve, reject)
+					this.tapfun(this.$parent.$root, resolve, reject)
 				});
 				// console.log('&&&&&&&&&&&&&&&&&&&****************&&&&&&&&&&&&&&&&&')
 				// this.canclick = true;
 			},
-			__change(){
-				let {canclick} = this;
-				if(canclick){
+			async __change() {
+				let {
+					canclick
+				} = this;
+				if (canclick) {
 					this.canclick = false;
-					if(this.tapfun){
-						this.__tap().then(()=>{
+					if (this.tapfun) {
+						this.__tap().then(() => {
 							console.log('调用成功了');
 							this.canclick = true;
-						}).catch(()=>{
+						}).catch(() => {
 							console.log('这是报错了');
 							this.canclick = true;
 						});
-					}else{
+					} else {
 						uni.showToast({
-							title: this.i18n.none,
+							title: this.i18n.funNull,
 							icon: 'none'
 						})
 					}
-				}else{
-					if(this.canClick){
+				} else {
+					if (this.canClick) {
 						uni.showToast({
 							title: this.i18n.dianji,
 							icon: 'none'
@@ -76,20 +112,19 @@
 					}
 				}
 			}
-			
+
 		},
 		watch: {
 			canClick(newValue, oldValue) {
 				this.canclick = newValue;
 			}
 		},
-		computed: {
-		},
+		computed: {},
 	}
 </script>
 
 <style scoped lang="stylus">
-	.btn
+	.btn 
 		width:100%;
 		height:100%;
 		display: flex;
@@ -102,13 +137,13 @@
 		font-family:PingFang SC;
 		font-weight: 500;
 		color: #fff;
-		margin: 0 auto;
-		letter-spacing: 8upx;
-	&.active
-		opacity 0.4
 		
+		letter-spacing: 8upx;
+		&.active 
+			opacity 0.4
+
 	/*************弥散投影按钮** 开始************/
-	.bnt_ms{
+	.bnt_ms {
 		outline: none;
 		/*display: inline-block;*/
 		border-radius: 4px;
@@ -122,7 +157,8 @@
 		height: 10.666666vw;
 		margin: 14.9333333vw 0;
 	}
-	.bnt_ms:before{
+
+	.bnt_ms:before {
 		content: "";
 		background: inherit;
 		width: calc(100% - 6rem);
@@ -136,7 +172,15 @@
 		filter: blur(0.6rem);
 		-webkit-filter: blur(0.6rem);
 	}
+
 	/********************弥散投影按钮** 结束**************************/
+</style>
+
+<style>
+	.btn{
+		margin: 0 auto;
+	}
+	
 </style>
 <!-- 
 demo
