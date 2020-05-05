@@ -59,13 +59,13 @@
 						canClick&&this.toast(this.i18n.dianji)
 					}
 				
-				const res = await this.tapfun();
+				// const res = await this.tapfun();
 				
-				if(res){
+				// if(res){
 					
-				}else{
+				// }else{
 					
-				}
+				// }
 			},
 			
 			
