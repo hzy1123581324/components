@@ -12,7 +12,6 @@
 			value: {
 				type: [String, Number],
 				default: '',
-
 			}
 		},
 		data() {
@@ -39,7 +38,7 @@
 						return val;
 					}
 				}
-				let timeStr = this.data.format;
+				let timeStr = this.format;
             	timeStr = timeStr
                 .replace(/yyyy/, year)
                 .replace(/MM/, zeroize(month))
@@ -47,26 +46,6 @@
                 .replace(/HH/, zeroize(hour))
                 .replace(/mm/, zeroize(minute))
                 .replace(/ss/, zeroize(second));
-				// let timeStr;
-				// switch (this.format) {
-				// 	case 'yyyy-MM-dd HH:mm:ss':
-				// 		timeStr = `${year}-${zeroize(month)}-${zeroize(day)} ${zeroize(hour)}:${zeroize(minute)}:${zeroize(second)}`;
-				// 		console.log(timeStr);
-				// 		break;
-				// 	case 'yyyy/MM/dd HH:mm:ss':
-				// 		timeStr = `${year}/${zeroize(month)}/${zeroize(day)} ${zeroize(hour)}:${zeroize(minute)}:${zeroize(second)}`;
-				// 		break;
-				// 	case 'yyyy-MM-dd':
-				// 		timeStr = `${year}-${zeroize(month)}-${zeroize(day)}`;
-				// 		break;
-				// 	case 'yyyy/MM/dd':
-				// 		timeStr = `${year}/${zeroize(month)}/${zeroize(day)}`;
-				// 		break;
-				// 	case 'HH:mm:ss':
-				// 		timeStr = `${zeroize(hour)}:${zeroize(minute)}:${zeroize(second)}`;
-				// 		break;
-				// }
-				console.log(timeStr,'*************');
 				this.timeStr = timeStr
 				
 			}

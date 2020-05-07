@@ -1,8 +1,8 @@
 <!-- 仿支付宝支付密码组件 -->
 <template>
-	<view class="" >
+	<view class="">
 		<view class="w_100 h_100" @click="showPayment = !showPayment" v-if="type=='embed'">
-			
+
 			<slot></slot>
 		</view>
 		<view class="paymentBox  fs36" v-show="showPayment" @click="showPayment = !showPayment">
@@ -17,13 +17,13 @@
 					<view :class="['payment-init',passWord.length-1>=index&&'satisfy']" v-for="(item,index) in 6" :key="item"></view>
 				</view>
 				<view class="payment-forget" v-show="forget">
-					<view class="txt_rg fs32 mar_rg_30" @click="getpayword">{{i18n.$validation.forgetPwd}}</view>
+					<view class="txt_rg fs32 mar_rg_30" @click="forget">{{i18n.$validation.forgetPwd}}</view>
 					<!--忘记密码-->
 				</view>
 			</view>
 
 			<view class="payment-keyboard flex flex_center flex_wrap" @click.stop>
-				<view class="w_33 txt_c bg_fff payment-numcell color_31" v-for="item in nums" :key="item" @click="passWord += item">{{item}}</view>
+				<view class="w_33 txt_c payment-numcell color_31" hover-class="payment-numcell-active" hover-stay-time="300" v-for="item in nums" :key="item" @click="passWord += item">{{item}}</view>
 				<view class="payment-cancel w_33 lh98 h98 " @click=" passWord = passWord.slice(0,-1)">
 					<svg class="payment-cancel-item" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400.67 253">
 						<g>
@@ -49,15 +49,15 @@
 				type: Function,
 			},
 			showpayment: {
-				type: [Boolean,String,Number],
+				type: [Boolean, String, Number],
 
 			},
 			type: {
 				type: String,
-				default: 'embed',
-				validator: function(value){
+				default: 'trigger',
+				validator: function(value) {
 					// 这个值必须匹配下列字符串中的一个
-					        return ['embed', 'trigger'].indexOf(value) !== -1
+					return ['embed', 'trigger'].indexOf(value) !== -1
 				}
 			}
 		},
@@ -83,7 +83,7 @@
 			},
 			showPayment(newval) {
 				this.passWord = '';
-				if(!newval){
+				if (!newval) {
 					this.$emit("update:showpayment", newval);
 				}
 			},
@@ -105,7 +105,7 @@
 
 <style>
 	/* 仿支付宝 输入支付密码组件 */
-	.fixed{
+	.fixed {
 		position: fixed;
 		left: 0;
 		right: 0;
@@ -113,91 +113,105 @@
 		top: 0;
 		z-index: 99999999999;
 	}
+
 	.paymentBox {
-	  position: fixed;
-	  left: 0;
-	  right: 0;
-	  bottom: 0;
-	  /* top: 0; */
-	  z-index: 99999999999;
-	  background-color: #E4E8F1;
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		/* top: 0; */
+		z-index: 99999999999;
+		background-color: #E4E8F1;
 	}
-	.paymentTitle{
+
+	.paymentTitle {
 		line-height: 98upx;
 	}
+
 	.paymentBox::before {
-	  content:"";
-	  width: 100vw;
-	  height: 100vh;
-	  background:rgba(51, 51, 51, .4);
-	  position:absolute;
-	  bottom:0;
-	  left:0;
+		content: "";
+		width: 100vw;
+		height: 100vh;
+		background: rgba(51, 51, 51, .4);
+		position: absolute;
+		bottom: 0;
+		left: 0;
 	}
-	
+
 	.payment-init-box {
-	  /* border:.13333vw solid #d2d2d2; */
-	  box-shadow: 0 0 0 0.26667vw #e7e7e7;
-	  margin: 7.2vw 4vw;
-	  overflow: hidden;
-	  display: flex;
+		/* border:.13333vw solid #d2d2d2; */
+		box-shadow: 0 0 0 0.26667vw #e7e7e7;
+		margin: 7.2vw 4vw;
+		overflow: hidden;
+		display: flex;
 	}
-	
+
 	.payment-init-box .payment-init {
 		flex-grow: 1;
 		flex-shrink: 0;
-	  position:relative;
+		position: relative;
 	}
-	
+
 	.payment-init-box .payment-init.satisfy::before {
-	  content:'';
-	  width: 24upx;
-	  height: 24upx;
-	  position:absolute;
-	  border-radius:50%;
-	  background:#333;
-	  top:50%;
-	  left:50%;
-	  margin-left:-12upx;
-	  margin-top: -12upx;
-	
+		content: '';
+		width: 24upx;
+		height: 24upx;
+		position: absolute;
+		border-radius: 50%;
+		background: #333;
+		top: 50%;
+		left: 50%;
+		margin-left: -12upx;
+		margin-top: -12upx;
+
 	}
-	.payment-forget{
-	  color: #3490C7;
-	  margin: 6vw 0 7.2vw;
+
+	.payment-forget {
+		color: #2E74F3;
+		margin: 6vw 0 7.2vw;
+		text-decoration: underline;
 	}
-	
+
 	.payment-init-box .payment-init+.payment-init {
-	  box-shadow: -0.26667vw 0 0 0.26667vw #efefef;
+		box-shadow: -0.26667vw 0 0 0.26667vw #efefef;
 	}
-	.payment-numcell{
+
+	.payment-numcell {
 		font-size: 40upx;
 		line-height: 98upx;
 		height: 98upx;
-	  box-shadow: 0 0 0 0.13333vw #e7e7e7;
+		box-shadow: 0 0 0 2upx #e7e7e7;
+		background-color: #fff;
 	}
-	.payment-keyboard{
-	  position: relative;
+	.payment-numcell-active{
+		background-color: #aaa ;
 	}
-	.payment-cancel{
-	  position: absolute;
-	  bottom: 0;
-	  right: 0;
-	
+	.payment-keyboard {
+		position: relative;
 	}
-	.payment-cancel-item{
-	  border-radius: 6upx;
-	  position: absolute;
-	  top: 50%;
-	  left: 50%;
-	  -webkit-transform: translate(-50%, -50%);
-	  -moz-transform: translate(-50%, -50%);
-	  -o-transform: translate(-50%, -50%);
-	  -ms-transform: translate(-50%, -50%);
-	  transform: translate(-50%, -50%);
-	  height: 36upx;
-	  width:auto;
-	  fill: #fff;
+
+	.payment-cancel {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+
+	}
+	.payment-cancel-active{
+		
+	}
+	.payment-cancel-item {
+		border-radius: 6upx;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		-webkit-transform: translate(-50%, -50%);
+		-moz-transform: translate(-50%, -50%);
+		-o-transform: translate(-50%, -50%);
+		-ms-transform: translate(-50%, -50%);
+		transform: translate(-50%, -50%);
+		height: 36upx;
+		width: auto;
+		fill: #fff;
 	}
 </style>
 
