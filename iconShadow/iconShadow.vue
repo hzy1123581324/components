@@ -3,7 +3,7 @@
  -->
 <template>
   <view class="icon-shadow">
-    <div class="iconshadowbg"></div>
+    <view class="iconshadowbg"></view>
   </view>
 </template>
 

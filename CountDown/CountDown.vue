@@ -1,9 +1,9 @@
 <template>
-	<div class="time">
+	<view class="time">
 		{{ tipText }}<span class="styleAll" v-if="isDay === true">{{ day }}</span><span class="timeTxt">{{ dayText }}</span><span
 		 class="styleAll">{{ hour }}</span><span class="timeTxt">{{ hourText }}</span><span class="styleAll">{{ minute }}</span><span
 		 class="timeTxt">{{ minuteText }}</span><span class="styleAll">{{ second }}</span><span class="timeTxt">{{ secondText }}</span>
-	</div>
+	</view>
 </template>
 <script>
 	export default {

@@ -3,8 +3,8 @@
   components
     ├─ codeTxt 
 	│	└─ codeTxt 发送验证码
-    ├─ changeNumMoneyToChinese 
-    │    └─ changeNumMoneyToChinese  数字转中文繁体
+    ├─ numeral 
+    │    └─ numeral  数字转中文繁体|加逗号
     ├─ CountDown 
     │    └─ CountDown  倒计时
 	├─ noData 
@@ -19,10 +19,12 @@
 	│    └─ payment  仿支付宝支付密码组件
 	├─ text-gradient 
 	│    └─ text-gradient  文字渐变
-	├─ creasing 递增递减（未完）
-	│ 	 └─creasing  递增递减
+	├─ increase  递增递减（未完）
+	│ 	 └─increase   递增递减
 	├─ timeStr 
 	│    └─ timeStr  时间戳格式化
+	├─ magnifier
+	│    └─ magnifier  图片放大镜
 	│
 	│
 	│
