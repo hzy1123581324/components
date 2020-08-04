@@ -1,128 +1,189 @@
 <template>
-	    <view class="magnifier-box" id="magnifier">
-	        <view class="small-box" id="small-box" @touchstart="showBig = true"  @touchend="showBig = false">
-	            <view id="float-box" class="float-box"></view>
-				<slot>
-					<image :src="src"  mode="widthFix"/>
-				</slot>
-	            
-	        </view>
-	        <view class="big-box" id="big-box" v-show="showBig">
-	            <slot>
-	            	<image :src="src"  mode="widthFix" />
-	            </slot>
-	        </view>
-	    </view>
+  <view class="magnifier-box" id="magnifier">
+    <view class="small-box" ref="smallbox">
+      <view
+        id="float-box"
+        class="float-box"
+        @mousemove="moving($event)"
+        @mouseout="showBig = false"
+        :style="floatStyle"
+      ></view>
+      <slot>
+        <image :src="src" mode="widthFix" />
+      </slot>
+    </view>
+    <view class="big-box" id="big-box" v-show="showBig" :style="bigStyle">
+      <slot>
+        <image :src="bigsrc||src" mode="widthFix" />
+      </slot>
+    </view>
+  </view>
 </template>
 
 <script>
-	/**
-	 * magnifier 放大镜
-	 * @description 图片放大镜，常用于展示商品图片
-	 * @tutorial https://www.uviewui.com/components/button.html
-	 * @property {String} src 图片路径
-	 * @example <magnifier :num.sync="num"></magnifier>
-	 */
-	export default {
-		name: "magnifier",
-		props: {
-			src: {
-				type: String,
-				default: 'https://img.alicdn.com/imgextra/https://img.alicdn.com/bao/uploaded/i2/1026430696/O1CN011H0o7UD6ZwLT3vl_!!1026430696.jpg_430x430q90.jpg',
-			}
-		},
-		data: function() {
-			return {
-				showBig: false,
-			};
-		},
-		created: function() {
-			// this.src = 'https://img.alicdn.com/imgextra/https://img.alicdn.com/bao/uploaded/i2/1026430696/O1CN011H0o7UD6ZwLT3vl_!!1026430696.jpg_430x430q90.jpg'
-		},
-		mounted: function() {
-			 //找五个个元素：demo，smallBox,foatBox,bigfloatBox,imgs,
-			 return 
-			var objDemo = document.getElementById("demo");
-			var objSmallBox = document.getElementById("small-box");
-			var objFloatBox = document.getElementById("float-box");
-			var objBigBox = document.getElementById("big-box");
-			var objBigBoxImg = objBigBox.getElementsByTagName("img")[0];
-
-			//给小盒子添加事件，移入和移出
-			//移入：浮动的box和和bigBox显示
-			objSmallBox.onmouseover = function () {
-				objFloatBox.style.display = "block";
-				objBigBox.style.display = "block";
-			}
-			//移除：浮动的box和bigBox隐藏
-			objSmallBox.onmouseout = function () {
-				objFloatBox.style.display = "none";
-				objBigBox.style.display = "none";
-			}
-
-			//给小盒子添加鼠标移动事件
-			objSmallBox.onmousemove = function (ev) {
-				var _event = ev || window.event;//做兼容性，兼容IE
-				//1计算值：
-				var left = _event.clientX - objDemo.offsetLeft - objSmallBox.offsetLeft - objFloatBox.offsetWidth / 2;
-				var top = _event.clientY - objDemo.offsetTop - objSmallBox.offsetTop - objFloatBox.offsetHeight / 2;
-
-				//5.优化，在前面加判断,不让其溢出，加判断
-				if (left < 0) left = 0;
-				if (top < 0) top = 0;
-				if (left > objSmallBox.offsetWidth - objFloatBox.offsetWidth)
-					left = objSmallBox.offsetWidth - objFloatBox.offsetWidth;
-				if (top > objSmallBox.offsetHeight - objFloatBox.offsetHeight)
-					top = objSmallBox.offsetHeight - objFloatBox.offsetHeight;
-
-				//2把值赋值给放大镜
-				objFloatBox.style.left = left + "px";
-				objFloatBox.style.top = top + "px";
-
-				//3计算比例
-				var percentX = left / (objSmallBox.offsetWidth - objFloatBox.offsetWidth);
-				var percentY = top / (objSmallBox.offsetHeight - objFloatBox.offsetHeight);
-
-				//4利用这个比例计算距离后赋值给右侧的图片
-				objBigBoxImg.style.left = -percentX * (objBigBoxImg.offsetWidth - objBigBox.offsetWidth) + "px";
-				objBigBoxImg.style.top = -percentY * (objBigBoxImg.offsetHeight - objBigBox.offsetHeight) + "px";
-			}
-		},
-		methods: {
-		}
-	};
+/**
+ * magnifier 放大镜
+ * @description 图片放大镜，常用于展示商品图片
+ * @tutorial https://www.uviewui.com/components/magnifier.html
+ * @property {String} src 图片路径
+ * @property {String} bigsrc 大图图片路径
+ * @property {String,Number} multiple 大图放大的倍数
+ * @example <magnifier src="https://img.alicdn.com/bao/uploaded/i2/1026430696/O1CN011H0o7UD6ZwLT3vl_!!1026430696.jpg_430x430q90.jpg"></magnifier>
+ * @example <magnifier><image src="https://img.alicdn.com/bao/uploaded/i2/1026430696/O1CN011H0o7UD6ZwLT3vl_!!1026430696.jpg_430x430q90.jpg"></image></magnifier>
+ */
+export default {
+  name: "magnifier",
+  props: {
+    src: {
+      type: String,
+      default: '',
+    },
+    bigsrc: {
+      type: String,
+      default:
+        "",
+    },
+    multiple: {
+      type: [String, Number],
+      default: 1.5,
+    },
+  },
+  data: function () {
+    return {
+      showBig: false,
+      offsetX: 0,
+      offsetY: 0,
+      imgWidth: 0,
+      imgHeight: 0,
+    };
+  },
+  created: function () {
+  },
+  watch: {
+    showBig(newval) {
+      if (!newval) {
+        this.offsetX = 0;
+        this.offsetY = 0;
+      }
+    },
+  },
+  computed: {
+    bigStyle() {
+      let { floatX, floatY, multiple, imgWidth } = this;
+      if (imgWidth == 0) {
+        return `--left:0%;--top:-0%;--scale:1;`;
+      } else {
+        return `--left:-${floatX * multiple}px;--top:-${
+          floatY * multiple
+        }px;--scale:${multiple};`;
+      }
+    },
+    floatStyle() {
+      let { floatWidth, floatHeight, floatX, floatY } = this;
+      return `--width:${floatWidth}px;--height:${floatHeight}px;--floatLeft:${floatX}px;--floatTop: ${floatY}px;`;
+    },
+    floatWidth() {
+      let { imgWidth, multiple = 1 } = this;
+      return imgWidth / multiple;
+    },
+    floatHeight() {
+      let { imgHeight, multiple = 1 } = this;
+      return imgHeight / multiple;
+    },
+    floatX() {
+      let { offsetX, floatWidth, imgWidth } = this;
+      if (offsetX < floatWidth / 2) {
+        return 0;
+      } else if (parseFloat(offsetX) + floatWidth / 2 > imgWidth) {
+        return imgWidth - floatWidth;
+      } else {
+        return offsetX - floatWidth / 2;
+      }
+    },
+    floatY() {
+      let { offsetY, floatHeight, imgHeight } = this;
+      if (offsetY < floatHeight / 2) {
+        return 0;
+      } else if (parseFloat(offsetY) + floatHeight / 2 > imgHeight) {
+        return imgHeight - floatHeight;
+      } else {
+        return offsetY - floatHeight / 2;
+      }
+    },
+  },
+  mounted: function () {
+    setTimeout(() => {
+      this.imgWidth = this.$refs.smallbox.offsetWidth;
+      this.imgHeight = this.$refs.smallbox.offsetHeight;
+    }, 500);
+    return;
+  },
+  methods: {
+    moving(event) {
+      this.showBig = true;
+      let { offsetX, offsetY } = event;
+      this.offsetX = offsetX;
+      this.offsetY = offsetY;
+    },
+  },
+};
 </script>
 
 <style scoped>
-	.magnifier-box{
-		display: inline-block;
-	}
-	.small-box{
-		display: inline-block;
-		cursor: zoom-in;
-		vertical-align: bottom;
-		position: relative;
-	}
-	/* 悬浮层 */
-	.float-box{
-		position: absolute;
-		left: 0;
-		right: 0;
-		top: 0;
-		bottom: 0;
-		height: 100%;
-		width: 100%;
-		
-	}
-	.big-box{
-		position: absolute;
-		left: 100%;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		z-index: 100;
-	}
-	image{
-		vertical-align: bottom;
-	}
+.magnifier-box {
+  display: inline-block;
+  position: relative;
+  margin-top: 30px;
+  margin-left: 30px;
+}
+.small-box {
+  display: inline-block;
+  cursor: zoom-in;
+  vertical-align: bottom;
+  position: relative;
+}
+/* 悬浮层 */
+.small-box:hover .float-box::after {
+  opacity: 1;
+  pointer-events: auto;
+}
+.float-box {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  z-index: var(--index10, 10);
+}
+.float-box::after {
+  opacity: 0;
+  pointer-events: none;
+  content: "";
+  width: var(--width, 10%);
+  height: var(--height, 10%);
+  background-color: rgba(255, 255, 234, 0.5);
+  position: absolute;
+  left: var(--floatLeft, 0);
+  top: var(--floatTop, 0);
+}
+.big-box {
+  position: absolute;
+  left: 120%;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  z-index: 100;
+  overflow: hidden;
+}
+.big-box img {
+  width: calc(100% * var(--scale, 1));
+  height: calc(100% * var(--scale, 1));
+  left: var(--left, 50%);
+  top: var(--top, 50%);
+}
+img {
+  vertical-align: bottom;
+}
 </style>
