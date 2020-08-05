@@ -27,6 +27,8 @@
 	│    └─ magnifier  图片放大镜
 	├─ biometrics
 	│    └─ biometrics  指纹解锁,人脸识别（未完）
+	├─ sticky
+	│    └─ sticky  吸顶（未完）
 	│
 	│
 	│

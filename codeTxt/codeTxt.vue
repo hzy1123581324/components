@@ -8,17 +8,33 @@
 </template>
 
 <script>
+	/**
+	 * counter 自增自减计数器
+	 * @description 商品自增自减
+	 * @tutorial https://www.uviewui.com/components/button.html
+	 * @property {String,Number} time 倒计时时间
+	 * @property {Function} getcodefun 验证码发送成功回调
+	 * @property {String,Number} codetype 验证码类型//1=电话，2邮箱
+	 * @property {String,Number} quhao 手机区号
+	 * @property {String,Number} phone 向该手机号发送验证码
+	 * @property {String} email 向该邮箱发送验证码
+	 * @property {Boolean,Number,} trigger 接口调用后立即处于可点击状态
+	 * @example <codeTxt :num.sync="num"></codeTxt>
+	 */
 	let timer = '';
 	export default {
+		name: 'codeTxt',
 		props: {
+			// 倒计时时间
 			time: {
 				type: [String, Number],
 				default: 60,
 			},
-			getcodefun:{
+			// 回调
+			getcodefun: {
 				type: Function,
 				// required: true,
-				
+
 				// default:(resolve, reject)=>{
 				// 	console.log(222222)
 				// 	setTimeout(()=>{
@@ -26,30 +42,31 @@
 				// 	},1000)
 				// }
 			},
-			// title:{
-			// 	type: String,
-			// 	default: ,
-			// },
+			//  验证码类型
 			codetype: {
-				type: [Number,String],
-				default: 1,//1=电话，2邮箱
+				type: [Number, String],
+				default: 1, //1=电话，2邮箱
 			},
-			quhao:{
+			// 手机区号
+			quhao: {
 				//区号
-				type: [String,Number],
-				default: '',//1=电话，2邮箱
+				type: [String, Number],
+				default: '86',
 			},
-			phone:{
+			// 向该手机号发送验证码
+			phone: {
 				type: [String, Number],
 				// required: true,
 			},
-			email:{
+			// 向该邮箱发送验证码
+			email: {
 				type: [String],
 				// required: true,
 			},
-			trigger:{
+			// 是否可点击
+			trigger: {
 				//接口调用后立即处于可点击状态
-				type: [Boolean,Number,],
+				type: [Boolean, Number, ],
 				default: false,
 			},
 		},
@@ -58,112 +75,64 @@
 				active_time: 0,
 			}
 		},
-		onLoad() {
-
-		},
-		mounted() {
-
-		},
+		onLoad() {},
+		mounted() {},
 		methods: {
 			async __getcode() {
-				// console.log(this.quhao);
-				// return ;
-				// console.log('++++++++++++++++++++')
-				// if(this.getcodefun){
-				// 	const res = await this.getcodefun();
-				// }else{
-					
-				// }
-				let {active_time} = this;
-				
-				if(active_time<=0){
-					console.log('************');
-					
+				let {
+					active_time
+				} = this;
+				if (active_time <= 0) {
 					let res = '';
-					if(this.getcodefun){
-							
+					if (this.getcodefun) {
+
 						res = await this.getcodefun();
-					}else{
+					} else {
 						res = await this.getcode()
 					}
-	
-					if(res){
+
+					if (res) {
 						this.active_time = this.time;
-						timer=setInterval(()=>{
-							let {active_time} = this;
+						timer = setInterval(() => {
+							let {
+								active_time
+							} = this;
 							this.active_time--;
-							if(this.active_time<=0){
+							if (this.active_time <= 0) {
 								clearInterval(timer);
 							}
-						},1000)
-					}else{
-						
-						if(this.trigger){
+						}, 1000)
+					} else {
+
+						if (this.trigger) {
 							this.active_time = 0;
 							clearInterval(timer);
 						}
 					}
-					
-					// new Promise((resolve, reject)=> {
-					// 	if(this.getcode){
-					// 		this.active_time = this.time;
-					// 		console.log(this.active_time,this.time);
-					// 		timer=setInterval(()=>{
-					// 			let {active_time} = this;
-					// 			this.active_time--;
-					// 			if(this.active_time<=0){
-					// 				clearInterval(timer);
-					// 			}
-					// 		},1000)
-					// 		// console.log('&&&&&&&&&&&&&&')
-					// 		this.getcode(resolve,reject);
-					// 	}else{
-					// 		return uni.showToast({
-					// 			title: '?????????',
-					// 			icon: 'none',
-					// 			success() {
-					// 				//防止Promise占用内存，这个不确定
-					// 				reject('Promise ');
-					// 			}
-					// 		})
-					// 	}
-					// }).then(()=>{
-					// 	if(this.trigger){
-					// 		this.active_time = 0;
-					// 		clearInterval(timer);
-					// 	}	
-					// })
-					// .catch((err)=>{
-					// 	console.log(err);
-					// 	if(this.trigger){
-					// 		this.active_time = 0;
-					// 		clearInterval(timer);
-					// 	}
-					// })
-					
-				}else{
-					
+				} else {
 					return this.toast(this.i18n.$validation.getCoded)
-					// uni.showToast({
-					// 	title: this.i18n.phone1,
-					// 	icon: 'none'
-					// })
 				}
 			},
-			async getcode(resolve,reject){
-				let {codetype} = this;
-				let {active_time,phone,email} = this;
-				if(!phone&&codetype==1){
+			async getcode(resolve, reject) {
+				let {
+					codetype
+				} = this;
+				let {
+					active_time,
+					phone,
+					email
+				} = this;
+				if (!phone && codetype == 1) {
 					return uni.showToast({
-								title: this.i18n.phone,
-								icon: 'none',
-							})
+						title: this.i18n.phone,
+						icon: 'none',
+					})
 				}
-				if(!email&&codetype==2){
+				if (!email && codetype == 2) {
 					return uni.showToast({
-								title: this.i18n.email,
-								icon: 'none',
-							})
+						title: this.i18n.email,
+						icon: 'none',
+					})
 				}
 				// if(!(/^1[3456789]\d{9}$/.test(phone+''))&&codetype==1){
 				// 	return uni.showToast({
@@ -176,74 +145,75 @@
 				// 			}
 				// 		})
 				// }
-				if(!(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(email))&&codetype==2){
+				if (!(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(email)) && codetype == 2) {
 					return uni.showToast({
-							title: this.i18n.email1,
-							icon: 'none',
-							success:()=> {
-								// this.$emit("checkphone", false);
-								// 以下支持双向数据绑定打开，以上关闭
-								this.$emit("update:email", '');
-							}
-						})
+						title: this.i18n.email1,
+						icon: 'none',
+						success: () => {
+							// this.$emit("checkphone", false);
+							// 以下支持双向数据绑定打开，以上关闭
+							this.$emit("update:email", '');
+						}
+					})
 				}
-				console.log('&&&&&&&&&&&&&&&&&12341234')
-				if(codetype==1){
-					console.log('***************');
-					return  this.tel_code(resolve,reject);
-				}else{
-					return  this.email_code(resolve,reject);
+				if (codetype == 1) {
+					return this.tel_code(resolve, reject);
+				} else {
+					return this.email_code(resolve, reject);
 				}
 			},
-			tel_code(resolve,reject){
+			tel_code(resolve, reject) {
 				var that = this;
-				var data ={action:'authen',xfrom:'reg'};
-				 data.mobile =this.quhao+this.phone;
-				 this.$net.ajax("/service/sms",data,"POST").then((result)=>{
-				 		// console.log(result)
-					if(result === false){
+				var data = {
+					action: 'authen',
+					xfrom: 'reg'
+				};
+				data.mobile = this.quhao + this.phone;
+				this.$net.ajax("/service/sms", data, "POST").then((result) => {
+					// console.log(result)
+					if (result === false) {
 						reject();
-					}else{
+					} else {
 						resolve();
 					}
-				 })
+				})
 			},
-			email_code(resolve,reject){
+			email_code(resolve, reject) {
 				var that = this;
-				var data ={};
-				data.email =this.email;
-				this.$net.ajax("/service/send_email",data,"POST").then((result)=>{
+				var data = {};
+				data.email = this.email;
+				this.$net.ajax("/service/send_email", data, "POST").then((result) => {
 					// console.log(result)
-						if(result === false){
-							reject();
-						}else{
-							resolve();
-						}
-					
+					if (result === false) {
+						reject();
+					} else {
+						resolve();
+					}
+
 				})
 			},
 		},
 		watch: {
 
 		},
-		computed: {
-		},
+		computed: {},
 	}
 </script>
-<style scoped lang="stylus">
-	.code-box
-		display flex
-		width 100%
-		height 100%
-		justify-content center
-		align-items center
-		font-size inherit
-	.code-active
-		color #2E74F3
-		
-	.code-default
-		cursor pointer
+<style scoped >
+	.code-box{
+		display: flex;
+		width: 100%;
+		height: 100%;
+		justify-content: center;
+		align-items: center;
+		font-size: inherit;
+		}
+	.code-active{
+		color: #2E74F3;
+	}
+
+	.code-default{
+		cursor: pointer;
+	}
 </style>
 
-<!-- demo -->
-<!-- <code-txt class='color_main' :phone.sync="电话号码" :getcode="接口方法"></code-txt> -->

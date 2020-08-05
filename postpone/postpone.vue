@@ -131,13 +131,13 @@
 		align-items: center;
 		justify-content:center;
 		// background:linear-gradient(0deg,rgba(249,178,36,1) 0%,rgba(255,222,98,1) 100%);
-		// box-shadow:0px 4upx 4upx 0px rgba(74,74,74,0.3);
-		border-radius: 8upx;
+		box-shadow:var(--btn-shadow);
+		border-radius: var(--btn-radius);
 		font-size:32upx;
 		font-family:PingFang SC;
 		font-weight: 500;
 		color: #fff;
-		
+		background: var(--btn-bg);
 		letter-spacing: 8upx;
 		&.active 
 			opacity 0.4
