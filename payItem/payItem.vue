@@ -16,24 +16,47 @@
 </template>
 
 <script>
+	/**
+	 * payItem 
+	 * @description 商品自增自减
+	 * @tutorial https://www.uviewui.com/components/button.html
+	 * @property {String} inputType 输入类型
+	 * @property {String} pwd 用户输入的密码
+	 * @property {Boolean} keyboard  是否使用键盘
+	 * @example <payItem class="payItem" :pwd.sync="pwd"></payItem>
+	 * 
+	 * 修改样式,修改不成功，注意是否是优先级的问题
+	 * <style>
+		.payItem{
+			--cell-size: 54upx;
+			--cell-radius: 2upx;
+			--cell-bg: #F3F3F3;
+			--cell-gauge: 30upx;
+			--dot-size: 12upx;
+			--dot-bg: #101010;
+		}
+	 </style>
+	 */
+	
 	export default {
+		name: 'payItem',
 		props:{
+			// 输入类型
 			inputType:{
 				type: String,
 				default: 'number',
 			},
+			// 用户输入的密码
 			pwd: {
 				type: String,
 				default: '',
 			},
-			color: {
-				type: String,
-				default: '',
-			},
-			bgcolor: {
-				type: String,
-				default: '',
-			},
+			// 是否使用键盘
+			keyboard: {
+				type: Boolean,
+				default: true,
+			}
+
 			
 		},
 		watch:{
@@ -59,22 +82,28 @@
 	}
 </script>
 
-<style >
+<style scoped>
 	.pay-item{
 		position: relative;
 		line-height: 1;
 		display: inline-block;
+		--cell-size: 54upx;
+		--cell-radius: 2upx;
+		--cell-bg: #F3F3F3;
+		--cell-gauge: 30upx;
+		--dot-size: 12upx;
+		--dot-bg: #101010;
 	}
 	.pay-item view{
 		line-height: inherit;
 	}
 	.password-item{
 		display: inline-block;
-		width: 54upx;
-		height: 54upx;
-		background-color: #F3F3F3;
-		border-radius: 2upx;
-		margin-right: 30upx;
+		width: var(--cell-size);
+		height: var(--cell-size);
+		background-color: var(--cell-bg);
+		border-radius: var(--cell-radius);
+		margin-right: var(--cell-gauge);
 		position: relative;
 	}
 	.password-item.active::after{
@@ -82,12 +111,12 @@
 		position: absolute;
 		left: 50%;
 		top: 50%;
-		margin-left: -6upx;
-		margin-top: -6upx;
-		width: 12upx;
-		height: 12upx;
-		border-radius: 12upx;
-		background-color:#101010;
+		margin-left: calc(var(--dot-size) / -2);
+		margin-top: calc(var(--dot-size) / -2);
+		width: var(--dot-size);
+		height: var(--dot-size);
+		border-radius: calc(var(--dot-size) / 2);
+		background-color: var(--dot-bg);
 		box-sizing: border-box;
 	}
 	.pay-item-input{

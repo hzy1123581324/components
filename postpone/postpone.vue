@@ -5,12 +5,25 @@
 </template>
 
 <script>
+	/**
+	 * postpone 异步按钮
+	 * @description 接口返回才可以再次点击，接口请求中保持点击状态
+	 * @tutorial https://www.uviewui.com/components/button.html
+	 * @property {String} title 按钮内容
+	 * @property {Function} tapfun 执行函数
+	 * @property {Boolean} canclick 是否可以点击 
+	 * @example  <postpone :tapfun="send"></postpone>
+	 * @example  <postpone :tapfun="send" :canClick="false" ></postpone>
+	 */
 	export default {
+		name: 'postpone',
 		props: {
+			// 按钮内容
 			title: {
 				type: String,
 				default: '确定'
 			},
+			// 执行函数
 			tapfun: {
 				type: Function,
 				required: true,
@@ -22,6 +35,7 @@
 				// 	},10000)
 				// }
 			},
+			// 是否可以点击
 			canClick: {
 				type: Boolean,
 				default: true,
@@ -182,9 +196,4 @@
 	}
 	
 </style>
-<!-- 
-demo
- <postpone :tapfun="send"></postpone>
-demo 初始不能点击
- <postpone :tapfun="send" :canClick="false" ></postpone>
- -->
+

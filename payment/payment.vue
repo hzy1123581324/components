@@ -39,7 +39,28 @@
 </template>
 
 <script>
+	/**
+	 * payment 
+	 * @description 商品自增自减
+	 * @tutorial https://www.uviewui.com/components/button.html
+	 * @property {String,Number} min 最小值
+	 * @property {String,Number} max 最大值
+	 * @property {String,Number} num 初始化的值
+	 * @example <payItem class="payItem" :pwd.sync="pwd"></payItem>
+	 * 修改样式,修改不成功，注意是否是优先级的问题
+	 * <style>
+		.payItem{
+			--cell-size: 54upx;
+			--cell-radius: 2upx;
+			--cell-bg: #F3F3F3;
+			--cell-gauge: 30upx;
+			--dot-size: 12upx;
+			--dot-bg: #101010;
+		}
+	 </style>
+	 */
 	export default {
+		name: 'payment',
 		props: {
 			password: {},
 			pay: {

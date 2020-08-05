@@ -17,8 +17,8 @@
 	│    └─ payItem  6位数字密码输入框
 	├─ payment
 	│    └─ payment  仿支付宝支付密码组件
-	├─ text-gradient 
-	│    └─ text-gradient  文字渐变
+	├─ textGradient 
+	│    └─ textGradient  文字渐变
 	├─ increase  递增递减（未完）
 	│ 	 └─increase   递增递减
 	├─ timeStr 
