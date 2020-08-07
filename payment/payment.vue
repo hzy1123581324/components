@@ -235,11 +235,3 @@
 		fill: #fff;
 	}
 </style>
-
-
-<!-- 
- demo
- 
- <payment :password.sync="password">{{password || '这是内容'}}</payment>
- <payment :password.sync="password" :forget="func">{{password || '这是内容'}}</payment> 
- -->
