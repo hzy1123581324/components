@@ -1,5 +1,5 @@
 <template>
-  <div class="waterfall-box flex" :style="`--width:${100/ __column}%`">
+  <div class="waterfall-box flex" :style="`--column:${ __column}`">
     <div class="items-box" v-for="items in columnList" :key="items">
       <div class="item-box" v-for="item in items" :key="item.id" @click="jump(item.id)">
         <slot :item="item"></slot>
@@ -26,14 +26,14 @@ export default {
   props: {
     column: {
       type: [String, Number],
-      default: 2
+      default: 2,
     },
     list: {
       type: Array,
       default: () => {
         return [];
-      }
-    }
+      },
+    },
   },
   components: {},
   computed: {
@@ -58,7 +58,7 @@ export default {
       } else {
         return this.column;
       }
-    }
+    },
   },
   data() {
     return {};
@@ -67,22 +67,21 @@ export default {
   mounted() {},
   watch: {},
   destroyed() {},
-  methods: {}
+  methods: {},
 };
 </script>
 
 <style scoped>
 .waterfall-box {
-  width: 100%;
-  --space: 0.2rem;
+  /* width: 100%; */
+  --space: 30upx;
   overflow-x: hidden;
+  width: calc(100% + var(--space));
+  margin-left: calc(var(--space) / 2 * -1);
 }
 .items-box {
-  width: var(--width);
+  width: calc(100% / var(--column));
   padding: 0 calc(var(--space) / 2);
-}
-.items-box:first-child {
-  margin-left: calc(var(--space) / 2 * -1);
 }
 .item-box {
   display: flex;

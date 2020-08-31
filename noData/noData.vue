@@ -1,11 +1,15 @@
 <template>
-	<view class="">
-		<solt>{{'~~'+i18n.nodata+'~~'}}</solt>
+	<view class="noData-box">
+		<slot>{{'~~'+i18n.nodata+'~~'}}</slot>
 	</view>
 </template>
 
 <script>
 </script>
 
-<style>
+<style scoped>
+	.noData-box{
+		text-align: center;
+		margin-top: 60upx;
+	}
 </style>
