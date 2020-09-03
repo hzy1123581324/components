@@ -1,54 +1,54 @@
 <template>
-	<view class="uni-calendar" @touchmove.stop.prevent="clean">
-		<view v-if="!insert&&show" class="uni-calendar__mask" :class="{'uni-calendar--mask-show':aniMaskShow}" @click="clean"></view>
-		<view v-if="insert || show" class="uni-calendar__content" :class="{'uni-calendar--fixed':!insert,'uni-calendar--ani-show':aniMaskShow}">
-			<view v-if="!insert" class="uni-calendar__header uni-calendar--fixed-top">
-				<view class="uni-calendar__header-btn-box" @click="close">
-					<text class="uni-calendar__header-text uni-calendar--fixed-width">取消</text>
+	<view class="calendar" @touchmove.stop.prevent="clean">
+		<view v-if="!insert&&show" class="calendar__mask" :class="{'calendar--mask-show':aniMaskShow}" @click="clean"></view>
+		<view v-if="insert || show" class="calendar__content" :class="{'calendar--fixed':!insert,'calendar--ani-show':aniMaskShow}">
+			<view v-if="!insert" class="calendar__header calendar--fixed-top">
+				<view class="calendar__header-btn-box" @click="close">
+					<text class="calendar__header-text calendar--fixed-width">取消</text>
 				</view>
-				<view class="uni-calendar__header-btn-box" @click="confirm">
-					<text class="uni-calendar__header-text uni-calendar--fixed-width">确定</text>
+				<view class="calendar__header-btn-box" @click="confirm">
+					<text class="calendar__header-text calendar--fixed-width">确定</text>
 				</view>
 			</view>
-			<view class="uni-calendar__header">
-				<view class="uni-calendar__header-btn-box" @click="pre">
-					<view class="uni-calendar__header-btn uni-calendar--left"></view>
+			<view class="calendar__header">
+				<view class="calendar__header-btn-box" @click="pre">
+					<view class="calendar__header-btn calendar--left"></view>
 				</view>
-				<text class="uni-calendar__header-text">{{ (nowDate.year||'') +'年'+( nowDate.month||'') +'月'}}</text>
-				<view class="uni-calendar__header-btn-box" @click="next">
-					<view class="uni-calendar__header-btn uni-calendar--right"></view>
+				<view class="calendar__header-text">{{ (nowDate.year||'') +'年'+( nowDate.month||'') +'月'}}</view>
+				<view class="calendar__header-btn-box" @click="next">
+					<view class="calendar__header-btn calendar--right"></view>
 				</view>
-				<text class="uni-calendar__backtoday" @click="backtoday">回到今天</text>
+				<view class="calendar__backtoday" @click="backtoday">回到今天</view>
 			</view>
-			<view class="uni-calendar__box">
-				<view v-if="showMonth" class="uni-calendar__box-bg">
-					<text class="uni-calendar__box-bg-text">{{nowDate.month}}</text>
+			<view class="calendar__box">
+				<view v-if="showMonth" class="calendar__box-bg">
+					<view class="calendar__box-bg-text">{{nowDate.month}}</view>
 				</view>
-				<view class="uni-calendar__weeks">
-					<view class="uni-calendar__weeks-day">
-						<text class="uni-calendar__weeks-day-text">日</text>
+				<view class="calendar__weeks">
+					<view class="calendar__weeks-day">
+						<text class="calendar__weeks-day-text">日</text>
 					</view>
-					<view class="uni-calendar__weeks-day">
-						<text class="uni-calendar__weeks-day-text">一</text>
+					<view class="calendar__weeks-day">
+						<text class="calendar__weeks-day-text">一</text>
 					</view>
-					<view class="uni-calendar__weeks-day">
-						<text class="uni-calendar__weeks-day-text">二</text>
+					<view class="calendar__weeks-day">
+						<text class="calendar__weeks-day-text">二</text>
 					</view>
-					<view class="uni-calendar__weeks-day">
-						<text class="uni-calendar__weeks-day-text">三</text>
+					<view class="calendar__weeks-day">
+						<text class="calendar__weeks-day-text">三</text>
 					</view>
-					<view class="uni-calendar__weeks-day">
-						<text class="uni-calendar__weeks-day-text">四</text>
+					<view class="calendar__weeks-day">
+						<text class="calendar__weeks-day-text">四</text>
 					</view>
-					<view class="uni-calendar__weeks-day">
-						<text class="uni-calendar__weeks-day-text">五</text>
+					<view class="calendar__weeks-day">
+						<text class="calendar__weeks-day-text">五</text>
 					</view>
-					<view class="uni-calendar__weeks-day">
-						<text class="uni-calendar__weeks-day-text">六</text>
+					<view class="calendar__weeks-day">
+						<text class="calendar__weeks-day-text">六</text>
 					</view>
 				</view>
-				<view class="uni-calendar__weeks" v-for="(item,weekIndex) in weeks" :key="weekIndex">
-					<view class="uni-calendar__weeks-item" v-for="(weeks,weeksIndex) in item" :key="weeksIndex">
+				<view class="calendar__weeks" v-for="(item,weekIndex) in weeks" :key="weekIndex">
+					<view class="calendar__weeks-item" v-for="(weeks,weeksIndex) in item" :key="weeksIndex">
 						<calendar-item :weeks="weeks" :calendar="calendar" :selected="selected" :lunar="lunar" @change="choiceDate"></calendar-item>
 					</view>
 				</view>
@@ -77,7 +77,7 @@
 	 * @event {Function} change 日期改变，`insert :ture` 时生效
 	 * @event {Function} confirm 确认选择`insert :false` 时生效
 	 * @event {Function} monthSwitch 切换月份时触发
-	 * @example <uni-calendar :insert="true":lunar="true" :start-date="'2019-3-2'":end-date="'2019-5-20'"@change="change" />
+	 * @example <calendar :insert="true":lunar="true" :start-date="'2019-3-2'":end-date="'2019-5-20'"@change="change" />
 	 */
 	export default {
 		components: {
@@ -240,14 +240,14 @@
 </script>
 
 <style lang="scss" scoped>
-	.uni-calendar {
+	.calendar {
 		/* #ifndef APP-NVUE */
 		display: flex;
 		/* #endif */
 		flex-direction: column;
 	}
 
-	.uni-calendar__mask {
+	.calendar__mask {
 		position: fixed;
 		bottom: 0;
 		top: 0;
@@ -262,11 +262,11 @@
 		/* #endif */
 	}
 
-	.uni-calendar--mask-show {
+	.calendar--mask-show {
 		opacity: 1
 	}
 
-	.uni-calendar--fixed {
+	.calendar--fixed {
 		position: fixed;
 		bottom: 0;
 		left: 0;
@@ -279,15 +279,15 @@
 		/* #endif */
 	}
 
-	.uni-calendar--ani-show {
+	.calendar--ani-show {
 		transform: translateY(0);
 	}
 
-	.uni-calendar__content {
+	.calendar__content {
 		background-color: #fff;
 	}
 
-	.uni-calendar__header {
+	.calendar__header {
 		position: relative;
 		/* #ifndef APP-NVUE */
 		display: flex;
@@ -301,7 +301,7 @@
 		border-bottom-width: 1px;
 	}
 
-	.uni-calendar--fixed-top {
+	.calendar--fixed-top {
 		/* #ifndef APP-NVUE */
 		display: flex;
 		/* #endif */
@@ -312,12 +312,12 @@
 		border-top-width: 1px;
 	}
 
-	.uni-calendar--fixed-width {
+	.calendar--fixed-width {
 		width: 50px;
 		// padding: 0 15px;
 	}
 
-	.uni-calendar__backtoday {
+	.calendar__backtoday {
 		position: absolute;
 		right: 0;
 		top: 25rpx;
@@ -332,14 +332,14 @@
 		background-color: $uni-bg-color-hover;
 	}
 
-	.uni-calendar__header-text {
+	.calendar__header-text {
 		text-align: center;
 		width: 100px;
 		font-size: $uni-font-size-base;
 		color: $uni-text-color;
 	}
 
-	.uni-calendar__header-btn-box {
+	.calendar__header-btn-box {
 		/* #ifndef APP-NVUE */
 		display: flex;
 		/* #endif */
@@ -350,7 +350,7 @@
 		height: 50px;
 	}
 
-	.uni-calendar__header-btn {
+	.calendar__header-btn {
 		width: 10px;
 		height: 10px;
 		border-left-color: $uni-text-color-placeholder;
@@ -361,16 +361,16 @@
 		border-top-width: 2px;
 	}
 
-	.uni-calendar--left {
+	.calendar--left {
 		transform: rotate(-45deg);
 	}
 
-	.uni-calendar--right {
+	.calendar--right {
 		transform: rotate(135deg);
 	}
 
 
-	.uni-calendar__weeks {
+	.calendar__weeks {
 		position: relative;
 		/* #ifndef APP-NVUE */
 		display: flex;
@@ -378,11 +378,11 @@
 		flex-direction: row;
 	}
 
-	.uni-calendar__weeks-item {
+	.calendar__weeks-item {
 		flex: 1;
 	}
 
-	.uni-calendar__weeks-day {
+	.calendar__weeks-day {
 		flex: 1;
 		/* #ifndef APP-NVUE */
 		display: flex;
@@ -395,18 +395,18 @@
 		border-bottom-style: solid;
 		border-bottom-width: 1px;
 	}
-	.uni-calendar__weeks-day-text {
+	.calendar__weeks-day-text {
 		font-size: 14px;
 	}
 
-	.uni-calendar__box {
+	.calendar__box {
 		position: relative;
 	}
 
-	.uni-calendar__box-bg {
-		/* #ifndef APP-NVUE */
+	.calendar__box-bg {
+		
 		display: flex;
-		/* #endif */
+		
 		justify-content: center;
 		align-items: center;
 		position: absolute;
@@ -416,14 +416,16 @@
 		bottom: 0;
 	}
 
-	.uni-calendar__box-bg-text {
+	.calendar__box-bg-text {
+        display: flex;
+        width: auto;
+        height: auto;
 		font-size: 200px;
 		font-weight: bold;
 		color: $uni-text-color-grey;
 		opacity: 0.1;
 		text-align: center;
-		/* #ifndef APP-NVUE */
 		line-height: 1;
-		/* #endif */
+		
 	}
 </style>
