@@ -29,10 +29,10 @@
                 required: true,
                 // default:(resolve, reject)=>{
                 // 这个是实例
-                // 	console.log(111)
-                // 	setTimeout(()=>{
-                // 		resolve();
-                // 	},10000)
+                //     console.log(111)
+                //     setTimeout(()=>{
+                //         resolve();
+                //     },10000)
                 // }
             },
             // 是否可以点击

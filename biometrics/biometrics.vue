@@ -9,24 +9,23 @@
 </template>
 
 <script>
-	/*
-	* magnifier 生物认证
-	* @description  指纹解锁，人脸识别
-	* @tutorial https://www.uviewui.com/components/button.html
-	* @property {String} src 图片路径
-	* @example <biometrics></biometrics>
-	*/
+    /*
+     * magnifier 生物认证
+     * @description  指纹解锁，人脸识别
+     * @tutorial https://www.uviewui.com/components/button.html
+     * @property {String} src 图片路径
+     * @example <biometrics></biometrics>
+     */
     export default {
-		name: 'biometrics',
+        name: 'biometrics',
         data() {
-            return {
-            }
+            return {}
         },
         onLoad() {
 
         },
         methods: {
-			// 检查支持的认证方式
+            // 检查支持的认证方式
             checkIsSupportSoterAuthentication() {
                 uni.checkIsSupportSoterAuthentication({
                     success(res) {
@@ -40,7 +39,7 @@
                     }
                 })
             },
-			// 检查是否录入指纹
+            // 检查是否录入指纹
             checkIsSoterEnrolledInDeviceFingerPrint() {
                 uni.checkIsSoterEnrolledInDevice({
                     checkAuthMode: 'fingerPrint',
@@ -55,7 +54,7 @@
                     }
                 })
             },
-			// 检查是否录入FaceID
+            // 检查是否录入FaceID
             checkIsSoterEnrolledInDeviceFaceID() {
                 uni.checkIsSoterEnrolledInDevice({
                     checkAuthMode: 'facial',
@@ -70,7 +69,7 @@
                     }
                 })
             },
-			// 开始指纹认证
+            // 开始指纹认证
             startSoterAuthenticationFingerPrint() {
                 uni.startSoterAuthentication({
                     requestAuthModes: ['fingerPrint'],
@@ -87,7 +86,7 @@
                     }
                 })
             },
-			// 开始FaceID认证
+            // 开始FaceID认证
             startSoterAuthenticationFaceID() {
                 uni.startSoterAuthentication({
                     requestAuthModes: ['facial'],

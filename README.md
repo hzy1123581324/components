@@ -48,10 +48,14 @@
     │    └─ rolling  滚动盒子
     ├─ semiCircle
     │    └─ semiCircle  半圆渐变背景
+    ├─ skeleton
+    │    └─ skeleton  骨架屏
+    ├─ slideNavigation
+    │    └─ slideNavigation  滑动导航
     ├─ square
-    │    └─ square  正方形
+    │    └─ square  正方形skeleton
     ├─ sticky
-    │    └─ sticky  吸顶（未完）
+    │    └─ sticky  吸顶
     ├─ switch
     │    └─ switch  开关
     ├─ textGradient 
@@ -59,7 +63,7 @@
     ├─ timeStr
     │    └─ timeStr  时间戳格式化
     ├─ transition
-    │    └─ transition  过渡组件	
+    │    └─ transition  过渡组件
     ├─ unScrollBar
     │    └─ unScrollBar 隐藏滚动条
     ├─ utils
