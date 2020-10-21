@@ -40,10 +40,21 @@
     │    └─ payItem  6位数字密码输入框
     ├─ payment
     │    └─ payment  仿支付宝支付密码组件
+    ├─ popup   ---------(未实际应用过)
+    │    ├─ message.js
+    │    ├─ popup.js
+    │    ├─ popup
+    │    ├─ popup-dialog
+    │    ├─ popup-message  
+    │    └─ popup-share   分享弹出框
     ├─ postpone
     │    └─ postpone  有限制异步按钮
     ├─ previewPhone
     │    └─ previewPhone  手机模型
+    ├─ progress
+    │    └─ progress  进度条（*************未完成*******************）
+    ├─ readMore
+    │    └─ readMore  阅读更多
     ├─ rolling
     │    └─ rolling  滚动盒子
     ├─ semiCircle

@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    /**
+/**
  * counter 自增自减计数器
  * @description 商品自增自减
  * @tutorial https://www.uviewui.com/components/button.html
