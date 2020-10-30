@@ -71,6 +71,8 @@
     │    └─ switch  开关
     ├─ textGradient 
     │    └─ textGradient  文字渐变
+    ├─ themeBox
+    │    └─ themeBox  修改风格组件
     ├─ timeStr
     │    └─ timeStr  时间戳格式化
     ├─ transition
