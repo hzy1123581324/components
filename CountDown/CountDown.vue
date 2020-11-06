@@ -85,15 +85,15 @@
                 default: 30
             },
             // 分隔符颜色
-            // separatorColor: {
-            //     type: String,
-            //     default: "#303133"
-            // },
+            separatorColor: {
+                type: String,
+                default: "#303133"
+            },
             // 字体颜色
-            // color: {
-            //     type: String,
-            //     default: '#303133'
-            // },
+            color: {
+                type: String,
+                default: '#303133'
+            },
             // 字体大小，单位rpx
             fontSize: {
                 type: [Number, String],
@@ -145,6 +145,7 @@
             timestamp(newVal, oldVal) {
                 // 如果倒计时间发生变化，清除定时器，重新开始倒计时
                 clearInterval(this.timer);
+                // console.log(newVal,'调用了')
                 this.start();
             }
         },
@@ -186,12 +187,16 @@
         },
         mounted() {
             // 如果自动倒计时
-            this.autoplay && this.timestamp && this.start();
+            // console.log(this.timestamp,'mountesd++++++++++++');
+            clearInterval(this.timer);
+            this.autoplay &&parseFloat(this.timestamp||0)>0 && this.start();
+            // this.autoplay &&this.timestamp && this.start();
         },
         methods: {
             // 倒计时
             start() {
-                if (this.timestamp <= 0) return;
+                // console.log(this.timestamp,'这个是要倒计时的值')
+                if (parseFloat(this.timestamp) <= 0) return;
                 this.seconds = Number(this.timestamp);
                 this.formatTime(this.seconds);
                 this.timer = setInterval(() => {
@@ -203,6 +208,7 @@
                     }
                     this.formatTime(this.seconds);
                 }, 1000);
+               
             },
             // 格式化时间
             formatTime(seconds) {
@@ -223,7 +229,8 @@
                 minute = Math.floor(seconds / 60) - hour * 60 - day * 24 * 60;
                 second = Math.floor(seconds) - day * 24 * 60 * 60 - hour * 60 * 60 - minute * 60;
                 // 如果小于10，在前面补上一个"0"
-                hour = hour < 10 ? '0' + hour : hour;
+                day = day < 10 ? '0' + day : day;
+                showHour = showHour < 10 ? '0' + showHour : showHour;
                 minute = minute < 10 ? '0' + minute : minute;
                 second = second < 10 ? '0' + second : second;
                 this.d = day;
