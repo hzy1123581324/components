@@ -2,11 +2,15 @@
     <view class="slide-navigation-box">
         <scroll-view id="scrollBox" :scroll-x="direction" :scroll-left='scollx' scroll-with-animation="true" class="slide-navigation-item" :style="countStyle" @scroll="scrollChange">
             <view class="menu-item" v-for="(items,index) in _list" :key="index" >
-                <navigator :url="item.url" :open-type="item.show==1?'switchTab':'navigate'" hover-class="none" class="menu-box" v-for="item in items" :key="item.id" >
-                    <view class="menu-icon"><image :src="item.pic"></image></view>
-                    <view class="menu-title">{{ item.name }}</view>
-                    <view class="menu-details">{{ item.name }}</view>
-                </navigator>
+                <view  hover-class="none" class="menu-box" v-for="item in items" :key="item.id" @tap="jump" >
+                    <slot v-bind:item="item">
+                        <view class="menu-icon">
+                            <image :src="item.pic"></image>
+                        </view>
+                        <view class="menu-title">{{ item.title }}</view>
+                        <view class="menu-details">{{ item.subtitle }}</view>
+                    </slot>
+                </view>
             </view>
         </scroll-view>
         <!-- 进度条 -->
@@ -42,10 +46,12 @@
                 type: Boolean,
                 default: true,
             },
+            // 行数
             row:{
                 type: [String,Number],
                 default: 2,
             },
+            // 列数
             column:{
                 type: [String,Number],
                 default: 5,
@@ -89,7 +95,7 @@
                   // _list[i % _column] || (_list[i % _column] = []);
                   // _list[i % _column].push(list[i]);
                 }
-                console.log(_list,'处理后的数据')
+                // console.log(_list,'处理后的数据')
                 return _list;
             },
             // 修改样式
@@ -120,6 +126,28 @@
         mounted() {
         },
         methods: {
+            // jump(item){
+            //     if(item.state==0){
+            //         return uni.showToast({
+            //             title: '待开放',
+            //             icon: 'none',
+            //         })
+            //     }
+                
+            //     if(item.path=="#"||!item.path){
+            //         return uni.showToast({
+            //             title: '没有定义路由',
+            //             icon: 'none',
+            //         })
+            //     }else{
+            //         let openType = (!item.openType)?'navigateTo':item.openType==1?'reLaunch':'redirectTo'
+                    
+            //         uni[openType]({
+            //             url: item.path
+            //         })
+            //     }
+                
+            // },
             // 移动进度条
             movableChange(event){
                 // console.log(event,'888888888888888');
@@ -179,6 +207,13 @@
 <style scoped>
     .slide-navigation-box{
         position: relative;
+        --title-font-size: 24upx; /*标题字体大小*/
+        --title-space: 10upx;/*标题与图标的距离*/
+        --title-color: inherit;/*标题颜色默认继承*/
+        --subtitle-font-size: 18upx;/*副标题字体大小*/
+        --subtitle-space: 8upx;/*副标题与标题之间的距离*/
+        --subtitle-color: inherit;/*副标题颜色默认继承*/
+        --item-space: 36upx; /*行与行之间的距离*/
     }
     .slide-navigation-box::after,.slide-navigation-box::before{
         content: '';
@@ -187,11 +222,11 @@
     }
     .slide-navigation-item{
         width: 100%;
-/*         display: flex;
+        /* display: flex;
         flex-wrap: wrap; */
         white-space: nowrap;
         /* position: relative; */
-        margin-bottom: 38upx;
+        /* margin-bottom: 38upx; */
     }
     .menu-item{
         vertical-align: text-top;
@@ -199,24 +234,25 @@
         width: 100%;
         height: 100%;
         white-space: normal;
-        padding-top: 41upx;
+        /* padding-top: 41upx; */
     }
     .menu-box{
         width: var(--item-width);
         text-align: center;
         display: inline-block;
-        padding-bottom: 36upx;
-        color: #828282;
-        font-size: 18upx;
-        line-height: 25upx;
+        padding-bottom: var(--item-space);
+        /* color: #828282; */
+        font-size: var(--title-font-size);
+        line-height: 1;
     }
     .menu-title{
-        font-size: 24upx;
-        margin-top: 10upx;
-        line-height: 34upx;
+        font-size: var(--title-font-size);
+        margin-top:var(--title-space);
+        line-height: 1;
         overflow: hidden;
         text-overflow: ellipsis;
-        color: #000000;
+        font-weight: 500;
+        color: var(--title-color);
     }
     .menu-icon image{
         width:var(--icon-size);
@@ -224,7 +260,12 @@
         border-radius: 50%;
         /* margin: 0 auto; */
     }
-    
+    .menu-details{
+        font-weight: 400;
+    }
+    .menu-details:empty{
+        display: none;
+    }
     /* 进度条 */
     .progress-bar{
         /* position: absolute; */

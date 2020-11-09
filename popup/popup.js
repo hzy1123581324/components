@@ -13,6 +13,10 @@ const config = {
     dialog: 'center',
     // 分享
     share: 'bottom',
+    // 左边弹出
+    left: 'left',
+    // 右边弹出
+    right: 'right',
 }
 
 export default {

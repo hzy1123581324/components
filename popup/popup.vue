@@ -131,6 +131,9 @@
                         this.msgtimer = setTimeout(() => {
                             this.customOpen && this.customOpen()
                         }, 100)
+                        if(this.type=='left'||this.type=='right'){
+                            uni.hideTabBar()
+                        }
                         this.$emit('change', {
                             show: true,
                             type: this.type
@@ -145,6 +148,10 @@
                         show: false,
                         type: this.type
                     })
+       
+                    if(this.type=='left'||this.type=='right'){
+                        uni.showTabBar()
+                    }
                     clearTimeout(this.timer)
                     // 自定义关闭事件
                     this.customOpen && this.customClose()
@@ -154,6 +161,7 @@
                 })
             },
             onTap() {
+                console.log(this.mkclick);
                 if (!this.mkclick) return
                 this.close()
             },
@@ -201,7 +209,34 @@
                     'justifyContent': 'center',
                     'alignItems': 'center'
                 }
-            }
+            },
+            /**
+             * 左边弹出样式处理
+             */
+            left() {
+                this.popupstyle = 'left'
+                this.ani = ['slide-left', 'fade']
+                this.transClass = {
+                    'position': 'fixed',
+                    'bottom': 0,
+                    'left': 0,
+                    'top': 0,
+        
+                }
+            },
+            /**
+             * 左边弹出样式处理
+             */
+            right() {
+                this.popupstyle = 'right'
+                this.ani = ['slide-right', 'fade']
+                this.transClass = {
+                    'position': 'fixed',
+                    'bottom': 0,
+                    'right': 0,
+                    'top': 0,
+                }
+            },
         }
     }
 </script>
