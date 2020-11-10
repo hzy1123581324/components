@@ -82,6 +82,10 @@
         border-radius: 50%;
         overflow: hidden;
     }
+    .avatar-img image{
+        width: 100%;
+        height: 100%;
+    }
     .title-box{
         
     }
