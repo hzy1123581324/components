@@ -1,15 +1,19 @@
 ## 组件目录结构详细说明
 ~~~
   components
+    ├─ avatar
+    │    └─ avatar  头像组件
     ├─ biometrics
     │    └─ biometrics  指纹解锁,人脸识别（未完）
+    ├─ button
+    │    └─ button  按钮组件
     ├─calendar
     │    ├─ calendar.js  @1900-2100区间内的公历、农历互转
     │    ├─ calendar.vue  日历组件
     │    ├─ calendar-item  日历单元
     │    └─util.js  公共方法
     ├─ chat 
-    │    └─ chat 聊天室
+    │    └─ chat 聊天室(功能未完善)
     ├─ codeTxt 
     │    └─ codeTxt 发送验证码
     ├─ countDown 
@@ -24,6 +28,8 @@
     │    ├─ car-keyboard  车牌键盘（未完）
     │    ├─ number-keyboard  数字键盘（未完）
     │    └─keyboard  键盘（未完）
+    ├─ lineTitle
+    │    └─ lineTitle  左右有图片的标题
     ├─ loading
     │    └─ loading  加载中
     ├─ magnifier
@@ -83,7 +89,9 @@
     │    ├─ color  颜色变量
     │    ├─ colorGradient  渐变颜色
     │    ├─ guid  全局唯一标识符
+    │    ├─ hex2str  字符串转16进制
     │    ├─ md5  MD5加密
+    │    ├─ prototype  原型链
     │    ├─ queryParams  参数处理
     │    ├─ random  四舍五入
     │    ├─ randomArray  随机数组
@@ -101,13 +109,6 @@
     │
     │
     │
-    │
-    │
-    │
-    │
-    │
-    │
-    ├─ dialog 提示框  （未完）
     ├─ textareaHZY  重写textarea（未完）
     └─ 敬请期待
 
