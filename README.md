@@ -14,22 +14,22 @@
     │    └─util.js  公共方法
     ├─ chat 
     │    └─ chat 聊天室(功能未完善)
-    ├─ codeTxt 
-    │    └─ codeTxt 发送验证码
-    ├─ countDown 
-    │    └─ countDown  倒计时
-    ├─ iconShadow 
-    │    └─ iconShadow  png图片实现变色
-    ├─ imageCube
-    │    └─ imageCube  图片魔方
+    ├─ code-txt 
+    │    └─ code-txt 发送验证码
+    ├─ count-down 
+    │    └─ count-down  倒计时
+    ├─ icon-shadow 
+    │    └─ icon-shadow  png图片实现变色
+    ├─ image-cube
+    │    └─ image-cube  图片魔方
     ├─ increase 
     │    └─increase  递增递减（未完）
     ├─ keyboard
     │    ├─ car-keyboard  车牌键盘（未完）
     │    ├─ number-keyboard  数字键盘（未完）
     │    └─keyboard  键盘（未完）
-    ├─ lineTitle
-    │    └─ lineTitle  左右有图片的标题
+    ├─ line-title
+    │    └─ line-title  左右有图片的标题
     ├─ loading
     │    └─ loading  加载中
     ├─ magnifier
@@ -38,12 +38,12 @@
     │    ├─ iconfont.css  css样式
     │    ├─ mverify  右滑验证
     │    └─ README.md  描述
-    ├─ noData
-    │    └─ noData  暂无数据
+    ├─ no-data
+    │    └─ no-data  暂无数据
     ├─ numeral
     │    └─ numeral  数字转中文繁体|加逗号
-    ├─ payItem
-    │    └─ payItem  6位数字密码输入框
+    ├─ payitem
+    │    └─ payitem  6位数字密码输入框
     ├─ payment
     │    └─ payment  仿支付宝支付密码组件
     ├─ popup   ---------(未实际应用过)
@@ -55,36 +55,36 @@
     │    └─ popup-share   分享弹出框
     ├─ postpone
     │    └─ postpone  有限制异步按钮
-    ├─ previewPhone
-    │    └─ previewPhone  手机模型
+    ├─ preview-phone
+    │    └─ preview-phone  手机模型
     ├─ progress
     │    └─ progress  进度条（*************未完成*******************）
-    ├─ readMore
-    │    └─ readMore  阅读更多
+    ├─ read-more
+    │    └─ read-more  阅读更多
     ├─ rolling
     │    └─ rolling  滚动盒子
-    ├─ semiCircle
-    │    └─ semiCircle  半圆渐变背景
+    ├─ semi-circle
+    │    └─ semi-circle  半圆渐变背景
     ├─ skeleton
     │    └─ skeleton  骨架屏
-    ├─ slideNavigation
-    │    └─ slideNavigation  滑动导航
+    ├─ slide-navigation
+    │    └─ slide-navigation  滑动导航
     ├─ square
     │    └─ square  正方形skeleton
     ├─ sticky
     │    └─ sticky  吸顶
     ├─ switch
     │    └─ switch  开关
-    ├─ textGradient 
-    │    └─ textGradient  文字渐变
-    ├─ themeBox
-    │    └─ themeBox  修改风格组件
-    ├─ timeStr
-    │    └─ timeStr  时间戳格式化
+    ├─ text-gradient 
+    │    └─ text-gradient  文字渐变
+    ├─ theme-box
+    │    └─ theme-box  修改风格组件
+    ├─ time-str
+    │    └─ time-str  时间戳格式化
     ├─ transition
     │    └─ transition  过渡组件
-    ├─ unScrollBar
-    │    └─ unScrollBar 隐藏滚动条
+    ├─ unscrollbar
+    │    └─ unscrollbar 隐藏滚动条
     ├─ utils
     │    ├─ color  颜色变量
     │    ├─ colorGradient  渐变颜色
