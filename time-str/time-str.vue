@@ -4,16 +4,16 @@
 
 <script>
     /**
-     * timeStr 异步按钮
+     * time-str 异步按钮
      * @description 接口返回才可以再次点击，接口请求中保持点击状态
      * @tutorial https://www.uviewui.com/components/button.html
      * @property {String} format 输出格式
      * @property {String,Number} value精确到秒的时间戳，不传默认是当前时间 
-     * @example  <timeStr :value=""></timeStr>
-     * @example  <timeStr :value="1111111111" :format="'HH:mm:ss'" ></timeStr>
+     * @example  <time-str :value=""></time-str>
+     * @example  <time-str :value="1111111111" :format="'HH:mm:ss'" ></time-str>
      */
     export default {
-        name: 'timeStr',
+        name: 'time-str',
         props: {
             // 输出格式
             format: {

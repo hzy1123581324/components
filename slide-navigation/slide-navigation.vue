@@ -2,13 +2,13 @@
     <view class="slide-navigation-box">
         <scroll-view id="scrollBox" :scroll-x="direction" :scroll-left='scollx' scroll-with-animation="true" class="slide-navigation-item" :style="countStyle" @scroll="scrollChange">
             <view class="menu-item" v-for="(items,index) in _list" :key="index" >
-                <view  hover-class="none" class="menu-box" v-for="item in items" :key="item.id" @tap="jump" >
+                <view  hover-class="none" class="menu-box" v-for="item in items" :key="item.id" @tap="jump(item)" >
                     <slot v-bind:item="item">
                         <view class="menu-icon">
-                            <image :src="item.pic"></image>
+                            <image :src="item[keyIcon]"></image>
                         </view>
-                        <view class="menu-title">{{ item.title }}</view>
-                        <view class="menu-details">{{ item.subtitle }}</view>
+                        <view class="menu-title">{{ item[keyTitle] }}</view>
+                        <view class="menu-details">{{ item[keySubtitle] }}</view>
                     </slot>
                 </view>
             </view>
@@ -22,19 +22,22 @@
 
 <script>
     /**
-     * SlideNavigation 滑动导航
-     * @description 
+     * slide-navigation 滑动导航
+     * @description 这是一个可以活动的导航，带进度条
      * @tutorial https://www.uviewui.com/components/button.html
      * @property {Array} list  传入数组
      * @property {Boolean} direction 是否横向滚动 
      * @property {String,Number} row  一版排列行数
      * @property {String,Number} column  一版排列的列数
      * @property {Sting,Number} iconSize 图标尺寸默认88
-     * @example <SlideNavigation :lsit="list"></SlideNavigation>
+     * @property {Sting} keyIcon 图标变量默认pic
+     * @property {Sting} keyTitle 主标题变量默认title
+     * @property {Sting} keySubtitle 副标题变量默认subtitle
+     * @example <slide-navigation :lsit="list"></slide-navigation>
      */
     let change_rate,move_type;
     export default {
-        name: 'SlideNavigation',
+        name: 'slide-navigation',
         props: {
             list: {
                 type: Array,
@@ -49,7 +52,7 @@
             // 行数
             row:{
                 type: [String,Number],
-                default: 2,
+                default: 3,
             },
             // 列数
             column:{
@@ -59,7 +62,19 @@
             iconSize:{
                 type: [String,Number],
                 default: 88,
-            }, 
+            },
+            keyIcon: {
+                type: String,
+                default: 'pic'
+            },
+            keyTitle: {
+                type: String,
+                default: 'title'
+            },
+            keySubtitle: {
+                type: String,
+                default: 'subtitle'
+            }
         },
         data() {
             return {

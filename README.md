@@ -68,7 +68,7 @@
     ├─ skeleton
     │    └─ skeleton  骨架屏
     ├─ slide-navigation
-    │    └─ slide-navigation  滑动导航
+    │    └─ slide-navigation  图文滑动导航
     ├─ square
     │    └─ square  正方形skeleton
     ├─ sticky

@@ -1,8 +1,8 @@
 <template>
     <view v-if="showPopup" class="uni-popup" :class="[popupstyle]" @touchmove.stop.prevent="clear">
-        <transition v-if="maskShow" :mode-class="['fade']" :styles="maskClass" :duration="duration" :show="showTrans"
+        <transition class="mask" v-if="maskShow" :mode-class="['fade']" :styles="maskClass" :duration="duration" :show="showTrans"
             @click="onTap" />
-        <transition :mode-class="ani" :styles="transClass" :duration="duration" :show="showTrans" @click="onTap">
+        <transition class="more" :mode-class="ani" :styles="transClass" :duration="duration" :show="showTrans" @click="onTap">
             <view class="uni-popup__wrapper-box" @click.stop="clear">
                 <slot></slot>
             </view>
@@ -17,10 +17,12 @@
      * PopUp 弹出层
      * @description 弹出层组件，为了解决遮罩弹层的问题
      * @tutorial https://ext.dcloud.net.cn/plugin?id=329
-     * @property {String} type = [top|center|bottom] 弹出方式
+     * @property {String} type = [top|center|bottom|left|right] 弹出方式
      *     @value top 顶部弹出
      *     @value center 中间弹出
      *     @value bottom 底部弹出
+     *     @value left 左边弹出
+     *     @value right 右边弹出
      *     @value message 消息提示
      *     @value dialog 对话框
      *     @value share 底部分享示例
@@ -40,11 +42,15 @@
                 type: Boolean,
                 default: true
             },
-            // 弹出层类型，可选值，top: 顶部弹出层；bottom：底部弹出层；center：全屏弹出层
+            // 弹出层类型，可选值，top: 顶部弹出层；bottom：底部弹出层；left: 左弹出框；right：右弹出框；center：全屏弹出层
             // message: 消息提示 ; dialog : 对话框
             type: {
                 type: String,
-                default: 'center'
+                default: 'center',
+                validator: function (value) {
+                        // 这个值必须匹配下列字符串中的一个
+                        return ['top', 'bottom', 'right','left', 'center','message','dialog',].indexOf(value) !== -1
+                      }
             },
             // maskClick
             maskClick: {
@@ -257,7 +263,12 @@
         background-color: $uni-bg-color-mask;
         opacity: 0;
     }
-
+    .mask{
+        margin-top: var(--mask-top,0);
+    }
+    .more{
+        margin-top: var(--mask-top,0);
+    }
     .mask-ani {
         transition-property: opacity;
         transition-duration: 0.2s;
