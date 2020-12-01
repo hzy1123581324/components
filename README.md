@@ -1,115 +1,185 @@
 ## 组件目录结构详细说明
 ~~~
-  components
-    ├─ avatar
-    │    └─ avatar  头像组件
-    ├─ biometrics
-    │    └─ biometrics  指纹解锁,人脸识别（未完）
-    ├─ button
-    │    └─ button  按钮组件
-    ├─calendar
-    │    ├─ calendar.js  @1900-2100区间内的公历、农历互转
-    │    ├─ calendar.vue  日历组件
-    │    ├─ calendar-item  日历单元
-    │    └─util.js  公共方法
-    ├─ chat 
-    │    └─ chat 聊天室(功能未完善)
-    ├─ code-txt 
-    │    └─ code-txt 发送验证码
-    ├─ count-down 
-    │    └─ count-down  倒计时
-    ├─ icon-shadow 
-    │    └─ icon-shadow  png图片实现变色
-    ├─ image-cube
-    │    └─ image-cube  图片魔方
-    ├─ increase 
-    │    └─increase  递增递减（未完）
-    ├─ keyboard
-    │    ├─ car-keyboard  车牌键盘（未完）
-    │    ├─ number-keyboard  数字键盘（未完）
-    │    └─keyboard  键盘（未完）
-    ├─ line-title
-    │    └─ line-title  左右有图片的标题
-    ├─ loading
-    │    └─ loading  加载中
-    ├─ magnifier
-    │    └─ magnifier  图片放大镜
-    ├─ mverify
-    │    ├─ iconfont.css  css样式
-    │    ├─ mverify  右滑验证
-    │    └─ README.md  描述
-    ├─ no-data
-    │    └─ no-data  暂无数据
-    ├─ numeral
-    │    └─ numeral  数字转中文繁体|加逗号
-    ├─ payitem
-    │    └─ payitem  6位数字密码输入框
-    ├─ payment
-    │    └─ payment  仿支付宝支付密码组件
-    ├─ popup   ---------(未实际应用过)
-    │    ├─ message.js
-    │    ├─ popup.js
-    │    ├─ popup
-    │    ├─ popup-dialog
-    │    ├─ popup-message  
-    │    └─ popup-share   分享弹出框
-    ├─ postpone
-    │    └─ postpone  有限制异步按钮
-    ├─ preview-phone
-    │    └─ preview-phone  手机模型
-    ├─ progress
-    │    └─ progress  进度条（*************未完成*******************）
-    ├─ read-more
-    │    └─ read-more  阅读更多
-    ├─ rolling
-    │    └─ rolling  滚动盒子
-    ├─ semi-circle
-    │    └─ semi-circle  半圆渐变背景
-    ├─ skeleton
-    │    └─ skeleton  骨架屏
-    ├─ slide-navigation
-    │    └─ slide-navigation  图文滑动导航
-    ├─ square
-    │    └─ square  正方形skeleton
-    ├─ sticky
-    │    └─ sticky  吸顶
-    ├─ switch
-    │    └─ switch  开关
-    ├─ text-gradient 
-    │    └─ text-gradient  文字渐变
-    ├─ theme-box
-    │    └─ theme-box  修改风格组件
-    ├─ time-str
-    │    └─ time-str  时间戳格式化
-    ├─ transition
-    │    └─ transition  过渡组件
-    ├─ unscrollbar
-    │    └─ unscrollbar 隐藏滚动条
-    ├─ utils
-    │    ├─ color  颜色变量
-    │    ├─ colorGradient  渐变颜色
-    │    ├─ guid  全局唯一标识符
-    │    ├─ hex2str  字符串转16进制
-    │    ├─ md5  MD5加密
-    │    ├─ prototype  原型链
-    │    ├─ queryParams  参数处理
-    │    ├─ random  四舍五入
-    │    ├─ randomArray  随机数组
-    │    ├─ route  路由变量
-    │    ├─ test  正则验证
-    │    ├─ timeFormat  时间格式化
-    │    ├─ timeFrom  时间戳转为多久之前
-    │    ├─ toast  提示框
-    │    ├─ trim  去空格
-    │    ├─ type2icon  类型转icon 
-    │    └─ 待续
-    │
-    ├─ waterfall
-    │    └─ waterfall  瀑布流
-    │
-    │
-    │
-    ├─ textareaHZY  重写textarea（未完）
+  z-view-ui
+    ├─ README.md
+    │ 
+    ├─ components
+    │  │ 
+    │  ├─z-avatar
+    │  │     └─ z-avatar.vue
+    │  │      
+    │  ├─z-biometrics
+    │  │     └─ z-biometrics.vue
+    │  │      
+    │  ├─z-button
+    │  │     └─ z-button.vue
+    │  │      
+    │  ├─z-calendar
+    │  │    ├─  calendar-item.vue
+    │  │    ├─  calendar.js
+    │  │    ├─  util.js
+    │  │    └─  z-calendar.vue
+    │  │      
+    │  ├─z-chat
+    │  │    └─  z-chat.vue
+    │  │      
+    │  ├─z-code-txt
+    │  │      └─z-code-txt.vue
+    │  │      
+    │  ├─z-count-down
+    │  │     └─ z-count-down.vue
+    │  │      
+    │  ├─z-icon-shadow
+    │  │     └─ z-icon-shadow.vue
+    │  │      
+    │  ├─z-image-cube
+    │  │     └─ z-image-cube.vue
+    │  │      
+    │  ├─z-increase
+    │  │     └─ z-increase.vue
+    │  │      
+    │  ├─z-keyboard
+    │  │     ├─ car-keyboard.vue
+    │  │     ├─ number-keyboard.vue
+    │  │     └─ z-keyboard.vue
+    │  │      
+    │  ├─z-line-title
+    │  │     └─ z-line-title.vue
+    │  │      
+    │  ├─z-loading
+    │  │     └─ z-loading.vue
+    │  │      
+    │  ├─z-magnifier
+    │  │     ├─ magnifier-original.vue
+    │  │     └─z-magnifier.vue
+    │  │      
+    │  ├─z-mverify
+    │  │     ├─ iconfont.css
+    │  │     ├─ README.md
+    │  │     └─ z-mverify.vue
+    │  │      
+    │  ├─z-navbar
+    │  │    └─  z-navbar.vue
+    │  │      
+    │  ├─z-no-data
+    │  │     └─ z-no-data.vue
+    │  │      
+    │  ├─z-notice-bar
+    │  │     └─ z-notice-bar.vue
+    │  │      
+    │  ├─z-notice-column
+    │  │     └─ z-notice-column.vue
+    │  │      
+    │  ├─z-notice-row
+    │  │     └─ z-notice-row.vue
+    │  │      
+    │  ├─z-numeral
+    │  │     └─ z-numeral.vue
+    │  │      
+    │  ├─z-parse
+    │  │  ├─  z-parse.vue
+    │  │  └─libs
+    │  │      ├─    config.js
+    │  │      ├─   CssHandler.js
+    │  │      ├─   handler.wxs
+    │  │      ├─   MpHtmlParser.js
+    │  │      └─   trees.vue
+    │  │          
+    │  ├─z-payitem
+    │  │     └─ z-payitem.vue
+    │  │      
+    │  ├─z-payment
+    │  │     └─ z-payment.vue
+    │  │      
+    │  ├─z-popup
+    │  │    ├─  message.js
+    │  │    ├─  popup-dialog.vue
+    │  │    ├─  popup-message.vue
+    │  │    ├─  popup-share.vue
+    │  │    ├─  popup.js
+    │  │    └─  z-popup.vue
+    │  │      
+    │  ├─z-postpone
+    │  │     └─ z-postpone.vue
+    │  │      
+    │  ├─z-preview-phone
+    │  │     └─ z-preview-phone.vue
+    │  │      
+    │  ├─z-progress
+    │  │      └─z-progress.vue
+    │  │      
+    │  ├─z-qrcode
+    │  │     ├─ uqrcode.js
+    │  │     └─ z-qrcode.vue
+    │  │      
+    │  ├─z-read-more
+    │  │     └─ z-read-more.vue
+    │  │      
+    │  ├─z-rolling
+    │  │     └─ z-rolling.vue
+    │  │      
+    │  ├─z-semi-circle
+    │  │     └─ z-semi-circle.vue
+    │  │      
+    │  ├─z-skeleton
+    │  │     └─ z-skeleton.vue
+    │  │      
+    │  ├─z-slide-navigation
+    │  │     └─ z-slide-navigation.vue
+    │  │      
+    │  ├─z-square
+    │  │     └─ z-square.vue
+    │  │      
+    │  ├─z-sticky
+    │  │     └─ z-sticky.vue
+    │  │      
+    │  ├─z-switch
+    │  │    └─  z-switch.vue
+    │  │      
+    │  ├─z-tabs
+    │  │     └─ z-tabs.vue
+    │  │      
+    │  ├─z-text-gradient
+    │  │     └─ z-text-gradient.vue
+    │  │      
+    │  ├─z-textarea
+    │  │     └─ z-textarea.vue
+    │  │      
+    │  ├─z-theme-box
+    │  │     └─ z-theme-box.vue
+    │  │      
+    │  ├─z-time-str
+    │  │     └─ z-time-str.vue
+    │  │      
+    │  ├─z-transition
+    │  │     └─ z-transition.vue
+    │  │      
+    │  ├─z-unscrollbar
+    │  │     └─ z-unscrollbar.vue
+    │  │      
+    │  └─z-waterfall
+    │        └─  z-waterfall.vue  瀑布流
+    │          
+    ├─utils
+    │   ├─ color.js
+    │   ├─ colorGradient.js
+    │   ├─ file.js
+    │   ├─ guid.js
+    │   ├─ hex2str.js
+    │   ├─ md5.js
+    │   ├─ prototype.js
+    │   ├─ queryParams.js
+    │   ├─ random.js
+    │   ├─ randomArray.js
+    │   ├─ route.js
+    │   ├─ test.js
+    │   ├─ timeFormat.js
+    │   ├─ timeFrom.js
+    │   ├─ toast.js
+    │   ├─ trim.js
+    │   ├─ type2icon.js
+    │   └─ 待续       
+    │ 
     └─ 敬请期待
 
 ~~~
