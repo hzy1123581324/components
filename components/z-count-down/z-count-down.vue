@@ -1,37 +1,27 @@
 <template>
     <view class="countdown">
-        <view class="countdown-item" :style="[itemStyle]" v-if="showDays">
-            <view class="countdown-time" :style="[letterStyle]">
-                {{ d }}
-            </view>
+        <view class="countdown-item"  v-if="showDays">
+            <view class="countdown-time">{{ d }}</view>
         </view>
-        <view class="countdown-colon" :style="{fontSize: separatorSize + 'rpx', color: separatorColor, paddingBottom: separator == 'colon' ? '4rpx' : 0}"
-            v-if="showDays">
+        <view :class="['countdown-colon',separator == 'colon'&&'separator']"   v-if="showDays">
             {{ separator == 'colon' ? ':' : '天' }}
         </view>
-        <view class="countdown-item" :style="[itemStyle]" v-if="showHours">
-            <view class="countdown-time" :style="{ fontSize: fontSize + 'rpx', color: color}">
-                {{ h }}
-            </view>
+        <view class="countdown-item"  v-if="showHours">
+            <view class="countdown-time" >{{ h }}</view>
         </view>
-        <view class="countdown-colon" :style="{fontSize: separatorSize + 'rpx', color: separatorColor, paddingBottom: separator == 'colon' ? '4rpx' : 0}"
-            v-if="showHours">
+        <view :class="['countdown-colon',separator == 'colon'&&'separator']"  v-if="showHours">
             {{ separator == 'colon' ? ':' : '时' }}
         </view>
-        <view class="countdown-item" :style="[itemStyle]" v-if="showMinutes">
-            <view class="countdown-time" :style="{ fontSize: fontSize + 'rpx', color: color}">
-                {{ i }}
-            </view>
+        <view class="countdown-item"  v-if="showMinutes">
+            <view class="countdown-time">{{ i }}</view>
         </view>
-        <view class="countdown-colon" :style="{fontSize: separatorSize + 'rpx', color: separatorColor, paddingBottom: separator == 'colon' ? '4rpx' : 0}"
-            v-if="showMinutes">
+        <view :class="['countdown-colon',separator == 'colon'&&'separator']"  v-if="showMinutes">
             {{ separator == 'colon' ? ':' : '分' }}
         </view>
-        <view class="countdown-item" :style="[itemStyle]" v-if="showSeconds">
-            <view class="countdown-time" :style="{ fontSize: fontSize + 'rpx', color: color}">{{ s }}</view>
+        <view class="countdown-item"  v-if="showSeconds">
+            <view class="countdown-time" >{{ s }}</view>
         </view>
-        <view class="countdown-colon" :style="{fontSize: separatorSize + 'rpx', color: separatorColor, paddingBottom: separator == 'colon' ? '4rpx' : 0}"
-            v-if="showSeconds && separator == 'zh'">
+        <view :class="['countdown-colon',separator == 'colon'&&'separator']" v-if="showSeconds && separator == 'zh'">
             秒
         </view>
     </view>
@@ -45,8 +35,6 @@
      * @property {String Number} timestamp 倒计时，单位为秒
      * @property {Boolean} autoplay 是否自动开始倒计时，如果为false，需手动调用开始方法。见官网说明（默认true）
      * @property {String} separator 分隔符，colon为英文冒号，zh为中文（默认colon）
-     * @property {String Number} separator-size 分隔符的字体大小，单位rpx（默认30）
-     * @property {String} separator-color 分隔符的颜色（默认#303133）
      * @property {String Number} font-size 倒计时字体大小，单位rpx（默认30）
      * @property {Boolean} show-border 是否显示倒计时数字的边框（默认false）
      * @property {String} border-color 数字边框的颜色（默认#303133）
@@ -59,10 +47,25 @@
      * @property {Boolean} show-seconds 是否显示倒计时的"秒"部分（默认true）
      * @event {Function} end 倒计时结束
      * @event {Function} change 每秒触发一次，回调为当前剩余的倒计秒数
-     * @example <count-down ref="uCountDown" :timestamp="86400" :autoplay="false"></count-down>
+     * @example <z-count-down ref="countDown" :timestamp="86400" :autoplay="false"></z-count-down>
+     * <style>
+        .count-down{
+            --color: 字体颜色
+            --font-size: 字体大小，单位upx（默认30）
+            --size； 字体盒子尺寸 默认auto;
+            --separator-font-size 分隔符的字体大小，单位upx（默认30）
+            --separator-color 分隔符的颜色（默认#303133
+            --bor-radius:  数字盒子圆角 默认6upx
+            --bor-width:  边框大小
+            --bor-color   边框颜色 默认#303133
+            --bg-color    背景颜色 默认#fff
+            --bg-img      背景图片
+            --shadow      阴影
+         }
+     </style>
      */
     export default {
-        name: 'count-down',
+        name: 'z-count-down',
         props: {
             // 倒计时的时间，秒为单位
             timestamp: {
@@ -79,46 +82,12 @@
                 type: String,
                 default: 'colon'
             },
-            // 分隔符的大小，单位rpx
-            separatorSize: {
-                type: [Number, String],
-                default: 30
-            },
-            // 分隔符颜色
-            separatorColor: {
-                type: String,
-                default: "#303133"
-            },
-            // 字体颜色
-            color: {
-                type: String,
-                default: '#303133'
-            },
-            // 字体大小，单位rpx
-            fontSize: {
-                type: [Number, String],
-                default: 30
-            },
-            // 背景颜色
-            bgColor: {
-                type: String,
-                default: '#fff'
-            },
-            // 数字框高度，单位rpx
-            height: {
-                type: [Number, String],
-                default: 'auto'
-            },
             // 是否显示数字框
             showBorder: {
                 type: Boolean,
                 default: false
             },
-            // 边框颜色
-            borderColor: {
-                type: String,
-                default: '#303133'
-            },
+
             // 是否显示秒
             showSeconds: {
                 type: Boolean,
@@ -158,32 +127,6 @@
                 timer: null, // 定时器
                 seconds: 0, // 记录不停倒计过程中变化的秒数
             };
-        },
-        computed: {
-            // 倒计时item的样式，item为分别的时分秒部分的数字
-            itemStyle() {
-                let style = {};
-                if (this.height) {
-                    style.height = uni.upx2px(this.height) + 'px';
-                    style.width = uni.upx2px(this.height) + 'px';
-                }
-                if (this.showBorder) {
-                    style.borderStyle = 'solid';
-                    style.borderColor = this.borderColor;
-                    style.borderWidth = '1px';
-                }
-                if (this.bgColor) {
-                    style.backgroundColor = this.bgColor;
-                }
-                return style;
-            },
-            // 倒计时数字的样式
-            letterStyle() {
-                let style = {};
-                if (this.fontSize) style.fontSize = uni.upx2px(this.fontSize) + 'px';
-                if (this.color) style.color = this.color;
-                return style;
-            }
         },
         mounted() {
             // 如果自动倒计时
@@ -260,30 +203,47 @@
     }
 
     .countdown-item {
+        --bor-ra: 6upx;
+        --bor-w: 1upx;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 2rpx;
-        border-radius: 6rpx;
         white-space: nowrap;
         transform: translateZ(0);
+        width: var(--size,auto);
+        height: var(--size,auto);
+        border: var(--bor-width,var(--bor-w)) solid var(--bor-color,#303133);
+        border-radius: var(--bor-radius,var(--bor-ra));
+        background-color: var(--bg-color,#fff);
+        background-image: var(--bg-img);
+        box-shadow: var(--shadow);
     }
 
     .countdown-time {
+        --f-s: 30upx;
         margin: 0;
         padding: 0;
         line-height: 1;
+        font-size: var(--font-size,var(--f-s));
+        color: var(--color,#303133)
     }
 
     .countdown-colon {
+        --font-size: 30upx;
         display: flex;
         justify-content: center;
         padding: 0 5rpx;
         line-height: 1;
         align-items: center;
         padding-bottom: 4rpx;
+        font-size:var(--separator-font-size,var(--font-size)); 
+        color: var(--separator-color,#303133);
     }
-
+    .countdown-colon.separator{
+        padding-bottom: 4upx;
+        // paddingBottom: separator == 'colon' ? '4rpx' : 0
+    }
     .countdown-scale {
         transform: scale(0.9);
         transform-origin: center center;

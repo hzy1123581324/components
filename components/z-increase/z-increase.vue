@@ -17,6 +17,7 @@
  * @property {String,Number} min 最小值
  * @property {String,Number} max 最大值
  * @property {String,Number} num 初始化的值
+ * @property {String,Number} step 递增步长
  * @example <counter :num.sync="num"></counter>
  * @example <counter class="couter" :num.sync="num"></counter>
  * <style>

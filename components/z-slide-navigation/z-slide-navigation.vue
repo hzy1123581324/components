@@ -33,7 +33,20 @@
      * @property {Sting} keyIcon 图标变量默认pic
      * @property {Sting} keyTitle 主标题变量默认title
      * @property {Sting} keySubtitle 副标题变量默认subtitle
-     * @example <slide-navigation :lsit="list"></slide-navigation>
+     * @example <slide-navigation class="slide-navigation" :lsit="list"></slide-navigation>
+     * <style>
+         .slide-navigation{
+             --title-font-size: 24upx;   标题字体大小
+             --title-space: 10upx;   标题与图标的距离
+             --title-color: inherit;  标题颜色默认继承
+             --subtitle-font-size: 18upx;   副标题字体大小
+             --subtitle-space: 8upx;   副标题与标题之间的距离
+             --subtitle-color: inherit;   副标题颜色默认继承
+             --item-space: 36upx;    行与行之间的距离
+             --icon-size： 88upx;  图标大小
+         }
+          
+     </style>
      */
     let change_rate,move_type;
     export default {
@@ -41,9 +54,11 @@
         props: {
             list: {
                 type: Array,
+                
                 default: ()=>{
                     return []
-                }
+                },
+                
             },
             direction: {
                 type: Boolean,
@@ -58,10 +73,6 @@
             column:{
                 type: [String,Number],
                 default: 5,
-            },
-            iconSize:{
-                type: [String,Number],
-                default: 88,
             },
             keyIcon: {
                 type: String,
@@ -117,20 +128,7 @@
             countStyle(){
                 let {column,iconSize} = this;
                 column = 100/column;
-                if(/(^[\-0-9][0-9]*(.[0-9]+)?)$/.test(iconSize)){
-                    // #ifdef APP-PLUS 
-                    iconSize = uni.upx2px(iconSize)+'px';
-                    // #endif
-                    // #ifdef H5
-                    iconSize = uni.upx2px(iconSize)+'px';
-                    // #endif
-                    // 微信小程序
-                    // #ifdef MP-WEIXIN
-                    iconSize+='rpx';
-                    // #endif
-
-                }
-                return `--item-width: ${column}%;--icon-size:${iconSize};`
+                return `--item-width: ${column}%;`
             },
             // 进度条样式
             countProgressStyle(){
@@ -229,6 +227,7 @@
         --subtitle-space: 8upx;/*副标题与标题之间的距离*/
         --subtitle-color: inherit;/*副标题颜色默认继承*/
         --item-space: 36upx; /*行与行之间的距离*/
+        --icon-size: 88upx;/*图标大小*/
     }
     .slide-navigation-box::after,.slide-navigation-box::before{
         content: '';

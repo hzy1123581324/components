@@ -39,6 +39,7 @@
      * <style>
      * 
      * .navbar{
+       --navbar-color: 导航栏默认字体颜色 #333
        --navbar-height: 导航栏高度， 默认98upx
        --navbar-fixed: 是否固定在顶部 
        --fixed-bg-color： 导航栏背景色
@@ -48,6 +49,7 @@
        --navbar-rg-font: 导航栏右边字体大小  默认32upx
        --navbar-lf-font: 导航栏左边字体大小  默认32upx
        --navbar-center-width: 导航标题宽度
+       
      }
      * 
     
