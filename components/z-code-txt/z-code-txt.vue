@@ -9,8 +9,8 @@
 
 <script>
     /**
-     * counter 自增自减计数器
-     * @description 商品自增自减
+     * counter 验证码组件
+     * @description 验证码组件
      * @tutorial https://www.uviewui.com/components/button.html
      * @property {String,Number} time 倒计时时间
      * @property {Function} getcodefun 验证码发送成功回调

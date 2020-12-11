@@ -1,27 +1,26 @@
 <template>
-    <view class="navbar-box" :style="navbarStyle">
-        <view class="navbar-fixed-box">
-            <view class="navbar-left">
-                <slot name="left" v-if="isBack" @tap="goBack">
+    <view class="navbar-box clear" :style="`--navbar-fixed:${!isFixed?'relative':'fixed'};--status-height:${statusheight}px;`">
+        <view class="navbar-fixed-box clear">
+            <view :class="['navbar-left',isBack&&'hasback']" @tap="goBack">
+                <slot name="left">
                     <u-icon :name="backIconName" :color="backIconColor" :size="backIconSize"></u-icon>
                     <text class="backTxt">{{backTxt}}</text>
                 </slot>
             </view>
-            <view class="navbar-center" v-if="showTitle" >
+            <view class="navbar-center" v-if="showTitle">
                 <slot></slot>
             </view>
             <view class="navbar-right">
                 <slot name="right"></slot>
             </view>
             <view class="navbar-full">
-                <slot class="full"></slot>
+                <slot name="full"></slot>
             </view>
         </view>
     </view>
 </template>
 
 <script>
-    
     /**
      * navbar 自定义导航栏
      * @description 此组件一般用于在特殊情况下，需要自定义导航栏的时候用到，一般建议使用uniapp自带的导航栏。
@@ -55,7 +54,7 @@
     
      </style>
      */
-    
+
     export default {
         name: 'z-navbar',
         props: {
@@ -84,77 +83,96 @@
             // 左边返回图标的大小，rpx
             backIconSize: {
                 type: [String, Number],
-                default: '30'
+                default: '34'
             },
             // 自定义返回逻辑
             customBack: {
-            	type: Function,
-            	default: null
+                type: Function,
+                default: null
             },
-            showTitle:{
+            showTitle: {
                 type: Boolean,
                 default: true
             }
         },
         data() {
             return {
-
+                statusheight: 0
             }
         },
         computed: {
-            navbarStyle() {
-                let style = '';
-                let {
-                    isFixed
-                } = this;
-                if (!isFixed) {
-                    style += '--navbar-fixed: relative';
-                }
+            // navbarStyle() {
+            //     let style = '';
+            //     let {
+            //         isFixed
+            //     } = this;
+            //     if (!isFixed) {
+            //         style += '--navbar-fixed: relative';
+            //     }
 
-                return style
-            }
+            //     return style
+            // }
+        },
+        mounted() {
+            uni.getSystemInfo({
+                success: (res)=> {
+                    // 有些手机没有设置--status-bar-height
+                    this.statusheight = res.statusBarHeight;
+                }
+            });
+    
         },
         methods: {
-		goBack() {
-			// 如果自定义了点击返回按钮的函数，则执行，否则执行返回逻辑
-			if(typeof this.customBack === 'function') {
-				this.customBack();
-			} else {
-				uni.navigateBack();
-			}
-		}
+            goBack() {
+                // 如果自定义了点击返回按钮的函数，则执行，否则执行返回逻辑
+                if (typeof this.customBack === 'function') {
+                    this.customBack();
+                } else {
+                    console.log('888888888888888888');
+                    uni.navigateBack();
+                }
+            }
         }
     }
 </script>
 
 <style scoped>
     .navbar-box {
+        --status-height: 0;
         --height: 98upx;
-        --center-width: 250upx;
-        height: calc(var(--navbar-height, var(--height)) + var(--status-bar-height, 0));
+        --center-width: 300upx;
+        padding-top: var(--status-bar-height, var(--status-height));
+        height: var(--navbar-height, var(--height));
         box-sizing: border-box;
         position: relative;
-        background-color: red;
-        color: var(--navbar-color,#333)
+        color: var(--navbar-color, #333);
+        box-sizing: content-box;
     }
 
     .navbar-fixed-box {
         width: 100%;
         position: var(--navbar-fixed, fixed);
-        height: calc(var(--navbar-height, var(--height)) + var(--status-bar-height, 0));
-        padding-top: var(--status-bar-height, 0);
-        z-index: 9999;
+        padding-top: var(--status-bar-height, var(--status-height));
+        height: var(--navbar-height, var(--height));
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
         /* #ifndef APP-NVUE */
         display: flex;
         /* #endif */
         box-shadow: 0 1upx 0 0 #f4f4f4;
-        background-color: var(--fixed-bg-color,#fff);
+        background-color: var(--fixed-bg-color, #fff);
         background-image: var(--fixed-bg-img);
+
+        box-sizing: content-box;
+
     }
 
     .navbar-left {
+
         --font: 32upx;
-        width: calc( (100vw - var(--navbar-center-width,var(--center-width)) ) / 2 );
+        width: calc((100vw - var(--navbar-center-width, var(--center-width))) / 2);
         height: 100%;
         /* #ifndef APP-NVUE */
         display: flex;
@@ -163,33 +181,45 @@
         align-content: center;
         justify-content: flex-start;
         padding-left: 0.5em;
-        font-size: var(--navbar-lf-font,var(--font));
-        
+        font-size: var(--navbar-lf-font, var(--font));
+        opacity: 0;
+        pointer-events: none;
+        /* background-color: red; */
     }
-    .backTxt{
+
+    .navbar-left.hasback {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .backTxt {
         padding-left: 0.3em;
     }
+
     /* 标题中部 */
-    .navbar-center{
+    .navbar-center {
         --font: 34upx;
         overflow: hidden;
-        text-overflow:ellipsis;/*文本溢出显示省略号*/
-        white-space:nowrap;/*文本不会换行（单行文本溢出）*/
-        width: var(--navbar-center-width,var(--center-width) );
+        text-overflow: ellipsis;
+        /*文本溢出显示省略号*/
+        white-space: nowrap;
+        /*文本不会换行（单行文本溢出）*/
+        width: var(--navbar-center-width, var(--center-width));
         height: 100%;
         line-height: var(--navbar-height, var(--height));
-        font-size: var(--navbar-title-font,var(--font));
-        font-weight: var(--navbar-title-weight,500);
+        font-size: var(--navbar-title-font, var(--font));
+        font-weight: var(--navbar-title-weight, 500);
         /* #ifndef APP-NVUE */
         display: block;
         /* #endif */
 
         text-align: center;
     }
+
     /*  */
-    .navbar-right{
+    .navbar-right {
         --font: 32upx;
-        width: calc( (100vw - var(--navbar-center-width,var(--center-width)) ) / 2 );
+        width: calc((100vw - var(--navbar-center-width, var(--center-width))) / 2);
         height: 100%;
         /* #ifndef APP-NVUE */
         display: flex;
@@ -200,14 +230,20 @@
         align-items: center;
         align-content: center;
         justify-content: flex-end;
-        font-size: var(--navbar-rg-font,var(--font));
+        font-size: var(--navbar-rg-font, var(--font));
         padding-right: 1em;
     }
-    .navbar-full{
+
+    .navbar-full {
         width: 100%;
         height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 10;
     }
-    .navbar-full:empty{
+
+    .navbar-full:empty {
         opacity: 0;
         pointer-events: none;
     }

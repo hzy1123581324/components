@@ -5,6 +5,7 @@
 </template>
 
 <script>
+    
     export default{
         name: 'z-icon',
         data(){
@@ -17,4 +18,10 @@
 </script>
 
 <style scoped>
+    .icon-box{
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+    }
+    
 </style>

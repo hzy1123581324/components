@@ -44,6 +44,8 @@
              --subtitle-color: inherit;   副标题颜色默认继承
              --item-space: 36upx;    行与行之间的距离
              --icon-size： 88upx;  图标大小
+             --title-font-weight 标题字重 默认 500
+             --subtitle-font-weight 副标题字重 默认400
          }
           
      </style>
@@ -267,7 +269,7 @@
         line-height: 1;
         overflow: hidden;
         text-overflow: ellipsis;
-        font-weight: 500;
+        font-weight: var(--title-font-weight,500);
         color: var(--title-color);
     }
     .menu-icon image{
@@ -277,7 +279,7 @@
         /* margin: 0 auto; */
     }
     .menu-details{
-        font-weight: 400;
+        font-weight: var(--subtitle-font-weight,400);
     }
     .menu-details:empty{
         display: none;

@@ -1,5 +1,5 @@
 <template>
-    <view :class="['button-box',plain&&'plain',shape,disable&&'disable']" style="buttonStyle" @click="buttonClick">
+    <view :class="['button-box',plain&&'plain',shape,disable&&'disable']" :style="buttonStyle" @click="buttonClick">
         <slot></slot>
     </view>
 </template>
@@ -13,11 +13,34 @@
      * @property {String} type = [default|navigation] 按钮类型
      *     @value default 默认按钮，没有其他功能
      *     @value navigation 路由按钮功能跟 navigation 一样
+     * @property {String} shape = [square|circle] 按钮类型
+     *      @value square 默认圆角
+     *      @value circle 两边为半圆
+     * @property {Boolean} plain 是否镂空 默认不镂空 
+     * @property {Boolean} disable 是否禁用，默认不禁用 
+     * @property {Function } postpone 仿重复点击事件，传入一个方法 
      * @property {Boolean} animation = [ture|false] 是否开启动画
+     * @property {String,Nubmer} stayTime  接口调用后必须等待多少时间才可点击
+     * @property {String,Nubmer} outTime 超出时间，后可以点击
      * @event {Function} change 打开关闭弹窗触发，e={show: false}
+     * @example <z-button class="button"></z-button>
+       <style>
+           .button{
+              --btn-height: 按钮高度 默认 84upx
+              --btn-bor-width: 边框宽度 默认2upx
+              --btn-color  按钮字体颜色
+              --btn-bg: 按钮背景色
+              --btn-disable-bg 按钮禁用背景色
+              --btn-disable-color 按钮禁用字体颜色
+              --btn-disable-opacity 按钮禁用透明度
+              --btn-disable-bor-color
+           }
+           
+       </style>
+     
      */
-    export default  {
-        name: 'hzyButton',
+    export default {
+        name: 'z-button',
         props: {
             // 按钮形状，circle（两边为半圆），square（带圆角）
             shape: {
@@ -29,46 +52,85 @@
                 type: Boolean,
                 default: false
             },
-            color:{
-                type: String,
-                default: ''
-            },
+            // 是否禁用
             disable: {
                 type: Boolean,
                 default: false,
             },
+            // 点击类型
             type: {
                 type: String,
                 default: 'default',
-            }
+            },
+            // 传入一个仿重复点击事件
+            postpone: {
+                type: Function,
+                
+            },
+            // 接口调用后必须等待多少时间才可点击
+            stayTime: {
+                type: [Number, String],
+                // default: 0,
+            },
+            // 超出时间，后可以点击
+            outTime: {
+                type: [Number, String],
+                // default: 3000,
+            },
 
         },
         components: {
             // postpone  
         },
         computed: {
-            buttonStyle(){
-                
+            buttonStyle() {
+
                 return ``
             },
         },
         data: () => {
             return {
-               
+                canclick: true,
             }
         },
-        methods:{
-            buttonClick(){
+        methods: {
+            buttonClick() {
+                if(!this.canclick){
+                    return ;
+                }
+                if (this.postpone) {
+                    return this.unrepeat(); 
+                }
+
                 switch (this.type) {
                     // 链接成功，可以放送订阅
                     case 'navigation':
                         this.jump();
                         break;
                     default:
+                        // this.$emit('click',)
                         break;
                 }
             },
-            jump(){
+
+            // 仿重复点击
+            async unrepeat() {
+                this.canclick = false;
+                if(this.outTime){
+                    setTimeout(()=>{
+                        this.canclick = true;
+                    },this.outTime)
+                }
+                await this.postpone();
+                if(this.stayTime){
+                    setTimeout(()=>{
+                        this.canclick = true;
+                    },this.stayTime)
+                }else{
+                    this.canclick = true;
+                }
+            },
+            jump() {
                 // if(item.state==0
                 // ){
                 //     return uni.showToast({
@@ -76,7 +138,7 @@
                 //         icon: 'none',
                 //     })
                 // }
-                
+
                 // if(item.path=="#"||!item.path){
                 //     return uni.showToast({
                 //         title: '没有定义路由',
@@ -84,15 +146,15 @@
                 //     })
                 // }else{
                 //     let openType = (!item.openType)?'navigateTo':item.openType==1?'reLaunch':'redirectTo'
-                    
+
                 //     uni[openType]({
                 //         url: item.path
                 //     })
                 // }
-                
+
             },
         }
-       
+
     }
 </script>
 
@@ -101,35 +163,39 @@
         /* 很操蛋var默认值upx转不过来 */
         --btn-height: 84upx;
         --btn-bor-width: 2upx;
-        --btn-bor: var(--btn-bor-width) solid var(--btn-bor-color,currentColor);
+        --btn-bor: var(--btn-bor-width) solid var(--btn-bor-color, currentColor);
         --btn-font-size: 32upx;
-        display: var(--display,block);
-        line-height: calc( var(--btn-height) - 2 * var(--btn-bor-width) );
+        display: var(--display, block);
+        line-height: calc(var(--btn-height) - 2 * var(--btn-bor-width));
         height: var(--btn-height);
         border: var(--btn-bor);
         text-align: center;
         font-size: var(--btn-font-size);
-        color:var(--btn-color,#fff);
+        color: var(--btn-color, #fff);
         letter-spacing: 4upx;
         padding: 0 1em;
         --btn-radius: calc(var(--btn-height) / 2);
-        border-radius: var(--btn-radius);/*默认是半圆*/
+        border-radius: var(--btn-radius);
+        /*默认是半圆*/
         background-color: var(--btn-bg);
         pointer-events: auto;
     }
-    .square{
+
+    .square {
         --btn-radius: 8upx;
     }
-    .button-box.plain{
+
+    .button-box.plain {
         background-color: transparent;
         color: var(--btn-color);
         /* border: var(--btn-bor-width,2upx) solid currentColor; */
         /* border: 2upx solid currentColor; */
     }
-    .button-box.disable{
-        background-color: var(--btn-disable-bg);
-        color: var(--btn-disable-color);
-        opacity: var(--btn-disable-opacity);
+
+    .button-box.disable {
+        background-color: var(--btn-disable-bg,var(--btn-bg));
+        color: var(--btn-disable-color,var(--btn-color,#fff));
+        opacity: var(--btn-disable-opacity,1);
         border-color: var(--btn-disable-bor-color);
         pointer-events: none;
     }

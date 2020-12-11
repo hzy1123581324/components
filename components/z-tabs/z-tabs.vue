@@ -105,7 +105,7 @@
 
             },
             list(newval) {
-                console.log('重新复制', newval)
+                // console.log('重新复制', newval)
                 if (newval.length > 0) {
                     // console.log(newval,'++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
                     setTimeout(this.check, 100)
@@ -192,9 +192,7 @@
         --tab-h: 80upx;
         height: var(--tab-height, var(--tab-h));
         position: relative;
-
     }
-
     .scroll-list-box,
     .tabs-items {
         height: 100%;
