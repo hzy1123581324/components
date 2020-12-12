@@ -44,10 +44,13 @@
     │  │        
     │  ├─z-icon  icon组件
     │  │     └─ z-icon.vue
-    │  │        
+    │  │
+    │  ├─z-icon-mode  图标变色组件
+    │  │     └─ z-icon-mode.vue 
+    │  │
     │  ├─z-icon-shadow  图标变色组件
     │  │     └─ z-icon-shadow.vue
-    │  │      
+    │  │
     │  ├─z-image-cube 图片魔方
     │  │     └─ z-image-cube.vue
     │  │      

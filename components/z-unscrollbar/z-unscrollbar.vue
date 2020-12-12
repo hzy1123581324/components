@@ -1,12 +1,36 @@
 <template>
-    <div class="outer-container">
-        <div class="inner-container">
-            <div class="content">
+    <view class="outer-container">
+        <view class="inner-container">
+            <view class="content">
                 <slot></slot>
-            </div>
-        </div>
-    </div>
+            </view>
+        </view>
+    </view>
 </template>
+<script>
+    export default {
+        props: {
+            
+        },
+        methods: {
+            handleScroll(e) {
+                const top = e.target.scrollTop;
+
+                if (top > 100) {
+                    this.flag = false;
+                } else {
+                    this.flag = true;
+                }
+            }
+        },
+        mounted() {
+            window.addEventListener("scroll", this.handleScroll, true);
+        },
+        destroyed() {
+            window.removeEventListener("scroll", this.windowScroll, true);
+        }
+    };
+</script>
 <style scoped>
     .outer-container {
         width: 200px;
