@@ -1,17 +1,16 @@
 <template>
     <view v-if="showPopup" class="uni-popup" :class="[popupstyle]" @touchmove.stop.prevent="clear">
-        <transition class="mask" v-if="maskShow" :mode-class="['fade']" :styles="maskClass" :duration="duration" :show="showTrans"
+        <z-transition class="mask" v-if="maskShow" :mode-class="['fade']" :styles="maskClass" :duration="duration" :show="showTrans"
             @click="onTap" />
-        <transition class="more" :mode-class="ani" :styles="transClass" :duration="duration" :show="showTrans" @click="onTap">
+        <z-transition class="more" :mode-class="ani" :styles="transClass" :duration="duration" :show="showTrans" @click="onTap">
             <view class="uni-popup__wrapper-box" @click.stop="clear">
                 <slot></slot>
             </view>
-        </transition>
+        </z-transition>
     </view>
 </template>
 
 <script>
-    import transition from '../z-transition/z-transition.vue'
     import popup from './popup.js'
     /**
      * PopUp 弹出层
@@ -34,7 +33,7 @@
     export default {
         name: 'popup',
         components: {
-            transition
+ 
         },
         props: {
             // 开启动画
@@ -221,7 +220,7 @@
              */
             left() {
                 this.popupstyle = 'left'
-                this.ani = ['slide-left', 'fade']
+                this.ani = ['slide-left']
                 this.transClass = {
                     'position': 'fixed',
                     'bottom': 0,
@@ -235,7 +234,7 @@
              */
             right() {
                 this.popupstyle = 'right'
-                this.ani = ['slide-right', 'fade']
+                this.ani = ['slide-right']
                 this.transClass = {
                     'position': 'fixed',
                     'bottom': 0,
@@ -253,7 +252,7 @@
     .uni-popup {
         position: fixed;
         /* #ifndef APP-NVUE */
-        z-index: 9999;
+        z-index: var(--z-index,9999);
         /* #endif */
     }
 

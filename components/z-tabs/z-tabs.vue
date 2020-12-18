@@ -1,16 +1,23 @@
 <template>
-    <scroll-view id="scroll-box" ref="scrollBox" class="scroll-box" scroll-x="true" :scroll-left="scrollLeft"
-        scroll-with-animation="true" :style="scrollStyle">
-        <view class="scroll-list-box">
-            <view :class="['tabs-items',type]" ref="tabsItems">
-                <view :id="'tabs_'+index" :class="['tabs-item',activeIndex==index&&'active']" v-for="(item,index) in list"
-                    :key="item.id" @click="activeIndex = index">
-                    {{item[keyname]}}
+    <view class="">
+        <scroll-view id="scroll-box" ref="scrollBox" :show-scrollbar="false" class="scroll-box" scroll-x="true" :scroll-left="scrollLeft"
+            scroll-with-animation="true" :style="scrollStyle">
+            <view class="scroll-list-box">
+                <view :class="['tabs-items',type]" ref="tabsItems">
+                    <view :id="'tabs_'+index" :class="['tabs-item',activeIndex==index&&'active']" v-for="(item,index) in list"
+                        :key="item.id" @click="tabtap(index)">
+                        {{item[keyname]}}
+                    </view>
                 </view>
+                <view class="tabs-progress"></view>
             </view>
-            <view class="tabs-progress"></view>
-        </view>
-    </scroll-view>
+        </scroll-view>
+        <scroll-view id="tabsScroll" :show-scrollbar="false" :scroll-with-animation="panelAnimation" scroll-x="true" :scroll-left="scrollLeft_2" :scroll-into-view="'tabs-panel-'+activeIndex" @scroll="tabchange">
+            <view class="scroll-view-tabs">
+                <slot></slot>
+            </view>
+        </scroll-view>
+    </view>
 </template>
 
 <script>
@@ -23,12 +30,14 @@
      * @property {String NUmber} index 初始激活下标index，父元素通过watch index来处理需求progressWidth
      * @property {String} type = ['left']  标签的排列方式
      * @property {String NUmber} progressWidth 下划线宽度，默认不传是选中标签的宽度
+     * @property {Boolean} panelAnimation 切换标签子组件tabs-panel是否有动画效果，默认true 有动画效果
      * @event {Function} selItem 点击标签，将下标赋值给activeIndex
      * @example <tabs :more-icon="true" :list="list"></tabs>
      * @example <tabs :index.sync="index" :list="list"></tabs>
      * @example <tabs class="tabs" :index.sync="index" :list="list"></tabs>
      * <style>
          .tabs{
+             --tab-bg:  组件背景色
             --tab-height： 组件高度
             --tab-min-width: 标签最小宽度
             --tab-max-width: 标签最大宽度
@@ -43,6 +52,7 @@
             --tab-item-active-weight 标签激活后字体粗细
             --tab-item-active-font 标签激活后的字体大小  默认28upx
             --tab-item-active-color： 标签激活后的颜色  #111
+            --tabs-bg-color  标签背景色
          }
      </style>
      */
@@ -57,7 +67,6 @@
                 }
             },
             keyname: {
-
                 type: String,
                 default: 'name'
             },
@@ -65,13 +74,21 @@
                 type: String,
                 default: 'left'
             },
+            // 
             index: {
                 required: true,
                 type: [String, Number],
                 default: 0,
             },
+            // 滑动条的宽度， 单位upx
             progressWidth: {
                 type: [String, Number],
+            },
+            // panel是否动画效果
+            panelAnimation: {
+                type: [Boolean],
+                default: true,
+                
             }
 
         },
@@ -82,6 +99,9 @@
                 itemWidth: 0,
                 transitionProgress: false,
                 scrollLeft: 0,
+                scrollLeft_2: 0,
+                timer: '',
+                tabsScrollWidth: 0,
             }
         },
 
@@ -90,6 +110,19 @@
             if (this.list.length > 0) {
                 this.check();
             }
+            uni.createSelectorQuery().in(this).select('#tabsScroll').fields({
+                size: true,
+                rect: true,
+                scrollOffset: true,
+            }, data => {
+                // console.log( "得到布局位置信息" + JSON.stringify(data));
+                // console.log("节点离页面顶部的距离为" + data.top);
+                if (data) {
+                   
+                    this.tabsScrollWidth = data.width;
+            
+                }
+            }).exec();
         },
         watch: {
             index(newval) {
@@ -136,6 +169,10 @@
             }
         },
         methods: {
+            tabtap(index){
+               this.activeIndex = index;
+               this.$emit('tabtap',index)
+            },
             check() {
                 this.activeIndex = this.index;
 
@@ -144,6 +181,9 @@
                     rect: true,
                     scrollOffset: true
                 }, data => {
+                    if(!data){
+                        return setTimeout(this.check,300);
+                    }
                     let scrollRectLeft = data.left;
                     let scrollWidth = data.width;
                     let scrollLeft = data.scrollLeft
@@ -182,7 +222,19 @@
 
 
 
-            }
+            },
+            tabchange(e){
+                clearTimeout(this.timer);
+                this.timer = setTimeout(()=>{
+                    this.scrollLeft_2= e.detail.scrollLeft;
+                    let activeIndex =Math.round(e.detail.scrollLeft / this.tabsScrollWidth);
+                    this.$nextTick(()=>{
+                  
+                        this.scrollLeft_2 = activeIndex * this.tabsScrollWidth;
+                    })
+                    this.activeIndex = activeIndex;
+                },100)
+            },
         }
     }
 </script>
@@ -201,6 +253,8 @@
         display: flex;
         /* #endif */
         flex-direction: row;
+        box-sizing: border-box;
+        background-color: var(--tabs-bg-color,rgba(0,0,0,0));
     }
 
     .tabs-items.center {
@@ -212,6 +266,7 @@
         flex-shrink: 0;
         min-width: 100%;
         line-height: var(--tab-height, var(--tab-h));
+        background-color: var(--tab-bg);
     }
 
     .tabs-item {
@@ -228,13 +283,14 @@
         font-weight: var(--tab-item-weight, 400);
         padding: 0 var(--tab-space, 0.5em);
         transition: color ease-in-out 0.3s 0s;
-
+        box-sizing: border-box;
     }
 
     .tabs-item.active {
         font-weight: var(--tab-item-active-weight, 400);
         font-size: var(--tab-item-active-font, var(--tab-item-font, var(--tab-font)));
         color: var(--tab-item-active-color, #111);
+        
     }
 
     .tabs-item+.tabs-item {
@@ -253,5 +309,12 @@
         height: var(--tabs-progress-height, var(--height));
         background-color: var(--tabs-progress-color, #EA4D5E);
         transition: var(--transition-progress, none);
+    }
+    
+    .scroll-view-tabs {
+        display: flex;
+    }
+    scroll-view >>>.uni-scroll-view::-webkit-scrollbar {
+        display: none;
     }
 </style>

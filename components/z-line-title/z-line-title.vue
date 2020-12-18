@@ -8,15 +8,22 @@
 
 <script>
     /**
-     * lineTitle 标题
+     * z-line-title 标题
      * @description  标题左右是图片
      * @tutorial https://www.uviewui.com/components/button.html
-     * @property {Array} list  传入数组
-     * @property {Boolean} direction 是否横向滚动 
-     * @property {String,Number} row  一版排列行数
-     * @property {String,Number} column  一版排列的列数
-     * @property {Sting,Number} iconSize 图标尺寸默认88
-     * @example <lineTitle></lineTitle>
+     * @example <z-line-title class="line-title">这个是标题</z-line-title>
+     * <style>
+        .line-title{
+            --line-bg:   用于左右图片一样
+            --line-bg-lf  左边图片
+            --line-bg-rg  右边图片
+            --line-space  图片与标题的间隔  默认20upx
+            --title-min-width 标题的最小宽度
+            --title-max-width  标题的最大宽度
+            --line-width   图片的宽度
+            --line-height  图片的高度
+        }
+     </style>
      */
     export default {
         name: 'lineTitle',
@@ -32,7 +39,7 @@
         --line-bg-lf: var(--line-bg); /*用于左右图片一样*/ 
         --line-bg-rg: var(--line-bg); /*用于左右图片一样*/
         --line-space: 20upx;
-        
+  
 
     }
     .title-main{

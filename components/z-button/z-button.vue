@@ -34,6 +34,9 @@
               --btn-disable-color 按钮禁用字体颜色
               --btn-disable-opacity 按钮禁用透明度
               --btn-disable-bor-color
+              --btn-font-size: 字体大小 默认32upx
+              --btn-font-weight: 字重 
+              --btn-radius: 圆角，8upx
            }
            
        </style>
@@ -162,27 +165,30 @@
     .button-box {
         /* 很操蛋var默认值upx转不过来 */
         --btn-height: 84upx;
-        --btn-bor-width: 2upx;
-        --btn-bor: var(--btn-bor-width) solid var(--btn-bor-color, currentColor);
-        --btn-font-size: 32upx;
+        --bor-width: 2upx;
+        --btn-bor: var(--btn-bor-width,var(--bor-width)) solid var(--btn-bor-color, currentColor);
+        --font-size: 32upx;
+        --radius: calc(var(--btn-height) / 2);
         display: var(--display, block);
-        line-height: calc(var(--btn-height) - 2 * var(--btn-bor-width));
+        line-height: calc(var(--btn-height) - 2 * var(--btn-bor-width,var(--bor-width)));
         height: var(--btn-height);
         border: var(--btn-bor);
         text-align: center;
-        font-size: var(--btn-font-size);
+        font-weight: var(--btn-font-weight,500);
+        font-size: var(--btn-font-size,var(--font-size));
         color: var(--btn-color, #fff);
         letter-spacing: 4upx;
         padding: 0 1em;
-        --btn-radius: calc(var(--btn-height) / 2);
-        border-radius: var(--btn-radius);
+        border-radius: var(--btn-radius,var(--radius));
         /*默认是半圆*/
         background-color: var(--btn-bg);
         pointer-events: auto;
+        box-sizing: var(--btn-box-sizing,border-box);
     }
 
     .square {
-        --btn-radius: 8upx;
+        --radius: 8upx;
+        border-radius: var(--btn-radius,var(--radius));
     }
 
     .button-box.plain {

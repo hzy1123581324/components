@@ -41,6 +41,9 @@
         overflow: hidden;
         display: inline-block;
         --size: 36upx;
+        width: var(--icon-shadow-size,var(--size));
+        height: var(--icon-shadow-size,var(--size));
+        box-sizing: border-box;
     }
 
     .iconshadowbg {
@@ -53,10 +56,11 @@
 
         box-sizing: content-box;
         background-image: var(--icon-shadow-bg-img);
-        -webkit-filter: drop-shadow(var(--icon-shadow-color,var(--theme) var(--icon-shadow-size,var(--size) 0);
-        filter: drop-shadow(var(--icon-shadow-color,var(--theme)) var(--icon-shadow-size,var(--size) 0);
-        border-right: var(--icon-shadow-size,var(--size) solid transparent;
+        filter: drop-shadow(var(--icon-shadow-color,var(--theme)) var(--icon-shadow-size,var(--size))  0);
+        /* 不能加逗号 ，加逗号图标出不来*/
+        border-right: var(--icon-shadow-size,var(--size)) solid transparent;
         display: inline-block;
         margin-left: calc(var(--icon-shadow-size,var(--size)) / -1);
+        
     }
 </style>

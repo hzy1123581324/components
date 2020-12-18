@@ -1,6 +1,6 @@
 <template>
     <view class="navbar-box clear" :style="`--navbar-fixed:${!isFixed?'relative':'fixed'};--status-height:${statusheight}px;`">
-        <view class="navbar-fixed-box clear">
+        <view class="navbar-fixed-box clear" :class="{'navbar-border': border}">
             <view :class="['navbar-left',isBack&&'hasback']" @tap="goBack">
                 <slot name="left">
                     <u-icon :name="backIconName" :color="backIconColor" :size="backIconSize"></u-icon>
@@ -93,6 +93,10 @@
             showTitle: {
                 type: Boolean,
                 default: true
+            },
+            border: {
+            	type: [String, Boolean],
+            	default: true
             }
         },
         data() {
@@ -128,7 +132,6 @@
                 if (typeof this.customBack === 'function') {
                     this.customBack();
                 } else {
-                    console.log('888888888888888888');
                     uni.navigateBack();
                 }
             }
@@ -161,7 +164,7 @@
         /* #ifndef APP-NVUE */
         display: flex;
         /* #endif */
-        box-shadow: 0 1upx 0 0 #f4f4f4;
+        /* box-shadow: 0 1upx 0 0 #f4f4f4; */
         background-color: var(--fixed-bg-color, #fff);
         background-image: var(--fixed-bg-img);
 
@@ -218,7 +221,7 @@
 
     /*  */
     .navbar-right {
-        --font: 32upx;
+        --font: 28upx;
         width: calc((100vw - var(--navbar-center-width, var(--center-width))) / 2);
         height: 100%;
         /* #ifndef APP-NVUE */
@@ -246,5 +249,9 @@
     .navbar-full:empty {
         opacity: 0;
         pointer-events: none;
+    }
+    
+    .navbar-border{
+      box-shadow: 0 1upx 0 0 #f4f4f4;
     }
 </style>
