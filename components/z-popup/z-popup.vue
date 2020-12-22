@@ -28,6 +28,12 @@
      * @property {Boolean} animation = [ture|false] 是否开启动画
      * @property {Boolean} maskClick = [ture|false] 蒙版点击是否关闭弹窗
      * @event {Function} change 打开关闭弹窗触发，e={show: false}
+     * @example <z-popup ref="popup"></z-popup>
+     * <style>
+        .popup{
+            --popup-index: 定义popup组件的层级
+        }
+     *</style>
      */
 
     export default {
@@ -252,7 +258,7 @@
     .uni-popup {
         position: fixed;
         /* #ifndef APP-NVUE */
-        z-index: var(--z-index,9999);
+        z-index: var(--popup-index,999);
         /* #endif */
     }
 

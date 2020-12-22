@@ -180,6 +180,7 @@
         /* #ifndef APP-NVUE */
         display: flex;
         /* #endif */
+        flex-direction: row;
         align-items: center;
         align-content: center;
         justify-content: flex-start;
@@ -230,6 +231,7 @@
         /* #ifndef APP-NVUE */
         display: flex;
         /* #endif */
+        flex-direction: row;
         align-items: center;
         align-content: center;
         justify-content: flex-end;

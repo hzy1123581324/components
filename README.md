@@ -23,8 +23,6 @@
     │  ├─z-chat    聊天室组件
     │  │    └─  z-chat.vue 
     │  │      
-    │  ├─z-code-txt  验证码组件
-    │  │      └─z-code-txt.vue
     │  │      
     │  ├─z-count-down  倒计时组件
     │  │     └─ z-count-down.vue 
@@ -62,6 +60,9 @@
     │  │     ├─ number-keyboard.vue
     │  │     └─ z-keyboard.vue
     │  │
+    │  ├─z-kline  K线图组件
+    │  │     └─ z-kline.vue
+    │  │   
     │  ├─z-line-title  标题左右是图片
     │  │     └─ z-line-title.vue
     │  │      
@@ -166,6 +167,9 @@
     │  │
     │  ├─z-tabs  标签栏
     │  │     └─ z-tabs.vue
+    │  │
+    │  ├─z-tabs-panel  标签栏内容
+    │  │     └─ z-tabs-panel.vue
     │  │      
     │  ├─z-text-gradient  字体渐变
     │  │     └─ z-text-gradient.vue

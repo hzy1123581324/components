@@ -1,6 +1,8 @@
 <template>
     <view :class="['button-box',plain&&'plain',shape,disable&&'disable']" :style="buttonStyle" @click="buttonClick">
         <slot></slot>
+        <button type="default" v-if="false"></button>
+        <!-- 特殊功能，仅button能触发 -->
     </view>
 </template>
 
@@ -184,6 +186,7 @@
         background-color: var(--btn-bg);
         pointer-events: auto;
         box-sizing: var(--btn-box-sizing,border-box);
+        position: relative;
     }
 
     .square {
