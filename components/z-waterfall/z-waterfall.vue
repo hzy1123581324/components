@@ -1,11 +1,11 @@
 <template>
-    <div class="waterfall-box flex" :style="`--column:${ __column}`">
-        <div class="items-box" v-for="items in columnList" :key="items">
-            <div class="item-box" v-for="item in items" :key="item.id" @click="jump(item)">
+    <view class="waterfall-box flex" :style="`--column:${ __column}`">
+        <view class="items-box" v-for="items in columnList" :key="items">
+            <view class="item-box" v-for="item in items" :key="item.id" @click="jump(item)">
                 <slot :item="item"></slot>
-            </div>
-        </div>
-    </div>
+            </view>
+        </view>
+    </view>
 </template>
 
 <script>
