@@ -1,0 +1,19 @@
+/* 圆角三角形 */
+.icon-box[delta-]{
+    background-image: linear-gradient(45deg, transparent 50%, #61C4CF 0%);
+    background-size: var(--icon-size) var(--icon-size);
+    border-radius: 0.11em;
+}
+.delta-rg{
+   
+    transform: rotate(45deg);
+}
+.delta-lf{
+    transform: rotate(225deg);
+}
+.delta-top{
+    transform: rotate(315deg);
+}
+.delta-btm{
+     transform: rotate(135deg);
+}
