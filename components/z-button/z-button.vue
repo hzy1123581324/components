@@ -28,17 +28,17 @@
      * @example <z-button class="button"></z-button>
        <style>
            .button{
-              --btn-height: 按钮高度 默认 84upx
-              --btn-bor-width: 边框宽度 默认2upx
+              --btn-height: 按钮高度 默认 84rpx
+              --btn-bor-width: 边框宽度 默认2rpx
               --btn-color  按钮字体颜色
               --btn-bg: 按钮背景色
               --btn-disable-bg 按钮禁用背景色
               --btn-disable-color 按钮禁用字体颜色
               --btn-disable-opacity 按钮禁用透明度
               --btn-disable-bor-color
-              --btn-font-size: 字体大小 默认32upx
+              --btn-font-size: 字体大小 默认32rpx
               --btn-font-weight: 字重 
-              --btn-radius: 圆角，8upx
+              --btn-radius: 圆角，8rpx
            }
            
        </style>
@@ -165,11 +165,11 @@
 
 <style scoped>
     .button-box {
-        /* 很操蛋var默认值upx转不过来 */
-        --btn-height: 84upx;
-        --bor-width: 2upx;
+        /* 很操蛋var默认值rpx转不过来 */
+        --btn-height: 84rpx;
+        --bor-width: 2rpx;
         --btn-bor: var(--btn-bor-width,var(--bor-width)) solid var(--btn-bor-color, currentColor);
-        --font-size: 32upx;
+        --font-size: 32rpx;
         --radius: calc(var(--btn-height) / 2);
         display: var(--display, block);
         line-height: calc(var(--btn-height) - 2 * var(--btn-bor-width,var(--bor-width)));
@@ -179,7 +179,7 @@
         font-weight: var(--btn-font-weight,500);
         font-size: var(--btn-font-size,var(--font-size));
         color: var(--btn-color, #fff);
-        letter-spacing: 4upx;
+        letter-spacing: 4rpx;
         padding: 0 1em;
         border-radius: var(--btn-radius,var(--radius));
         /*默认是半圆*/
@@ -190,15 +190,15 @@
     }
 
     .square {
-        --radius: 8upx;
+        --radius: 8rpx;
         border-radius: var(--btn-radius,var(--radius));
     }
 
     .button-box.plain {
         background-color: transparent;
         color: var(--btn-color);
-        /* border: var(--btn-bor-width,2upx) solid currentColor; */
-        /* border: 2upx solid currentColor; */
+        /* border: var(--btn-bor-width,2rpx) solid currentColor; */
+        /* border: 2rpx solid currentColor; */
     }
 
     .button-box.disable {

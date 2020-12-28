@@ -49,7 +49,7 @@
         background-color: var(--diamond-bg-color,#fff);
         transform-origin: center center;
         
-        transform: var(--diamond-transform,skew(-20deg) translateX(-12upx));
+        transform: var(--diamond-transform,skew(-20deg) translateX(-12rpx));
     }
     .diamond-item{
         position: absolute;

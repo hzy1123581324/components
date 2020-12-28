@@ -68,13 +68,13 @@
     .sunui-slider {
         position: relative;
         overflow: hidden;
-        width: 602upx;
-        height: 80upx;
-        line-height: 80upx;
+        width: 602rpx;
+        height: 80rpx;
+        line-height: 80rpx;
         margin: 0 auto;
         border-radius: 5px;
         /* box-shadow: 0px 0px 4px rgba(0, 0, 0, .1); */
-        font-size: 32upx;
+        font-size: 32rpx;
         text-align: center;
     }
 
@@ -83,8 +83,8 @@
         overflow: hidden;
         top: 0;
         width: 101%;
-        height: 80upx;
-        line-height: 80upx;
+        height: 80rpx;
+        line-height: 80rpx;
         background: #28d48e;
         border-radius: 5px;
         color: #fff;
@@ -97,7 +97,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 80upx;
+        height: 80rpx;
         width: 58px;
         /* background-color: #EBEBEB; */
     }

@@ -114,12 +114,12 @@ export default {
     text-align: center;
 }
 .FlipClock .M-Flipper {
-    margin: 0 3upx;
+    margin: 0 3rpx;
 }
 .FlipClock text {
     display: inline-block;
-    line-height: 102upx;
-    font-size: 66upx;
+    line-height: 102rpx;
+    font-size: 66rpx;
     font-style: normal;
     vertical-align: top;
 }

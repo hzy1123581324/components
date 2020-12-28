@@ -17,7 +17,7 @@
             --line-bg:   用于左右图片一样
             --line-bg-lf  左边图片
             --line-bg-rg  右边图片
-            --line-space  图片与标题的间隔  默认20upx
+            --line-space  图片与标题的间隔  默认20rpx
             --title-min-width 标题的最小宽度
             --title-max-width  标题的最大宽度
             --line-width   图片的宽度
@@ -38,7 +38,7 @@
         align-content: center;
         --line-bg-lf: var(--line-bg); /*用于左右图片一样*/ 
         --line-bg-rg: var(--line-bg); /*用于左右图片一样*/
-        --line-space: 20upx;
+        --line-space: 20rpx;
   
 
     }

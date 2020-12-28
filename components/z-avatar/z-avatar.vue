@@ -27,8 +27,8 @@
      * @example <z-avatar :src="src"></z-avatar>
      * <style>
          .avatar{
-             --avatar-icon-size:  头像尺寸大小  默认68upx
-             --space ： 头像与文本之间的距离 默认46upx
+             --avatar-icon-size:  头像尺寸大小  默认68rpx
+             --space ： 头像与文本之间的距离 默认46rpx
              --title-font-size   主标题字体大小 默认继承父元素inherit
              --title-color    主标题字体颜色  默认继承父元素inherit
              --subtitle-color  副标题字体颜色   默认继承父元素inherit
@@ -72,10 +72,10 @@
 
 <style scoped>
     .avatar-box{
-        --icon-size: 68upx;
-        --space: 46upx;
-        --title-space: 12upx;
-        --title-font-size: 44upx;
+        --icon-size: 68rpx;
+        --space: 46rpx;
+        --title-space: 12rpx;
+        --title-font-size: 44rpx;
         display: inline-flex;
         align-items: center;
         align-content: center;

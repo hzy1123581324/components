@@ -44,7 +44,7 @@
     export default {
         name: "read-more",
         props: {
-            // 默认的显示占位高度，单位为upx
+            // 默认的显示占位高度，单位为rpx
             showHeight: {
                 type: [Number, String],
                 default: 400
@@ -173,23 +173,23 @@
         margin: 0 auto;
         color: var(--color);
         text-align: var(--algin,center);
-        font-size: 24upx;
-        line-height: 33upx;
-        margin-top: 20upx;
+        font-size: 24rpx;
+        line-height: 33rpx;
+        margin-top: 20rpx;
     }
 
     .drop {
         display: inline-block;
-        width: 16upx;
-        height: 18upx;
-        border-bottom: 9upx solid transparent;
-        border-top: 9upx solid transparent;
-        border-left: 8upx solid transparent;
-        border-right: 8upx solid transparent;
+        width: 16rpx;
+        height: 18rpx;
+        border-bottom: 9rpx solid transparent;
+        border-top: 9rpx solid transparent;
+        border-left: 8rpx solid transparent;
+        border-right: 8rpx solid transparent;
         border-top-color: var(--color);
         border-bottom-color: transparent;
-        margin-top: 8upx;
-        margin-left: 10upx;
+        margin-top: 8rpx;
+        margin-left: 10rpx;
         vertical-align: middle;
 
     }
@@ -197,6 +197,6 @@
     .drop.active {
         border-bottom-color: var(--color);
         border-top-color: transparent;
-        margin-top: -12upx;
+        margin-top: -12rpx;
     }
 </style>

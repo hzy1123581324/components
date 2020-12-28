@@ -51,11 +51,11 @@
      * <style>
         .count-down{
             --color: 字体颜色
-            --font-size: 字体大小，单位upx（默认30）
+            --font-size: 字体大小，单位rpx（默认30）
             --size； 字体盒子尺寸 默认auto;
-            --separator-font-size 分隔符的字体大小，单位upx（默认30）
+            --separator-font-size 分隔符的字体大小，单位rpx（默认30）
             --separator-color 分隔符的颜色（默认#303133
-            --bor-radius:  数字盒子圆角 默认6upx
+            --bor-radius:  数字盒子圆角 默认6rpx
             --bor-width:  边框大小
             --bor-color   边框颜色 默认#303133
             --bg-color    背景颜色 默认#fff
@@ -203,8 +203,8 @@
     }
 
     .countdown-item {
-        --bor-ra: 6upx;
-        --bor-w: 1upx;
+        --bor-ra: 6rpx;
+        --bor-w: 1rpx;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -221,7 +221,7 @@
     }
 
     .countdown-time {
-        --f-s: 30upx;
+        --f-s: 30rpx;
         margin: 0;
         padding: 0;
         line-height: 1;
@@ -230,7 +230,7 @@
     }
 
     .countdown-colon {
-        --font-size: 30upx;
+        --font-size: 30rpx;
         display: flex;
         justify-content: center;
         padding: 0 5rpx;
@@ -241,7 +241,7 @@
         color: var(--separator-color,#303133);
     }
     .countdown-colon.separator{
-        padding-bottom: 4upx;
+        padding-bottom: 4rpx;
         // paddingBottom: separator == 'colon' ? '4rpx' : 0
     }
     .countdown-scale {

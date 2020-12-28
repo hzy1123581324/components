@@ -18,7 +18,7 @@
         .icon-shadow{
             --icon-shadow-bg-img  要改变颜色的图标
             --icon-shadow-color  图标颜色。默认主题色
-            --icon-shadow-size  图标大小默认36upx
+            --icon-shadow-size  图标大小默认36rpx
         } 
         
      </style>
@@ -40,7 +40,7 @@
         position: relative;
         overflow: hidden;
         display: inline-block;
-        --size: 36upx;
+        --size: 36rpx;
         width: var(--icon-shadow-size,var(--size));
         height: var(--icon-shadow-size,var(--size));
         box-sizing: border-box;

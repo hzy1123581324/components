@@ -10,6 +10,6 @@
 <style scoped>
     .noData-box{
         text-align: center;
-        margin-top: 60upx;
+        margin-top: 60rpx;
     }
 </style>

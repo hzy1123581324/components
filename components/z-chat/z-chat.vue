@@ -58,8 +58,8 @@
 
     .chat-title {
         text-align: center;
-        line-height: 76upx;
-        font-size: 32upx;
+        line-height: 76rpx;
+        font-size: 32rpx;
         font-weight: 600;
     }
 
@@ -79,7 +79,7 @@
 
     .chat-input-area {
         display: flex;
-        height: 80upx;
+        height: 80rpx;
         white-space: pre-wrap;
 
     }

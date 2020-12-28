@@ -24,14 +24,14 @@
      * @example <increase class="couter" :number.sync="number"></increase>
      * <style>
      *  .couter{
-        --increase-height: 组件的高度 默认38upx
+        --increase-height: 组件的高度 默认38rpx
         --increase-bor-width: 组件边框宽度 默认 1px
         --increase-bor-color ： 组件边框颜色 默认 #333
         --increase-rate  递增递减按钮尺寸跟加减号的比例 默认 0.35
         --increase-icon-color 加减号颜色
         --increase-icon-disable-color 禁用加减号颜色
         --increase-icon-thick 加减号厚度
-        --increase-input-font  输入框字体大小  默认 28upx
+        --increase-input-font  输入框字体大小  默认 28rpx
         --increase-input-color  输入框字体颜色 默认 #333；
      * }
      * </style>
@@ -159,7 +159,7 @@
 
 <style scoped>
     .counter-box {
-        --height: 88upx;
+        --height: 88rpx;
         --icon-size: calc(var(--increase-height, var(--height)) - var(--increase-bor-width, 1px) * 2);
         /* 递增递减按钮尺寸 */
         border: var(--increase-bor-width, 1px) solid var(--increase-bor-color, #333);
@@ -182,7 +182,7 @@
     .add::after,
     .del::before {
         content: '';
-        --icon-height: var(--increase-icon-thick, 2upx);
+        --icon-height: var(--increase-icon-thick, 2rpx);
         --icon-width: calc(var(--icon-size) * var(--increase-rate, 0.35));
         width: var(--icon-width);
         height: var(--icon-height);
@@ -206,7 +206,7 @@
 
     .intobox {
         --input-color: #333;
-        --input-font: 28upx;
+        --input-font: 28rpx;
         border: var(--increase-bor-width, 1px) solid var(--increase-bor-color, var(--input-color));
         border-top: 0;
         border-bottom: 0;
@@ -215,7 +215,7 @@
         width: 30%;
         flex-shrink: 2;
         font-size: var(--increase-input-font, var(--input-font));
-        /*默认28upx*/
+        /*默认28rpx*/
         color: var(--increase-input-color, var(--input-color));
         /*默认#333*/
         box-sizing: border-box;

@@ -13,7 +13,7 @@
         .icon-mode{
             --icon-mode-bg-img  要改变颜色的图标
             --icon-mode-color  图标颜色。默认主题色
-            --icon-mode-size  图标大小默认36upx
+            --icon-mode-size  图标大小默认36rpx
         } 
         
      </style>
@@ -22,7 +22,7 @@
     
 <style scoped>
     .icon-mode-box{
-        --size: 36upx;
+        --size: 36rpx;
         display: inline-flex;
         height: var(--icon-mode-size,var(--size));
         text-align: center;

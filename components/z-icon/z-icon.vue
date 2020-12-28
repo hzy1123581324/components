@@ -1,7 +1,5 @@
 <template>
-    <view :class="['icon-box',type]">
-        
-    </view>
+    <view :class="['icon-box',type]" :style='coinStyle'></view>
 </template>
 
 <script>
@@ -10,45 +8,73 @@
      * @description 此为css样式生成的图标
      * @tutorial https://www.uviewui.com/components/z-icon.html
      * @param {String} type 图标类型  
+     * @param {String} type 图标类型  
      * @example <z-icon class="icon" type="delta-rg"></z-icon> 
         <style>
             .icon{
-                --icon-size : 图标大小,默认28upx
+                --icon-size : 图标大小,默认28rpx
+                --icon-color: 图标颜色 
             }
         </style>
      */
-    export default{
+    export default {
         name: 'z-icon',
-        props:{
-            type: String,
-            default: '',
-            validator: function (value) {
+        props: {
+            // 图标类型
+            type: {
+                required: true,
+                type: String,
+                default: '',
+                validator: (value) => {
                     // 这个值必须匹配下列字符串中的一个
-                    let typeTxt="delta-rg,delta-lf,delta-top,delta-btm";
+                    let typeTxt =
+                        "delta-rg,delta-lf,delta-top,\
+                    delta-btm,up-arrow,left-arrow,right-arrow,\
+                    down-arrow,close";
                     let typeList = typeTxt.split(',');
                     return typeList.indexOf(value) !== -1
-                  }
-            
+                },
+            },
+            animation: {
+                type: Boolean,
+                default: false,
+            }
+
+
+
         },
-        data(){
+        computed:{
+          coinStyle(){
+              let style = '';
+              if(this.animation){
+                  style+=`--icon-transition: all ease-in-out 0.3s 0`
+              }
+              
+              return ``
+          }  
+        },
+        data() {
             return {}
         },
         methods: {
-            
+
         }
     }
 </script>
+<style>
 
+</style>
 <style scoped>
     @import './icon.css';
-    .icon-box{
-        --size: 28upx;
+
+    .icon-box {
+        --size: 28rpx;
         display: inline-block;
         width: 1em;
         height: 1em;
         position: relative;
-        font-size: var(--icon-size,var(--font-size,var(--size)));
-        
+        transition: var(--icon-transition,none);
+        color: var(--icon-color, var(--mian-color, #333));
+        font-size: var(--icon-size, var(--font-size, var(--size)));
     }
-    
 </style>

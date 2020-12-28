@@ -45,12 +45,12 @@
             --tabs-progress-color: 下划线样式  默认 #EA4D5E
             --tabs-progress-width: 下划线宽度  不设等于激活标签宽度
             --tabs-progress-height: 下划线高度
-            --tab-item-font  标签未激活字体大小  默认28upx
+            --tab-item-font  标签未激活字体大小  默认28rpx
             --tab-item-color 标签未激活颜色  默认#86909B
             --tab-space  标签左右内边距  默认0.5em
             --tab-mar-space 标签之间的间隔
             --tab-item-active-weight 标签激活后字体粗细
-            --tab-item-active-font 标签激活后的字体大小  默认28upx
+            --tab-item-active-font 标签激活后的字体大小  默认28rpx
             --tab-item-active-color： 标签激活后的颜色  #111
             --tabs-bg-color  标签背景色
          }
@@ -80,7 +80,7 @@
                 type: [String, Number],
                 default: 0,
             },
-            // 滑动条的宽度， 单位upx
+            // 滑动条的宽度， 单位rpx
             progressWidth: {
                 type: [String, Number],
             },
@@ -241,7 +241,7 @@
 
 <style scoped>
     .scroll-box {
-        --tab-h: 80upx;
+        --tab-h: 80rpx;
         height: var(--tab-height, var(--tab-h));
         position: relative;
     }
@@ -270,8 +270,8 @@
     }
 
     .tabs-item {
-        --tab-font: 28upx;
-        --min-w: 74upx;
+        --tab-font: 28rpx;
+        --min-w: 74rpx;
         flex-shrink: 0;
         max-width: calc(--tab-max-width, unset);
         width: auto;
@@ -299,7 +299,7 @@
 
 
     .tabs-progress {
-        --height: 4upx;
+        --height: 4rpx;
 
         position: absolute;
         bottom: 0;

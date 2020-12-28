@@ -28,11 +28,11 @@
      * 修改样式,修改不成功，注意是否是优先级的问题
      * <style>
         .payItem{
-            --cell-size: 54upx;
-            --cell-radius: 2upx;
+            --cell-size: 54rpx;
+            --cell-radius: 2rpx;
             --cell-bg: #F3F3F3;
-            --cell-gauge: 30upx;
-            --dot-size: 12upx;
+            --cell-gauge: 30rpx;
+            --dot-size: 12rpx;
             --dot-bg: #101010;
         }
      </style>
@@ -87,11 +87,11 @@
         position: relative;
         line-height: 1;
         display: inline-block;
-        --cell-size: 54upx;
-        --cell-radius: 2upx;
+        --cell-size: 54rpx;
+        --cell-radius: 2rpx;
         --cell-bg: #F3F3F3;
-        --cell-gauge: 30upx;
-        --dot-size: 12upx;
+        --cell-gauge: 30rpx;
+        --dot-size: 12rpx;
         --dot-bg: #101010;
     }
     .pay-item view{

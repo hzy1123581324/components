@@ -80,7 +80,7 @@
 <style scoped>
     .waterfall-box {
         /* width: 100%; */
-        --space: 30upx;
+        --space: 30rpx;
         overflow-x: hidden;
         width: calc(100% + var(--space));
         margin-left: calc(var(--space) / 2 * -1);

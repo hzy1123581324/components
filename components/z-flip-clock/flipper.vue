@@ -85,15 +85,15 @@ export default {
 .M-Flipper {
   display: inline-block;
   position: relative;
-  width: 60upx;
-  height: 100upx;
-  line-height: 100upx;
-  border: solid 1upx #000;
-  border-radius: 10upx;
+  width: 60rpx;
+  height: 100rpx;
+  line-height: 100rpx;
+  border: solid 1rpx #000;
+  border-radius: 10rpx;
   background: #fff;
-  font-size: 66upx;
+  font-size: 66rpx;
   color: #fff;
-  box-shadow: 0 0 6upx rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 6rpx rgba(0, 0, 0, 0.5);
   text-align: center;
   font-family: 'Helvetica Neue';
 }
@@ -110,13 +110,13 @@ export default {
 .M-Flipper .digital:before {
   top: 0;
   bottom: 50%;
-  border-radius: 10upx 10upx 0 0;
-  border-bottom: solid 1upx #666;
+  border-radius: 10rpx 10rpx 0 0;
+  border-bottom: solid 1rpx #666;
 }
 .M-Flipper .digital:after {
   top: 50%;
   bottom: 0;
-  border-radius: 0 0 10upx 10upx;
+  border-radius: 0 0 10rpx 10rpx;
   line-height: 0;
 }
 /*向下翻*/
@@ -126,7 +126,7 @@ export default {
 .M-Flipper.down .back:after {
   z-index: 2;
   transform-origin: 50% 0%;
-  transform: perspective(160upx) rotateX(180deg);
+  transform: perspective(160rpx) rotateX(180deg);
 }
 .M-Flipper.down .front:after,
 .M-Flipper.down .back:before {
@@ -135,7 +135,7 @@ export default {
 .M-Flipper.down.go .front:before {
   transform-origin: 50% 100%;
   animation: frontFlipDown 0.6s ease-in-out both;
-  box-shadow: 0 -2upx 6upx rgba(255, 255, 255, 0.3);
+  box-shadow: 0 -2rpx 6rpx rgba(255, 255, 255, 0.3);
   backface-visibility: hidden;
 }
 .M-Flipper.down.go .back:after {
@@ -148,7 +148,7 @@ export default {
 .M-Flipper.up .back:before {
   z-index: 2;
   transform-origin: 50% 100%;
-  transform: perspective(160upx) rotateX(-180deg);
+  transform: perspective(160rpx) rotateX(-180deg);
 }
 .M-Flipper.up .front:before,
 .M-Flipper.up .back:after {
@@ -157,7 +157,7 @@ export default {
 .M-Flipper.up.go .front:after {
   transform-origin: 50% 0;
   animation: frontFlipUp 0.6s ease-in-out both;
-  box-shadow: 0 2upx 6upx rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2rpx 6rpx rgba(255, 255, 255, 0.3);
   backface-visibility: hidden;
 }
 .M-Flipper.up.go .back:before {
@@ -165,34 +165,34 @@ export default {
 }
 @keyframes frontFlipDown {
   0% {
-    transform: perspective(160upx) rotateX(0deg);
+    transform: perspective(160rpx) rotateX(0deg);
   }
   100% {
-    transform: perspective(160upx) rotateX(-180deg);
+    transform: perspective(160rpx) rotateX(-180deg);
   }
 }
 @keyframes backFlipDown {
   0% {
-    transform: perspective(160upx) rotateX(180deg);
+    transform: perspective(160rpx) rotateX(180deg);
   }
   100% {
-    transform: perspective(160upx) rotateX(0deg);
+    transform: perspective(160rpx) rotateX(0deg);
   }
 }
 @keyframes frontFlipUp {
   0% {
-    transform: perspective(160upx) rotateX(0deg);
+    transform: perspective(160rpx) rotateX(0deg);
   }
   100% {
-    transform: perspective(160upx) rotateX(180deg);
+    transform: perspective(160rpx) rotateX(180deg);
   }
 }
 @keyframes backFlipUp {
   0% {
-    transform: perspective(160upx) rotateX(-180deg);
+    transform: perspective(160rpx) rotateX(-180deg);
   }
   100% {
-    transform: perspective(160upx) rotateX(0deg);
+    transform: perspective(160rpx) rotateX(0deg);
   }
 }
 .M-Flipper .number0:before,

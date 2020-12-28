@@ -39,14 +39,14 @@
      * 
      * .navbar{
        --navbar-color: 导航栏默认字体颜色 #333
-       --navbar-height: 导航栏高度， 默认98upx
+       --navbar-height: 导航栏高度， 默认98rpx
        --navbar-fixed: 是否固定在顶部 
        --fixed-bg-color： 导航栏背景色
        --fixed-bg-img:  导航栏图片
-       --navbar-title-font: 导航栏标题字体大小 默认34upx
+       --navbar-title-font: 导航栏标题字体大小 默认34rpx
        --navbar-title-weight： 导航栏标题之重 默认500
-       --navbar-rg-font: 导航栏右边字体大小  默认32upx
-       --navbar-lf-font: 导航栏左边字体大小  默认32upx
+       --navbar-rg-font: 导航栏右边字体大小  默认32rpx
+       --navbar-lf-font: 导航栏左边字体大小  默认32rpx
        --navbar-center-width: 导航标题宽度
        
      }
@@ -142,8 +142,8 @@
 <style scoped>
     .navbar-box {
         --status-height: 0;
-        --height: 98upx;
-        --center-width: 300upx;
+        --height: 98rpx;
+        --center-width: 300rpx;
         padding-top: var(--status-bar-height, var(--status-height));
         height: var(--navbar-height, var(--height));
         box-sizing: border-box;
@@ -164,7 +164,7 @@
         /* #ifndef APP-NVUE */
         display: flex;
         /* #endif */
-        /* box-shadow: 0 1upx 0 0 #f4f4f4; */
+        /* box-shadow: 0 1rpx 0 0 #f4f4f4; */
         background-color: var(--fixed-bg-color, #fff);
         background-image: var(--fixed-bg-img);
 
@@ -174,7 +174,7 @@
 
     .navbar-left {
 
-        --font: 32upx;
+        --font: 32rpx;
         width: calc((100vw - var(--navbar-center-width, var(--center-width))) / 2);
         height: 100%;
         /* #ifndef APP-NVUE */
@@ -202,7 +202,7 @@
 
     /* 标题中部 */
     .navbar-center {
-        --font: 34upx;
+        --font: 34rpx;
         overflow: hidden;
         text-overflow: ellipsis;
         /*文本溢出显示省略号*/
@@ -222,7 +222,7 @@
 
     /*  */
     .navbar-right {
-        --font: 28upx;
+        --font: 28rpx;
         width: calc((100vw - var(--navbar-center-width, var(--center-width))) / 2);
         height: 100%;
         /* #ifndef APP-NVUE */
@@ -254,6 +254,6 @@
     }
     
     .navbar-border{
-      box-shadow: 0 1upx 0 0 #f4f4f4;
+      box-shadow: 0 1rpx 0 0 #f4f4f4;
     }
 </style>

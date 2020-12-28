@@ -35,7 +35,7 @@
 <style>
      /* 文字渐变 */
     .text-gradient-main {  
-        --font-size: 20upx;
+        --font-size: 20rpx;
         --color: red;
         --gradient: -webkit-gradient(linear, 0 0, 0 bottom, from(#FBEE00), to(rgba(251,246,147,.6)));
         display: inline-block;

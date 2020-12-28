@@ -50,11 +50,11 @@
      * 修改样式,修改不成功，注意是否是优先级的问题
      * <style>
         .payItem{
-            --cell-size: 54upx;
-            --cell-radius: 2upx;
+            --cell-size: 54rpx;
+            --cell-radius: 2rpx;
             --cell-bg: #F3F3F3;
-            --cell-gauge: 30upx;
-            --dot-size: 12upx;
+            --cell-gauge: 30rpx;
+            --dot-size: 12rpx;
             --dot-bg: #101010;
         }
      </style>
@@ -146,7 +146,7 @@
     }
 
     .paymentTitle {
-        line-height: 98upx;
+        line-height: 98rpx;
     }
 
     .paymentBox::before {
@@ -175,15 +175,15 @@
 
     .payment-init-box .payment-init.satisfy::before {
         content: '';
-        width: 24upx;
-        height: 24upx;
+        width: 24rpx;
+        height: 24rpx;
         position: absolute;
         border-radius: 50%;
         background: #333;
         top: 50%;
         left: 50%;
-        margin-left: -12upx;
-        margin-top: -12upx;
+        margin-left: -12rpx;
+        margin-top: -12rpx;
 
     }
 
@@ -198,10 +198,10 @@
     }
 
     .payment-numcell {
-        font-size: 40upx;
-        line-height: 98upx;
-        height: 98upx;
-        box-shadow: 0 0 0 2upx #e7e7e7;
+        font-size: 40rpx;
+        line-height: 98rpx;
+        height: 98rpx;
+        box-shadow: 0 0 0 2rpx #e7e7e7;
         background-color: #fff;
     }
     .payment-numcell-active{
@@ -221,7 +221,7 @@
         
     }
     .payment-cancel-item {
-        border-radius: 6upx;
+        border-radius: 6rpx;
         position: absolute;
         top: 50%;
         left: 50%;
@@ -230,7 +230,7 @@
         -o-transform: translate(-50%, -50%);
         -ms-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
-        height: 36upx;
+        height: 36rpx;
         width: auto;
         fill: #fff;
     }

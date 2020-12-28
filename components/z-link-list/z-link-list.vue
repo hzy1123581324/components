@@ -30,13 +30,13 @@
      * @example <z-link-list :list="list" ></z-link-list>
      * <style>
         .link-list{
-            --link-height: 每一列的高度    默认98upx
+            --link-height: 每一列的高度    默认98rpx
             --link-bg-color: 每一列的背景色
             --link-bor-btm:  每一列都有的边框
             --link-lf-width: 组件左边宽度 默认60%
             --link-rg-width: 组件右边宽度 默认40%
             --link-mar-btm:   每一列之间的间距  默认是0px
-            --link-pad-lf:  组件的左内边距     默认30upx
+            --link-pad-lf:  组件的左内边距     默认30rpx
             --link-lf-icon-size:  左边图标大小
             --link-lf-font-size:  左边文本字体大小 默认 inherit继承父元素
             --link-lf-color:  左边文本字体颜色 默认 inherit继承父元素
@@ -45,18 +45,18 @@
             --link-rg-font-size:  右边文本字体大小 默认 inherit继承父元素
             --link-rg-color:  右边文本字体颜色 默认 inherit继承父元素
             --link-rg-weight:  右边文本字体字重 默认 400
-            --link-pad-rg:  组件的右内边距    默认30upx
+            --link-pad-rg:  组件的右内边距    默认30rpx
             --link-rg-icon-space: 右边图标与文本的距离
             --link-rg-icon : 右边图标
             --link-rg-icon-color: 右边图标颜色 ，默认#333
-            --link-rg-icon-size: 右边图标大小 ，默认32upx
+            --link-rg-icon-size: 右边图标大小 ，默认32rpx
          }
          //使用>>>穿透设置边框
          .link-list>>> .link-items{
              box-shadow: unset; 
          }
          .link-list>>> .link-items+.link-items{
-             box-shadow: 0 -1upx 0 0 red ;
+             box-shadow: 0 -1rpx 0 0 red ;
          }
      </style>
      */
@@ -104,7 +104,7 @@
     .link-list-box {}
 
     .link-items {
-        --height: 98upx;
+        --height: 98rpx;
         display: flex;
         background-color: var(--link-bg-color);
         justify-content: space-between;
@@ -119,7 +119,7 @@
     }
 
     .link-items-lf {
-        --pad-lf: 30upx;
+        --pad-lf: 30rpx;
         width: var(--link-lf-width,60%);
         height: 100%;
         flex-shrink: 0;
@@ -131,7 +131,7 @@
     }
 
     .left-icon {
-        --size: 48upx;
+        --size: 48rpx;
         width: var(--link-lf-icon-size, var(--size));
         height: var(--link-lf-icon-size, var(--size));
         margin-right: var(--link-lf-icon-space,1em);
@@ -142,7 +142,7 @@
         font-weight: var(--link-lf-weight,500);
     }
     .link-items-rg {
-        --pad-rg: 30upx;
+        --pad-rg: 30rpx;
         width: var(--link-rg-width,40%);
         height: 100%;
         flex-shrink: 0;
@@ -167,7 +167,7 @@
     }
     .toright {
         flex-shrink: 0;
-        --size: 32upx;
+        --size: 32rpx;
         --right: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAC7klEQVR4Xt3aPYvUQBjA8efJFtuIhTZWVwjqFxA9318QUbzjOFG/wGYnIZAvYKWF2Apb7cBhYeehHCqKiO/v2NmpvVYKYhXIziODc+UdmUky84xbT3bv/9t5ciFZhJYvIcQVAFggojlE/AIAt6SUsuXbejscXT+pKIotdV3/2eD4VSnlJdf39nmcM4AQ4hoAXN7kj40CwQlgNBptGwwGPxt8U+wRnACEEPsB4EMDAL2ENYITQJZlu4joa0MA1ghOAGVZDquq0gBzsSM4AejoNE2PJ0ny3AKA5U5wBtA1WZYdJaKXMSO0AtDhQojDAPA6VoTWAGYnHCCidzEidAKgw/M836eU+hgbQmcAZifsJaJPMSF0ChAjQucAsY1DLwDmOmE+SZL33MehNwAdPh6PDyLiW84IvQKYcTiklHrDFaF3ADMOR5IkecURwQuAGYdjiPiCG4I3AHPZfAIAnnFC8ApgzgknlVJPuSB4BzDjcAoRn3BACAJgxuE0ADwOjRAMwFw2nyGiRyERggKYcTiLiA9DIQQHMONwDgAehEBgAWDGYZGI7vlGYANgEJaIaM0nAisAc05YRsS7lghXpZT6Ia31ix2A2QnnieiOTc1sNtu+srLyy+YYvZYlgEG4QESrFkHzUkrbe5J8AYQQFwHgdlMARNw9nU6/NV2/vo7lDrCNB4Dvw+Fw52QyqaIHcIjXzf/HSdAxvtXjdzYjECKezX+BUPEsAELGBwcIHR8UgEN8MAAu8UEAOMV7B+AW7xWAY7w3AK7xXgA4x/cOwD2+V4AY4nsDiCW+F4CY4jsHiC2+U4AY4zsDiDW+E4CY41sDxB7fCiDP8wWl1H3L29CtbmBaflaj5c43RYUQ+knuYqNP+beIXbzzDiiKYkdd1z9ij3cGSNPU5nfALL/59S/PaQTKstxaVdXvBjuAdbzzDtAHZlm2RkRLmyCwj28FoA8WQtAGAFHEtwYwCNcBYBkA9hDRZ0S8KaW80WA8WCz5C3IYiFAvYhCTAAAAAElFTkSuQmCC');
         --icon-shadow-bg-img: var(--link-rg-icon, var(--right));
         --icon-shadow-color: var(--link-rg-icon-color, #333);

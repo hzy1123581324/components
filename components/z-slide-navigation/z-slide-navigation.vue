@@ -36,14 +36,14 @@
      * @example <slide-navigation class="slide-navigation" :lsit="list"></slide-navigation>
      * <style>
          .slide-navigation{
-             --title-font-size: 24upx;   标题字体大小
-             --title-space: 10upx;   标题与图标的距离
+             --title-font-size: 24rpx;   标题字体大小
+             --title-space: 10rpx;   标题与图标的距离
              --title-color: inherit;  标题颜色默认继承
-             --subtitle-font-size: 18upx;   副标题字体大小
-             --subtitle-space: 8upx;   副标题与标题之间的距离
+             --subtitle-font-size: 18rpx;   副标题字体大小
+             --subtitle-space: 8rpx;   副标题与标题之间的距离
              --subtitle-color: inherit;   副标题颜色默认继承
-             --item-space: 36upx;    行与行之间的距离
-             --icon-size： 88upx;  图标大小
+             --item-space: 36rpx;    行与行之间的距离
+             --icon-size： 88rpx;  图标大小
              --title-font-weight 标题字重 默认 500
              --subtitle-font-weight 副标题字重 默认400
          }
@@ -222,14 +222,14 @@
 <style scoped>
     .slide-navigation-box{
         position: relative;
-        --title-font-size: 24upx; /*标题字体大小*/
-        --title-space: 10upx;/*标题与图标的距离*/
+        --title-font-size: 24rpx; /*标题字体大小*/
+        --title-space: 10rpx;/*标题与图标的距离*/
         --title-color: inherit;/*标题颜色默认继承*/
-        --subtitle-font-size: 18upx;/*副标题字体大小*/
-        --subtitle-space: 8upx;/*副标题与标题之间的距离*/
+        --subtitle-font-size: 18rpx;/*副标题字体大小*/
+        --subtitle-space: 8rpx;/*副标题与标题之间的距离*/
         --subtitle-color: inherit;/*副标题颜色默认继承*/
-        --item-space: 36upx; /*行与行之间的距离*/
-        --icon-size: 88upx;/*图标大小*/
+        --item-space: 36rpx; /*行与行之间的距离*/
+        --icon-size: 88rpx;/*图标大小*/
     }
     .slide-navigation-box::after,.slide-navigation-box::before{
         content: '';
@@ -242,7 +242,7 @@
         flex-wrap: wrap; */
         white-space: nowrap;
         /* position: relative; */
-        /* margin-bottom: 38upx; */
+        /* margin-bottom: 38rpx; */
     }
     .menu-item{
         vertical-align: text-top;
@@ -250,7 +250,7 @@
         width: 100%;
         height: 100%;
         white-space: normal;
-        /* padding-top: 41upx; */
+        /* padding-top: 41rpx; */
         flex-wrap: wrap;
     }
     .menu-box{
@@ -287,21 +287,21 @@
     /* 进度条 */
     .progress-bar{
         /* position: absolute; */
-        width: 120upx;
-        height: 6upx;
-        border-radius: 16upx;
+        width: 120rpx;
+        height: 6rpx;
+        border-radius: 16rpx;
         background-color: #e0e0e0;
-        /* bottom:26upx; */
+        /* bottom:26rpx; */
         /* left: 50%; */
-        /* margin-left: -50upx; */
-        margin: 0 auto 26upx;
+        /* margin-left: -50rpx; */
+        margin: 0 auto 26rpx;
         /* z-index: 90; */
     }
     .progress-item{
         height: 100%;
         display: inline-block;
         
-        border-radius: 16upx;
+        border-radius: 16rpx;
         background-color: #E22F24;
     }
 </style>

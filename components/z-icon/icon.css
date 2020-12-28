@@ -1,12 +1,14 @@
+.icon-box::after,.icon-box::before{
+    content: "";
+}
 /* 圆角三角形 */
-.icon-box[delta-]{
-    background-image: linear-gradient(45deg, transparent 50%, #61C4CF 0%);
-    background-size: var(--icon-size) var(--icon-size);
+.delta-rg,.delta-lf,.delta-top,.delta-btm{
+    background-image: linear-gradient(45deg, transparent 50%, currentcolor 0%);
+    background-size: 1em 1em;
     border-radius: 0.11em;
 }
 .delta-rg{
-   
-    transform: rotate(45deg);
+   transform: rotate(45deg);
 }
 .delta-lf{
     transform: rotate(225deg);
@@ -16,4 +18,54 @@
 }
 .delta-btm{
      transform: rotate(135deg);
+}
+
+/*括号箭头*/
+.up-arrow::before,.left-arrow::before,.right-arrow::before,.down-arrow::before{
+  width:0.7em;
+  height:0.7em;
+  position: absolute;
+  left:50%;
+  top:50%;
+  border-left: 0.125em solid currentcolor;
+  border-bottom:0.125em solid currentcolor;
+}
+/*向右的箭头*/
+.up-arrow::before{
+  transform: translate(-50%,-50%) rotate(135deg);
+}
+/*向右的箭头*/
+.left-arrow::before{
+  transform: translate(-50%,-50%) rotate(225deg);
+}
+/*向左的箭头*/
+.left-arrow::before{
+  transform: translate(-50%,-50%) rotate(45deg);
+}
+/*向下的箭头*/
+.down-arrow::before{
+  transform: translate(-50%,-50%) rotate(-45deg);
+}
+
+
+/* 关闭,加号，减号 */
+.colse::after,.colse::before,.add::after,.add::before,.del::before{
+  position: absolute;
+  width: 0.7em;
+  height:0.08em;
+  border-radius: 0.04em;
+  box-shadow: 0 0 0 .1em currentcolor inset;
+  left:50%;
+  top:50%;
+  transform: translate(-50%,-50%) rotate(-45deg);
+}
+.colse::after{
+  transform: translate(-50%,-50%) rotate(45deg);
+}
+.add::before,.del::before{
+    transform: translate(-50%,-50%);
+}
+
+.add::after{
+    transform: translate(-50%,-50%) rotate(90deg);
 }
