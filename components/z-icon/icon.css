@@ -1,6 +1,4 @@
-.icon-box::after,.icon-box::before{
-    content: "";
-}
+
 /* 圆角三角形 */
 .delta-rg,.delta-lf,.delta-top,.delta-btm{
     background-image: linear-gradient(45deg, transparent 50%, currentcolor 0%);
@@ -22,29 +20,31 @@
 
 /*括号箭头*/
 .up-arrow::before,.left-arrow::before,.right-arrow::before,.down-arrow::before{
-  width:0.7em;
-  height:0.7em;
+  width:0.6em;
+  height:0.6em;
   position: absolute;
   left:50%;
   top:50%;
+  margin-top: -0.3em;
+  margin-left: -0.3em;
   border-left: 0.125em solid currentcolor;
   border-bottom:0.125em solid currentcolor;
 }
 /*向右的箭头*/
 .up-arrow::before{
-  transform: translate(-50%,-50%) rotate(135deg);
+  transform: rotate(135deg);
 }
 /*向右的箭头*/
-.left-arrow::before{
-  transform: translate(-50%,-50%) rotate(225deg);
+.right-arrow::before{
+  transform: rotate(225deg);
 }
 /*向左的箭头*/
 .left-arrow::before{
-  transform: translate(-50%,-50%) rotate(45deg);
+  transform: rotate(45deg);
 }
 /*向下的箭头*/
 .down-arrow::before{
-  transform: translate(-50%,-50%) rotate(-45deg);
+  transform: rotate(315deg);
 }
 
 

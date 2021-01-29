@@ -48,7 +48,9 @@
        --navbar-rg-font: 导航栏右边字体大小  默认32rpx
        --navbar-lf-font: 导航栏左边字体大小  默认32rpx
        --navbar-center-width: 导航标题宽度
-       
+       --navbar-btm：  导航栏下边框 默认 0 1rpx 0 0 #f4f4f4；
+       --navbar-pad-lf: 导航栏 左边内边距  默认 1em
+       --navbar-pad-rg: 导航栏 右边内边距 默认 1em
      }
      * 
     
@@ -150,6 +152,9 @@
         position: relative;
         color: var(--navbar-color, #333);
         box-sizing: content-box;
+        /* #ifndef APP-NVUE */
+        flex-shrink: 0;
+        /* #endif */
     }
 
     .navbar-fixed-box {
@@ -180,11 +185,10 @@
         /* #ifndef APP-NVUE */
         display: flex;
         /* #endif */
-        flex-direction: row;
         align-items: center;
         align-content: center;
         justify-content: flex-start;
-        padding-left: 0.5em;
+        padding-left:var(--navbar-pad-lf,1em);
         font-size: var(--navbar-lf-font, var(--font));
         opacity: 0;
         pointer-events: none;
@@ -231,29 +235,31 @@
         /* #ifndef APP-NVUE */
         display: flex;
         /* #endif */
-        flex-direction: row;
         align-items: center;
         align-content: center;
         justify-content: flex-end;
         font-size: var(--navbar-rg-font, var(--font));
-        padding-right: 1em;
+        padding-right: var(--navbar-pad-rg,1em);
     }
 
     .navbar-full {
         width: 100%;
         height: 100%;
         position: absolute;
+        padding-top: var(--status-bar-height, var(--status-height));
         top: 0;
         left: 0;
+        right: 0;
         z-index: 10;
+        box-sizing: border-box;
     }
-
     .navbar-full:empty {
         opacity: 0;
         pointer-events: none;
     }
     
     .navbar-border{
-      box-shadow: 0 1rpx 0 0 #f4f4f4;
+      --btm: 0 1rpx 0 0 #f4f4f4;
+      box-shadow: var(--navbar-btm,var(--btm));
     }
 </style>

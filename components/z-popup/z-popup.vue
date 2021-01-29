@@ -1,9 +1,9 @@
 <template>
-    <view v-if="showPopup" class="uni-popup" :class="[popupstyle]" @touchmove.stop.prevent="clear">
+    <view v-if="showPopup" class="popup" :class="[popupstyle]" @touchmove.stop.prevent="clear">
         <z-transition class="mask" v-if="maskShow" :mode-class="['fade']" :styles="maskClass" :duration="duration" :show="showTrans"
             @click="onTap" />
         <z-transition class="more" :mode-class="ani" :styles="transClass" :duration="duration" :show="showTrans" @click="onTap">
-            <view class="uni-popup__wrapper-box" @click.stop="clear">
+            <view class="popup-wrapper-box" @click.stop="clear">
                 <slot></slot>
             </view>
         </z-transition>
@@ -37,10 +37,7 @@
      */
 
     export default {
-        name: 'popup',
-        components: {
- 
-        },
+        name: 'z-popup',
         props: {
             // 开启动画
             animation: {
@@ -252,23 +249,21 @@
     }
 </script>
 <style lang="scss" scoped>
-    page{
-        
-    }
-    .uni-popup {
+
+    .popup {
         position: fixed;
         /* #ifndef APP-NVUE */
         z-index: var(--popup-index,999);
         /* #endif */
     }
 
-    .uni-popup__mask {
+    .popup-mask {
         position: absolute;
         top: 0;
         bottom: 0;
         left: 0;
         right: 0;
-        background-color: $uni-bg-color-mask;
+        background-color: var(--popup-mask-bg-color,rgba(0, 0, 0, 0.4));
         opacity: 0;
     }
     .mask{
@@ -282,19 +277,19 @@
         transition-duration: 0.2s;
     }
 
-    .uni-top-mask {
+    .top-mask {
         opacity: 1;
     }
 
-    .uni-bottom-mask {
+    .bottom-mask {
         opacity: 1;
     }
 
-    .uni-center-mask {
+    .center-mask {
         opacity: 1;
     }
 
-    .uni-popup__wrapper {
+    .popup-wrapper {
         /* #ifndef APP-NVUE */
         display: block;
         /* #endif */
@@ -314,7 +309,7 @@
         bottom: 0;
     }
 
-    .uni-popup__wrapper-box {
+    .popup-wrapper-box {
         /* #ifndef APP-NVUE */
         display: block;
         /* #endif */
@@ -333,15 +328,15 @@
     }
 
 
-    .uni-top-content {
+    .top-content {
         transform: translateY(0);
     }
 
-    .uni-bottom-content {
+    .bottom-content {
         transform: translateY(0);
     }
 
-    .uni-center-content {
+    .center-content {
         transform: scale(1);
         opacity: 1;
     }
