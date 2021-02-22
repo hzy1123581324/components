@@ -5,9 +5,15 @@
     │ 
     ├─ components
     │  │ 
+    │  ├─z-action-sheet  底部选择面板
+    │  │     └─ z-action-sheet.vue
+    │  │ 
     │  ├─z-avatar  头像
     │  │     └─ z-avatar.vue
-    │  │      
+    │  │
+    │  ├─z-badge  角标
+    │  │     └─ z-badge.vue
+    │  │    
     │  ├─z-biometrics 生物认证
     │  │     └─ z-biometrics.vue
     │  │      
@@ -26,6 +32,9 @@
     │  │      
     │  ├─z-count-down  倒计时组件
     │  │     └─ z-count-down.vue 
+    │  │      
+    │  ├─z-count-to  数字滚动
+    │  │     └─ z-count-to.vue 
     │  │
     │  ├─z-diamond  菱形，梯形组件
     │  │     └─ z-diamond.vue  
@@ -36,7 +45,7 @@
     │  ├─z-dropdown-item  下拉菜单子项
     │  │     └─ z-dropdown-item.vue  
     │  │ 
-    │  ├─ z-flip-clock  时间翻牌组件
+    │  ├─z-flip-clock  时间翻牌组件
     │  │     ├─ flipper.vue
     │  │     └─ z-flip-clock.vue 
     │  │        
@@ -72,6 +81,9 @@
     │  ├─z-loading   加载中组件
     │  │     └─ z-loading.vue
     │  │      
+    │  ├─z-luckdraw   九宫格抽奖
+    │  │     └─ z-luckdraw.vue
+    │  │
     │  ├─z-magnifier  放大镜
     │  │     ├─ magnifier-original.vue
     │  │     └─z-magnifier.vue
@@ -105,7 +117,7 @@
     │  ├─z-parse  富文本组件
     │  │  ├─  z-parse.vue
     │  │  └─libs
-    │  │      ├─    config.js
+    │  │      ├─   config.js
     │  │      ├─   CssHandler.js
     │  │      ├─   handler.wxs
     │  │      ├─   MpHtmlParser.js
@@ -124,9 +136,6 @@
     │  │    ├─  popup-share.vue
     │  │    ├─  popup.js
     │  │    └─  z-popup.vue
-    │  │      
-    │  ├─z-postpone （废弃）
-    │  │     └─ z-postpone.vue
     │  │      
     │  ├─z-preview-phone  手机模型
     │  │     └─ z-preview-phone.vue
@@ -158,7 +167,10 @@
     │  │      
     │  ├─z-sticky  吸顶
     │  │     └─ z-sticky.vue
-    │  │      
+    │  │
+    │  ├─z-swipe-action  左右滑动抽屉
+    │  │     └─ z-swipe-action.vue
+    │  │
     │  ├─z-switch  开关选择器
     │  │    └─  z-switch.vue
     │  │ 
@@ -171,11 +183,11 @@
     │  ├─z-tabs-panel  标签栏内容
     │  │     └─ z-tabs-panel.vue
     │  │      
-    │  ├─z-text-gradient  字体渐变
-    │  │     └─ z-text-gradient.vue
-    │  │      
     │  ├─z-textarea  导航文本
     │  │     └─ z-textarea.vue
+    │  │      
+    │  ├─z-text-gradient  字体渐变
+    │  │     └─ z-text-gradient.vue
     │  │      
     │  ├─z-theme-box  主题切换
     │  │     └─ z-theme-box.vue
@@ -225,4 +237,4 @@
 
 ## 备忘录
 
-- IOS苹果 自定义组件嵌套多层，底层组件最外层元素样式丢失，需要在页面重新定义样式，很奇怪的是绝对定位没事
+- IOS苹果 自定义吸顶组件嵌套多层，底层组件最外层元素样式丢失，需要在页面重新定义样式，很奇怪的是绝对定位没事

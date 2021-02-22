@@ -2,13 +2,12 @@
 	<view class="switch" :class="[value == true ? 'switch--on' : '', disabled ? 'switch--disabled' : '']" @tap="onClick"
 	 :style="[switchStyle]">
 		<view class="switch__node node-class">
-			<loading :show="loading" class="switch__loading" :size="size * 0.6" :color="loadingColor" />
+			<z-loading :show="loading" class="switch__loading" :size="size * 0.6" :color="loadingColor" />
 		</view>
 	</view>
 </template>
 
 <script>
-    import loading from "../loading/loading.vue";
 	/**
 	 * switch 开关选择器
 	 * @description 选择开关一般用于只有两个选择，且只能选其一的场景。
@@ -25,9 +24,7 @@
 	 */
 	export default {
 		name: "switch",
-        components: {
-          loading  
-        },
+
 		props: {
 			// 是否为加载中状态
 			loading: {

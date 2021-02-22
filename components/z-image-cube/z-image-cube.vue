@@ -11,7 +11,19 @@
      * @description 根据传入数量改变
      * @tutorial https://www.uviewui.com/components/button.html
      * @property {Array} list
-     * @example <image-cube :list="list"></image-cube>
+     * @example <image-cube :list="list">
+         <template v-slot:default="{ item }">
+           <!-- <div
+             :class="['imageCubeBox-item', item.type]"
+             :style="'--bg:url(' + item.img + ')'"
+             @click="goto(item)"
+           >
+             <p>{{ item.title }}</p>
+             <p>{{ item.subhead }}</p>
+           </div>-->
+           <img style="width: 100%;height: 100%;" :src="item.img" alt @click="goto(item)" />
+         </template>
+     </image-cube>
      */
     export default {
         name: "ImageCube",

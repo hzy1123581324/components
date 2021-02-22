@@ -1,13 +1,13 @@
 <template>
     <view class="navbar-box clear" :style="`--navbar-fixed:${!isFixed?'relative':'fixed'};--status-height:${statusheight}px;`">
-        <view class="navbar-fixed-box clear" :class="{'navbar-border': border}">
-            <view :class="['navbar-left',isBack&&'hasback']" @tap="goBack">
+        <view :class="['navbar-fixed-box clear',border&&'navbar-border']" >
+            <view :class="['navbar-left',isBack&&'hasback']" >
                 <slot name="left">
-                    <u-icon :name="backIconName" :color="backIconColor" :size="backIconSize"></u-icon>
-                    <text class="backTxt">{{backTxt}}</text>
+                    <u-icon :name="backIconName" :color="backIconColor" :size="backIconSize" @click.native="goBack"></u-icon>
+                    <text class="backTxt" v-if="hasbacktxt" @click="goBack">{{backTxt}}</text>
                 </slot>
             </view>
-            <view class="navbar-center" v-if="showTitle">
+            <view class="navbar-center">
                 <slot></slot>
             </view>
             <view class="navbar-right">
@@ -25,12 +25,8 @@
      * navbar 自定义导航栏
      * @description 此组件一般用于在特殊情况下，需要自定义导航栏的时候用到，一般建议使用uniapp自带的导航栏。
      * @tutorial https://www.uviewui.com/components/navbar.html
-     * @property {String} back-icon-color 左边返回图标的颜色（默认#606266）
-     * @property {String} back-icon-name 左边返回图标的名称，只能为uView自带的图标（默认arrow-left）
-     * @property {String Number} back-icon-size 左边返回图标的大小，单位rpx（默认30）
+     * @property {String} backicon 左边返回图标的资源路径
      * @property {String} back-text 返回图标右边的辅助提示文字
-     * @property {String} title-color 标题的颜色（默认#606266）
-     * @property {String Number} title-size 导航栏标题字体大小，单位rpx（默认32）
      * @property {Function} custom-back 自定义返回逻辑方法
      * @property {Boolean} is-back 是否显示导航栏左边返回图标和辅助文字（默认true）
      * @property {Boolean} is-fixed 导航栏是否固定在顶部（默认true）
@@ -48,7 +44,6 @@
        --navbar-rg-font: 导航栏右边字体大小  默认32rpx
        --navbar-lf-font: 导航栏左边字体大小  默认32rpx
        --navbar-center-width: 导航标题宽度
-       --navbar-btm：  导航栏下边框 默认 0 1rpx 0 0 #f4f4f4；
        --navbar-pad-lf: 导航栏 左边内边距  默认 1em
        --navbar-pad-rg: 导航栏 右边内边距 默认 1em
      }
@@ -68,14 +63,10 @@
                 type: Boolean,
                 default: true
             },
-            backTxt: {
-                type: String,
-                default: '返回'
-            },
             // 返回箭头的颜色
             backIconColor: {
                 type: String,
-                default: '#606266'
+                default: '$tem-text-color1'
             },
             // 左边返回的图标
             backIconName: {
@@ -87,14 +78,22 @@
                 type: [String, Number],
                 default: '34'
             },
+            backTxt: {
+                type: String,
+                default: '返回'
+            },
+            backicon: {
+                type: String,
+                default:'',
+            },
+            hasbacktxt: {
+                 type: Boolean,
+                 default: false,
+            },
             // 自定义返回逻辑
             customBack: {
                 type: Function,
                 default: null
-            },
-            showTitle: {
-                type: Boolean,
-                default: true
             },
             border: {
             	type: [String, Boolean],
@@ -103,7 +102,8 @@
         },
         data() {
             return {
-                statusheight: 0
+                statusheight: 0,
+                backIcon:require('./libs/images/back.png'),
             }
         },
         computed: {
@@ -141,20 +141,27 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+    .clear::after, .clear::before {
+    	content: '';
+    	display: table;
+    	clear: both;
+    }
     .navbar-box {
         --status-height: 0;
-        --height: 98rpx;
+        --height: 88rpx;
         --center-width: 300rpx;
         padding-top: var(--status-bar-height, var(--status-height));
         height: var(--navbar-height, var(--height));
-        box-sizing: border-box;
+        // box-sizing: border-box;
         position: relative;
-        color: var(--navbar-color, #333);
+        color: var(--navbar-color, $uni-text-color);
         box-sizing: content-box;
         /* #ifndef APP-NVUE */
         flex-shrink: 0;
         /* #endif */
+        // background-color: red;
+        // background-image: linear-gradient(to bottom,red 0,red 88rpx, blue 88rpx, blue 100%);
     }
 
     .navbar-fixed-box {
@@ -172,13 +179,12 @@
         /* box-shadow: 0 1rpx 0 0 #f4f4f4; */
         background-color: var(--fixed-bg-color, #fff);
         background-image: var(--fixed-bg-img);
-
         box-sizing: content-box;
-
+        // opacity: 0;
     }
 
     .navbar-left {
-
+        --pad-lf: 15rpx;
         --font: 32rpx;
         width: calc((100vw - var(--navbar-center-width, var(--center-width))) / 2);
         height: 100%;
@@ -188,10 +194,11 @@
         align-items: center;
         align-content: center;
         justify-content: flex-start;
-        padding-left:var(--navbar-pad-lf,1em);
+        padding-left:var(--navbar-pad-lf,var(--pad-lf));
         font-size: var(--navbar-lf-font, var(--font));
         opacity: 0;
         pointer-events: none;
+        white-space : nowrap;
         /* background-color: red; */
     }
 
@@ -202,6 +209,10 @@
 
     .backTxt {
         padding-left: 0.3em;
+    }
+    .backicon{
+        width: 38upx;
+        height: 38upx;
     }
 
     /* 标题中部 */
@@ -214,14 +225,15 @@
         /*文本不会换行（单行文本溢出）*/
         width: var(--navbar-center-width, var(--center-width));
         height: 100%;
-        line-height: var(--navbar-height, var(--height));
+        // line-height: var(--navbar-height, var(--height));
         font-size: var(--navbar-title-font, var(--font));
         font-weight: var(--navbar-title-weight, 500);
         /* #ifndef APP-NVUE */
-        display: block;
+        display: flex;
         /* #endif */
-
-        text-align: center;
+        align-items: center;
+        justify-content: center;
+        // text-align: center;
     }
 
     /*  */
@@ -244,22 +256,25 @@
 
     .navbar-full {
         width: 100%;
-        height: 100%;
+        height: var(--navbar-height, var(--height));
         position: absolute;
         padding-top: var(--status-bar-height, var(--status-height));
         top: 0;
         left: 0;
         right: 0;
         z-index: 10;
-        box-sizing: border-box;
+        box-sizing: content-box;
+        // background-color: blue;
     }
+
     .navbar-full:empty {
         opacity: 0;
         pointer-events: none;
     }
     
     .navbar-border{
-      --btm: 0 1rpx 0 0 #f4f4f4;
+      /* --btm: 0 1rpx 0 0 #f4f4f4; */
+      --btm: none;
       box-shadow: var(--navbar-btm,var(--btm));
     }
 </style>

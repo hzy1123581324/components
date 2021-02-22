@@ -1,6 +1,5 @@
 <template>
-    <view v-if="show" class="loading" :class="'loading-'+mode" :style="[cricleStyle]">
-    </view>
+    <view v-if="show" class="loading" :class="'loading-'+mode" :style="[cricleStyle]"></view>
 </template>
 
 <script>
@@ -48,7 +47,8 @@
                 let style = {};
                 style.width = this.size + 'rpx';
                 style.height = this.size + 'rpx';
-                if (this.mode == 'circle') style.borderColor = `#e4e4e4 #e4e4e4 #e4e4e4 ${this.color ? this.color : '#c7c7c7'}`;
+                if (this.mode == 'circle') style.borderColor =
+                    `#e4e4e4 #e4e4e4 #e4e4e4 ${this.color ? this.color : '#c7c7c7'}`;
                 return style;
             },
         }
