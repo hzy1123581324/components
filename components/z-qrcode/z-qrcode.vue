@@ -5,6 +5,31 @@
 </template>
 
 <script>
+    /**
+     * qrcode 二维码组件
+     * @description 用于字符串转二维码
+     * @tutorial https://www.uviewui.com/components/popup.html
+     * @property {String} cid canvasid 必传
+     * @property {Boolean} text 要转换的字符串
+     * @property {Boolean} size 二维码尺寸大小  默认590
+     * @property {Boolean} margin 边距，二维码实际尺寸会根据所设边距值进行缩放调整（默认：0）
+     * @property {Boolean} backgroundColor 背景色
+     * @property {Boolean} foregroundColor 前景色（默认：'#000000'）
+     * @property {Boolean} backgroundImage 二维码背景图
+     * @property {Boolean} logo 二维码中间的logo  默认false
+     * @property {Boolean} makeOnLoad 监听页面显示隐藏  默认false
+     * @property {Boolean} saveImg 是否保存图片到相册  默认false
+     * @event {Function} makeComplete 返回二维码图片
+     * @example <z-qrcode
+                    ref="qrcode"
+                    class="qrcode-img"
+                    cid="qrcode2218"
+                    :text="addr"
+                    :size="size"
+                    :makeOnLoad="makeOnLoad"
+                    @makeComplete="makeComplete"
+                ></z-qrcode>
+     */
     import uQRCode from './uqrcode.js'
 
     export default {

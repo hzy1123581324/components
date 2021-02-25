@@ -15,7 +15,6 @@
         methods: {
             handleScroll(e) {
                 const top = e.target.scrollTop;
-
                 if (top > 100) {
                     this.flag = false;
                 } else {

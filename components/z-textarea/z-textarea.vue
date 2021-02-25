@@ -7,6 +7,15 @@
 </template>
 
 <script>
+/**
+ * textarea 自定义多行文本框
+ * @description 此组件一般用于解决textarea层级过高的问题
+ * @tutorial https://www.uviewui.com/components/navbar.html
+ * @property {String} value value值
+ * @property {String} placeholder 占位符
+ * @property {String} classStyle 外部样式
+ * @example <z-textarea v-model="value" placeholder="占位符" classStyle=''></z-textarea>
+ */
 export default {
         props: {
             value: {

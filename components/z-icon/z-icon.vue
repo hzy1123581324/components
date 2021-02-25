@@ -1,5 +1,5 @@
 <template>
-    <view class="icon-box" :class="[type]" :style='coinStyle'></view>
+    <view class="icon-box" :class="['iconfont',type]" :style='coinStyle'></view>
 </template>
 
 <script>
@@ -66,7 +66,7 @@
 </style>
 <style scoped>
     @import './icon.css';
-
+    @import '../../iconfont.css';
     .icon-box {
         --size: 28rpx;
         display: inline-block;
@@ -75,11 +75,13 @@
         position: relative;
         transition: all ease-in-out 0.3s 0s;
         /* transition: var(--icon-transition,none); */
-        color: var(--icon-color, var(--mian-color, #333));
+        color: var(--icon-color, var(--mian-color, inherit));
         font-size: var(--icon-size, var(--font-size, var(--size)));
+        vertical-align: top;
+        flex-shrink: 0;
     }
     .icon-box::after,.icon-box::before{
-        content: "";
+        /* content: ""; */
         transition: var(--icon-transition,none);
     }
 </style>

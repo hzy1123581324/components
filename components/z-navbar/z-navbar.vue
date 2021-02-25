@@ -3,7 +3,7 @@
         <view :class="['navbar-fixed-box clear',border&&'navbar-border']" >
             <view :class="['navbar-left',isBack&&'hasback']" >
                 <slot name="left">
-                    <u-icon :name="backIconName" :color="backIconColor" :size="backIconSize" @click.native="goBack"></u-icon>
+                    <z-icon :type="backIconName" class="back-icon"  @click.native="goBack"></z-icon>
                     <text class="backTxt" v-if="hasbacktxt" @click="goBack">{{backTxt}}</text>
                 </slot>
             </view>
@@ -25,7 +25,6 @@
      * navbar 自定义导航栏
      * @description 此组件一般用于在特殊情况下，需要自定义导航栏的时候用到，一般建议使用uniapp自带的导航栏。
      * @tutorial https://www.uviewui.com/components/navbar.html
-     * @property {String} backicon 左边返回图标的资源路径
      * @property {String} back-text 返回图标右边的辅助提示文字
      * @property {Function} custom-back 自定义返回逻辑方法
      * @property {Boolean} is-back 是否显示导航栏左边返回图标和辅助文字（默认true）
@@ -37,8 +36,9 @@
        --navbar-color: 导航栏默认字体颜色 #333
        --navbar-height: 导航栏高度， 默认98rpx
        --navbar-fixed: 是否固定在顶部 
-       --fixed-bg-color： 导航栏背景色
-       --fixed-bg-img:  导航栏图片
+       --navbar-back-icon-size: 返回图标尺寸大小
+       --navbar-fixed-bg-color： 导航栏背景色
+       --navbar-fixed-bg-img:  导航栏图片
        --navbar-title-font: 导航栏标题字体大小 默认34rpx
        --navbar-title-weight： 导航栏标题之重 默认500
        --navbar-rg-font: 导航栏右边字体大小  默认32rpx
@@ -63,20 +63,10 @@
                 type: Boolean,
                 default: true
             },
-            // 返回箭头的颜色
-            backIconColor: {
-                type: String,
-                default: '$tem-text-color1'
-            },
             // 左边返回的图标
             backIconName: {
                 type: String,
-                default: 'arrow-left'
-            },
-            // 左边返回图标的大小，rpx
-            backIconSize: {
-                type: [String, Number],
-                default: '34'
+                default: 'icon-arrow-left'
             },
             backTxt: {
                 type: String,
@@ -92,7 +82,7 @@
             },
             // 自定义返回逻辑
             customBack: {
-                type: Function,
+                type: [Function,null],
                 default: null
             },
             border: {
@@ -103,7 +93,7 @@
         data() {
             return {
                 statusheight: 0,
-                backIcon:require('./libs/images/back.png'),
+                // backIcon:require('./libs/images/back.png'),
             }
         },
         computed: {
@@ -155,7 +145,7 @@
         height: var(--navbar-height, var(--height));
         // box-sizing: border-box;
         position: relative;
-        color: var(--navbar-color, $uni-text-color);
+        color: var(--navbar-color, var(--color-main,#333));
         box-sizing: content-box;
         /* #ifndef APP-NVUE */
         flex-shrink: 0;
@@ -177,8 +167,8 @@
         display: flex;
         /* #endif */
         /* box-shadow: 0 1rpx 0 0 #f4f4f4; */
-        background-color: var(--fixed-bg-color, #fff);
-        background-image: var(--fixed-bg-img);
+        background-color: var(--navbar-fixed-bg-color, #fff);
+        background-image: var(--navbar-fixed-bg-img);
         box-sizing: content-box;
         // opacity: 0;
     }
@@ -209,10 +199,17 @@
 
     .backTxt {
         padding-left: 0.3em;
+        color: inherit;
     }
     .backicon{
         width: 38upx;
         height: 38upx;
+    }
+    .back-icon{
+        --size: 40rpx;
+        --icon-size: var(--navbar-back-icon-size,var(--size));
+        
+        // --icon-color: inhert;
     }
 
     /* 标题中部 */

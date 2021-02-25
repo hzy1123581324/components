@@ -38,6 +38,7 @@
            .button{
               --btn-height: 按钮高度 默认 84rpx
               --btn-bor-width: 边框宽度 默认2rpx
+              --btn-bor-color: 边框颜色 默认 当前字体颜色
               --btn-color  按钮字体颜色 默认#333
               --btn-bg: 按钮背景色  默认red
               --btn-img:  一般用于设置渐变色
@@ -128,6 +129,7 @@
                     return ;
                 }
                 if (this.postpone) {
+                    console.log('异步处理')
                     return this.unrepeat(); 
                 }
                 // 是否开启水波纹效果
@@ -249,22 +251,25 @@
     /* 默认不镂空，8圆角，白色字体 */
     .button-box {
         /* 很操蛋var默认值rpx转不过来 */
-        --btn-height: 84rpx;
+        --height: 84rpx;
         --bor-width: 2rpx;
         --btn-bor: var(--btn-bor-width,var(--bor-width)) solid var(--btn-bor-color, currentColor);
         --font-size: 32rpx;
-        --radius: calc(var(--btn-height) / 2);
+        --Radius: calc(var(--btn-height,var(--height)) / 2);
         display: var(--display, block);
-        line-height: calc(var(--btn-height) - 2 * var(--btn-bor-width,var(--bor-width)));
-        height: var(--btn-height);
+        /* line-height: calc(var(--btn-height,var(--height)) - 2 * var(--btn-bor-width,var(--bor-width))); */
+        display: flex;
+        align-items: center;
+        height: var(--btn-height,var(--height));
         border: var(--btn-bor);
         text-align: center;
+        justify-content: center;
         font-weight: var(--btn-font-weight,600);
         font-size: var(--btn-font-size,var(--font-size));
         color: var(--btn-color, #fff);
         letter-spacing: 4rpx;
         padding: 0 1em;
-        border-radius: var(--btn-radius,var(--radius));
+        border-radius: var(--btn-radius,var(--Radius));
         /*默认是半圆*/
         background-image: var(--btn-img);
         background-color: var(--btn-bg,var(--theme,red));
@@ -276,8 +281,8 @@
     }
 
     .square {
-        --radius: 8rpx;
-        border-radius: var(--btn-radius,var(--radius));
+        --Radius: 8rpx;
+        border-radius: var(--btn-radius,var(--radius,var(--Radius)));
     }
 
     .button-box.plain {

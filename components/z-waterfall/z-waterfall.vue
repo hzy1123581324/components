@@ -13,7 +13,7 @@
      * waterfall 瀑布流组件
      * @description 瀑布流组件
      * @tutorial https://www.uviewui.com/components/button.html
-     * @property {String,Number} column 例数
+     * @property {String,Number} column 列数
      * @property {Array} list 要展示数据
      * @example
      * <waterfall :list='list' :column="column">

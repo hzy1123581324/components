@@ -8,7 +8,7 @@
     // getTheme是全局属性
     
     /**
-     * noticeBar 风格组件
+     * theme-box 风格组件 存在root 节点不需要使用该组件
      * @description 该组件用于切换风格
      * @tutorial https://www.uviewui.com/components/noticeBar.html
      * @property {String} theme 强制指定风格
