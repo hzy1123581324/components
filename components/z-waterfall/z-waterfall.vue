@@ -1,8 +1,8 @@
 <template>
-    <view class="waterfall-box flex" :style="`--column:${ __column}`">
-        <view class="items-box" v-for="items in columnList" :key="items">
-            <view class="item-box" v-for="item in items" :key="item.id" @click="jump(item)">
-                <slot :item="item"></slot>
+    <view class="waterfall-box flex" :style="`--waterfall-column:${ column}`">
+        <view class="items-box" v-for="(items,index) in columnList" :key="index">
+            <view class="item-box" v-for="(item,index2) in items" :key="item.id" @click="point(item)">
+                <slot :item="item" :index="index2*column+index"></slot>
             </view>
         </view>
     </view>
@@ -39,13 +39,11 @@
         },
         components: {},
         computed: {
-            ...mapGetters(["IsPhone"]),
+            // ...mapGetters(["IsPhone"]),
             columnList() {
                 let _list = [];
                 let column = this.column;
-                if (this.IsPhone) {
-                    column = 2;
-                }
+                
                 let list = this.list || [];
                 for (let i = 0; i < list.length; i++) {
                     _list[i % column] || (_list[i % column] = []);
@@ -53,13 +51,6 @@
                 }
 
                 return _list;
-            },
-            __column() {
-                if (this.IsPhone) {
-                    return 2;
-                } else {
-                    return this.column;
-                }
             },
         },
         data() {
@@ -70,8 +61,8 @@
         watch: {},
         destroyed() {},
         methods: {
-            jump(item){
-                this.$emit('jump',item);
+            point(item){
+                this.$emit('point',item);
             }
         },
     };
@@ -80,18 +71,24 @@
 <style scoped>
     .waterfall-box {
         /* width: 100%; */
-        --space: 30rpx;
+        --fall-pad: 30rpx;
         overflow-x: hidden;
-        width: calc(100% + var(--space));
-        margin-left: calc(var(--space) / 2 * -1);
+        width: 100%;
+        padding: var(--waterfall-pad,var(--fall-pad)) ;
+        display: flex;
+        justify-content: space-between;
     }
 
     .items-box {
-        width: calc(100% / var(--column));
-        padding: 0 calc(var(--space) / 2);
+        --space : var(--waterfall-space,var(--waterfall-pad,var(--fall-pad)));
+        width: calc( (100% - var(--space) * ( var(--waterfall-column) - 1) ) / var(--waterfall-column));
     }
-
+    .items-box+.items-box{
+        margin-left: var(--space) 0;
+    }
     .item-box {
+        margin-bottom: var(--space);
         display: flex;
+        flex-direction: column;
     }
 </style>

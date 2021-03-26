@@ -37,8 +37,6 @@
                 </z-luckdraw>
      * <style>
          .luckdraw{
-            --tab-bg:  组件背景色
-            --tab-height： 组件高度  默认80rpx
          }
      </style>
      */

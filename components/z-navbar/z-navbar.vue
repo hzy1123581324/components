@@ -4,6 +4,7 @@
             <view :class="['navbar-left',isBack&&'hasback']" >
                 <slot name="left">
                     <z-icon :type="backIconName" class="back-icon"  @click.native="goBack"></z-icon>
+                    <u-avatar class="back-avatar"  :src="src" mode="circle" :size="size" v-if="avatar"></u-avatar>
                     <text class="backTxt" v-if="hasbacktxt" @click="goBack">{{backTxt}}</text>
                 </slot>
             </view>
@@ -88,7 +89,19 @@
             border: {
             	type: [String, Boolean],
             	default: true
-            }
+            },
+            avatar: {
+                type: Boolean,
+                default: false,
+            },
+            src: {
+                type: String,
+                default: ''
+            },
+            size: {
+            	type: [String, Number],
+            	default: 'default'
+            },
         },
         data() {
             return {
@@ -116,7 +129,21 @@
                     this.statusheight = res.statusBarHeight;
                 }
             });
-    
+            this.$nextTick(()=>{
+                uni.createSelectorQuery().in(this).select('.navbar-fixed-box').fields({
+                    size: true,
+                    rect: true,
+                    scrollOffset: true,
+                }, data => {
+                    // console.log( "得到布局位置信息" + JSON.stringify(data));
+                    // console.log("节点离页面顶部的距离为" + data.top);
+                    if (data) {
+                       
+                        this.tabsScrollWidth = data.width;
+                        this.$emit('navbarHeight',data.height)
+                    }
+                }).exec();
+            })
         },
         methods: {
             goBack() {
@@ -211,7 +238,9 @@
         
         // --icon-color: inhert;
     }
-
+    .back-avatar {
+        margin-left: 10rpx;
+    }
     /* 标题中部 */
     .navbar-center {
         --font: 34rpx;
@@ -261,6 +290,7 @@
         right: 0;
         z-index: 10;
         box-sizing: content-box;
+        background-color: inherit;
         // background-color: blue;
     }
 

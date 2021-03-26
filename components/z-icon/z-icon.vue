@@ -1,5 +1,5 @@
 <template>
-    <view class="icon-box" :class="['iconfont',type]" :style='coinStyle'></view>
+    <view class="icon-box iconfont" :class="[type]" :style='coinStyle'></view>
 </template>
 
 <script>
@@ -65,8 +65,8 @@
 
 </style>
 <style scoped>
-    @import './icon.css';
     @import '../../iconfont.css';
+    @import 'icon.css';
     .icon-box {
         --size: 28rpx;
         display: inline-block;

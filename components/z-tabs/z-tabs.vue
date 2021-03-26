@@ -4,12 +4,14 @@
             scroll-with-animation="true" :style="scrollStyle">
             <view class="scroll-list-box">
                 <view :class="['tabs-items',type]" ref="tabsItems">
-                    <view :id="'tabs_'+index" :class="['tabs-item',activeIndex==index&&'active',isfull&&'full']" v-for="(item,index) in list"
+                    <view :id="'tabs_'+index" :class="['tabs-item u-skeleton-rect',activeIndex==index&&'active',isfull&&'full']" v-for="(item,index) in list"
                         :key="item.id" @click="tabtap(index)">
-                        {{item[keyname]}}
+                        <slot name="tabs-item" :item="item" :active="activeIndex==index">
+                            {{item[keyname]}}
+                        </slot>
                     </view>
                 </view>
-                <view class="tabs-progress"></view>
+                <view class="tabs-progress u-skeleton-rect"></view>
             </view>
         </scroll-view>
         <view class="tab-between"><slot name="between"></slot></view>
@@ -40,7 +42,7 @@
      * <style>
          .tabs{
             --tab-bg:  组件背景色
-            --tab-height： 组件高度
+            --tabs-height： 组件高度
             --tab-min-width: 标签最小宽度
             --tab-max-width: 标签最大宽度
             --tab-item-weight 标签未激活后字体粗细  默认400
@@ -55,6 +57,7 @@
             --tab-item-active-weight 标签激活后字体粗细  不设置使用未激活标签的字重
             --tab-item-active-font 标签激活后的字体大小  默认28rpx
             --tab-item-active-color： 标签激活后的颜色  #111
+            --tab-item-active-family: 标签激活后的使用的字体 默认是继承
             
             --tabs-progress-color: 下划线样式  默认 #EA4D5E
             --tabs-progress-width: 下划线宽度  不设等于激活标签宽度
@@ -139,15 +142,18 @@
         },
         watch: {
             index(newval) {
-
-                this.transitionProgress = true;
-                if (this.list.length > 0) {
-                    // console.log(newval,'------------------------------------------------------------------------------');
-                    this.check();
-                }
+                this.activeIndex = newval;
             },
             activeIndex(newval) {
                 this.$emit('update:index', newval);
+                this.transitionProgress = true;
+                if (this.list.length > 0) {
+                    // console.log(newval,'------------------------------------------------------------------------------');
+                    this.$nextTick(()=>{
+                        this.check();
+                    })
+                    // setTimeout(this.check, 0)
+                }
 
             },
             list(newval) {
@@ -183,8 +189,10 @@
         },
         methods: {
             tabtap(index){
+               if(index == this.activeIndex) return ;
+               // console.log('点击了');
                this.activeIndex = index;
-               this.$emit('tabtap',index)
+               this.$emit('tabtap',index);
             },
             check() {
                 this.activeIndex = this.index;
@@ -198,43 +206,48 @@
                         return setTimeout(this.check,300);
                     }
                     let scrollRectLeft = data.left;
-                    let scrollWidth = data.width;
-                    let scrollLeft = data.scrollLeft
-                    // console.log("得到节点信息scorll:" + JSON.stringify(data));
-                    // console.log("节点的宽为scorll:" + data.width);
-
-                    // setTimeout(()=>{
-                        // this.$nextTick(()=>{
-                            
-                       
-                        uni.createSelectorQuery().in(this).select('#tabs_' + this.activeIndex).fields({
+                    let scrollWidth = data.width; //组件的实际宽度
+                    let halfscroll = data.width/2;
+                    uni.createSelectorQuery().in(this).select(".tabs-items").fields({
+                        size: true,
+                        rect: true,
+                        // scrollOffset: true
+                    }, data => {
+                        if(!data||data.width==0){
+                            return setTimeout(this.check,300);
+                        }
+                        // console.log(data,'.tabs-items的节点信息')
+                        let allwidth = data.width; //组件的实际宽度
+                        let allitemsLeft= data.left;
+                        let maxScroll = allwidth - scrollWidth; //
+                        let minScroll = 0;
+                        uni.createSelectorQuery().in(this).select("#tabs_"+this.activeIndex).fields({
                             size: true,
                             rect: true,
-                            // scrollOffset: true,
+                            // scrollOffset: true
                         }, data => {
-                            // console.log(this.activeIndex, "得到布局位置信息" + JSON.stringify(data));
-                            // console.log("节点离页面顶部的距离为" + data.top);
-                            if (data) {
-                                // console.log(scrollWidth,data.width,'9999')
-                                let halfWidth = (scrollWidth - (this.progressWidth || data.width)) / 2;
-                                // console.log(halfWidth, data.left, '半个')
-                                this.itemWidth = data.width;
-
-                                if (this.progressWidth) {
-                                    this.progressLeft = data.left + (data.width - uni.upx2px(this.progressWidth ||
-                                        0)) / 2 - scrollRectLeft + scrollLeft;
-                                    this.scrollLeft = this.progressLeft - halfWidth - (data.width - uni.upx2px(
-                                        this.progressWidth || 0)) / 2;
-                                } else {
-                                    this.progressLeft = data.left - scrollRectLeft + scrollLeft;
-                                    this.scrollLeft = this.progressLeft - halfWidth;
-
-                                }
-
+                            if(!data||data.width==0){
+                                return setTimeout(this.check,300);
                             }
+                            // console.log(data);
+                            this.itemWidth = data.width;
+                            let scrollLeft = data.left + data.width/2 - scrollRectLeft - halfscroll - allitemsLeft;
+                            let progressWidth = this.progressWidth?uni.upx2px(this.progressWidth):data.width;
+                            this.progressLeft = data.left + data.width/2 - scrollRectLeft- (progressWidth/2) - allitemsLeft;
+                            // console.log(this.progressLeft,data.left,data.width/2 , scrollRectLeft,(progressWidth/2), allitemsLeft,'7777777777777777777++++');
+                            
+                            if(scrollLeft>minScroll&&scrollLeft<maxScroll){
+                                this.scrollLeft = scrollLeft;
+                            }else if(scrollLeft<minScroll){
+                                this.scrollLeft = minScroll;
+                            }else{
+                                this.scrollLeft = maxScroll;
+                            }
+                            // console.log(this.scrollLeft,'7777777777777777777++++');
+                            // console.log(data,'tabs_的节点信息')
+                            
                         }).exec();
-                         // })
-                    // },0)
+                    }).exec();
 
                 }).exec();
 
@@ -260,7 +273,7 @@
 <style scoped>
     .scroll-box {
         --tab-h: 80rpx;
-        height: var(--tab-height, var(--tab-h));
+        height: var(--tabs-height, var(--tab-h));
         position: relative;
         box-sizing: border-box;
     }
@@ -284,7 +297,7 @@
     .tabs-items {
         flex-shrink: 0;
         min-width: 100%;
-        /* line-height: var(--tab-height, var(--tab-h)); */
+        /* line-height: var(--tabs-height, var(--tab-h)); */
         /* background-color: var(--tab-bg); */
     }
 
@@ -303,17 +316,18 @@
         padding: var(--tabs-pad-top,0) var(--tab-space, 0.5em) var(--tabs-pad-btm,0);
         transition: color ease-in-out 0.3s 0s;
         box-sizing: border-box;
-        /* line-height: calc( var(--tab-height, var(--tab-h)) - var(--tabs-pad-btm,0) - var(--tabs-pad-top,0)); */
+        /* line-height: calc( var(--tabs-height, var(--tab-h)) - var(--tabs-pad-btm,0) - var(--tabs-pad-top,0)); */
         display: flex;
         align-items: center;
         justify-content: center;
+        
     }
 
     .tabs-item.active {
         font-weight: var(--tab-item-active-weight, var(--tab-item-weight, 400));
         font-size: var(--tab-item-active-font, var(--tab-item-font, var(--tab-font)));
         color: var(--tab-item-active-color, #111);
-        
+        font-family: var(--tab-item-active-family,inherit);
     }
     .tabs-item.full{
         flex-grow: 1;
@@ -340,6 +354,7 @@
         background-image: var(--tabs-progress-img,unset);
         transition: var(--transition-progress, none);
         box-shadow: var(--tabs-progress-shadow,none);
+        border-radius: var(--tabs-progress-radius,0);
     }
     
     .scroll-view-tabs {

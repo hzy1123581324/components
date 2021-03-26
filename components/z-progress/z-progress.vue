@@ -71,6 +71,7 @@
         width: 100%;
         border-radius: var(--progress-radius,50px);
         background-color: var(--progress-inactive-color,#ececec);
+        vertical-align: top;
     }
 
     .progress-bar {
@@ -84,7 +85,7 @@
         font-size: var(--progress-font-size,inherit);
         color: var(--progress-color,#fff);
         transition: var(--progress-trans,var(--tran));
-        background-color: var(--progress-active-bg,#19be6b);
+        background-color: var(--progress-active-bg,var(--color-theme, #19be6b));
     }
 
     .striped {
