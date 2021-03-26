@@ -3,6 +3,7 @@
         :class="classes"
         v-click-outside.capture="onClickOutside"
         v-click-outside:mousedown.capture="onClickOutside"
+        v-click-outside:touchstart.capture="onClickOutside"
     >
         <div
             ref="reference"
@@ -33,18 +34,23 @@
                     :multiple="multiple"
                     :values="values"
                     :clearable="canBeCleared"
+                    :prefix="prefix"
                     :disabled="disabled"
                     :remote="remote"
                     :input-element-id="elementId"
                     :initial-label="initialLabel"
                     :placeholder="placeholder"
                     :query-prop="query"
+                    :max-tag-count="maxTagCount"
+                    :max-tag-placeholder="maxTagPlaceholder"
 
                     @on-query-change="onQueryChange"
                     @on-input-focus="isFocused = true"
                     @on-input-blur="isFocused = false"
                     @on-clear="clearSingleSelect"
-                />
+                >
+                    <slot name="prefix" slot="prefix"></slot>
+                </select-head>
             </slot>
         </div>
         <transition name="transition-drop">
@@ -54,9 +60,12 @@
                 :placement="placement"
                 ref="dropdown"
                 :data-transfer="transfer"
+                :transfer="transfer"
                 v-transfer-dom
             >
-                <ul v-show="showNotFoundLabel" :class="[prefixCls + '-not-found']"><li>{{ localeNotFoundText }}</li></ul>
+                <ul v-show="showNotFoundLabel && !$slots.empty" :class="[prefixCls + '-not-found']"><li>{{ localeNotFoundText }}</li></ul>
+                <!--feature #5327-->
+                <ul v-if="showNotFoundLabel && $slots.empty" :class="[prefixCls + '-not-found']"  @mousedown.prevent><li><slot name="empty"></slot></li></ul>
                 <ul :class="prefixCls + '-dropdown-list'">
                     <functional-options
                         v-if="(!remote) || (remote && !loading)"
@@ -132,6 +141,15 @@
         const textContent = (option.componentOptions.children || []).reduce((str, child) => str + (child.text || ''), '');
         const innerHTML = getNestedProperty(option, 'data.domProps.innerHTML');
         return textContent || (typeof innerHTML === 'string' ? innerHTML : '');
+    };
+
+    const checkValuesNotEqual = (value,publicValue,values) => {
+        const strValue = JSON.stringify(value);
+        const strPublic = JSON.stringify(publicValue);
+        const strValues = JSON.stringify(values.map( item => {
+            return item.value;
+        }));
+        return strValue !== strPublic || strValue !== strValues || strValues !== strPublic;
     };
 
 
@@ -221,13 +239,28 @@
             },
             elementId: {
                 type: String
+            },
+            transferClassName: {
+                type: String
+            },
+            // 3.4.0
+            prefix: {
+                type: String
+            },
+            // 3.4.0
+            maxTagCount: {
+                type: Number
+            },
+            // 3.4.0
+            maxTagPlaceholder: {
+                type: Function
             }
         },
         mounted(){
             this.$on('on-select-selected', this.onOptionClick);
 
             // set the initial values if there are any
-            if (!this.remote && this.selectOptions.length > 0){
+            if ( this.selectOptions.length > 0){
                 this.values = this.getInitialValue().map(value => {
                     if (typeof value !== 'number' && !value) return null;
                     return this.getOptionData(value);
@@ -254,6 +287,9 @@
                 unchangedQuery: true,
                 hasExpectedValue: false,
                 preventRemoteCall: false,
+                filterQueryChange: false,  // #4273
+                // #6349
+                hideMenuTimer: null
             };
         },
         computed: {
@@ -275,6 +311,7 @@
                     [prefixCls + '-dropdown-transfer']: this.transfer,
                     [prefixCls + '-multiple']: this.multiple && this.transfer,
                     ['ivu-auto-complete']: this.autoComplete,
+                    [this.transferClassName]: this.transferClassName
                 };
             },
             selectionCls () {
@@ -282,12 +319,6 @@
                     [`${prefixCls}-selection`]: !this.autoComplete,
                     [`${prefixCls}-selection-focused`]: this.isFocused
                 };
-            },
-            queryStringMatchesSelectedOption(){
-                const selectedOptions = this.values[0];
-                if (!selectedOptions) return false;
-                const [query, label] = [this.query, selectedOptions.label].map(str => (str || '').trim());
-                return !this.multiple && this.unchangedQuery && query === label;
             },
             localeNotFoundText () {
                 if (typeof this.notFoundText === 'undefined') {
@@ -355,7 +386,6 @@
                         });
                     });
                 }
-                let hasDefaultSelected = slotOptions.some(option => this.query === option.key);
                 for (let option of slotOptions) {
 
                     const cOptions = option.componentOptions;
@@ -370,22 +400,22 @@
                             );
                         }
 
-                        cOptions.children = children.map(opt => {
+                        // fix #4371
+                        children = children.map(opt => {
                             optionCounter = optionCounter + 1;
                             return this.processOption(opt, selectedValues, optionCounter === currentIndex);
                         });
 
-                        // keep the group if it still has children
-                        if (cOptions.children.length > 0) selectOptions.push({...option});
+                        // keep the group if it still has children  // fix #4371
+                        if (children.length > 0) selectOptions.push({...option,componentOptions:{...cOptions,children:children}});
                     } else {
                         // ignore option if not passing filter
-                        if (!hasDefaultSelected) {
+                        if (this.filterQueryChange) {
                             const optionPassesFilter = this.filterable ? this.validateOption(cOptions) : option;
                             if (!optionPassesFilter) continue;
                         }
-
                         optionCounter = optionCounter + 1;
-                        selectOptions.push(this.processOption(option, selectedValues, optionCounter === currentIndex));
+                        selectOptions.push(this.processOption(option, selectedValues, currentIndex === optionCounter));
                     }
                 }
 
@@ -410,12 +440,14 @@
                 if (query === null) {
                     this.onQueryChange('');
                     this.values = [];
+                    // #5620,修复清空搜索关键词后，重新搜索相同的关键词没有触发远程搜索
+                    this.lastRemoteQuery = '';
                 }
             },
             clearSingleSelect(){ // PUBLIC API
-                this.$emit('on-clear');
                 this.hideMenu();
                 if (this.clearable) this.reset();
+                this.$emit('on-clear'); // #6331
             },
             getOptionData(value){
                 const option = this.flatOptions.find(({componentOptions}) => componentOptions.propsData.value === value);
@@ -443,7 +475,6 @@
                 const optionValue = option.componentOptions.propsData.value;
                 const disabled = option.componentOptions.propsData.disabled;
                 const isSelected = values.includes(optionValue);
-
                 const propsData = {
                     ...option.componentOptions.propsData,
                     selected: isSelected,
@@ -461,17 +492,18 @@
             },
 
             validateOption({children, elm, propsData}){
-                if (this.queryStringMatchesSelectedOption) return true;
-
-                const value = propsData.value;
                 const label = propsData.label || '';
                 const textContent = (elm && elm.textContent) || (children || []).reduce((str, node) => {
                     const nodeText = node.elm ? node.elm.textContent : node.text;
                     return `${str} ${nodeText}`;
                 }, '') || '';
-                const stringValues = JSON.stringify([value, label, textContent]);
+                const stringValues = [label, textContent];
                 const query = this.query.toLowerCase().trim();
-                return stringValues.toLowerCase().includes(query);
+                const findValuesIndex = stringValues.findIndex(item=>{
+                    let itemToLowerCase = item.toLowerCase();
+                    return itemToLowerCase.includes(query);
+                });
+                return findValuesIndex === -1 ? false : true;
             },
 
             toggleMenu (e, force) {
@@ -485,9 +517,22 @@
                     this.broadcast('Drop', 'on-update-popper');
                 }
             },
+            updateFocusIndex(){
+                this.focusIndex = this.flatOptions.findIndex((opt) => {
+                    if (!opt || !opt.componentOptions) return false;
+                    return opt.componentOptions.propsData.value === this.publicValue;
+                });
+            },
             hideMenu () {
                 this.toggleMenu(null, false);
-                setTimeout(() => this.unchangedQuery = true, ANIMATION_TIMEOUT);
+                setTimeout(() =>{
+                    this.unchangedQuery = true;
+                    // resolve if we use filterable, dropItem not selected #6349
+                    this.hideMenuTimer = setTimeout(()=>{
+                        this.updateFocusIndex();
+                        this.hideMenuTimer = null;
+                    });
+                }, ANIMATION_TIMEOUT);
             },
             onClickOutside(event){
                 if (this.visible) {
@@ -517,6 +562,7 @@
                     event.preventDefault();
                     this.hideMenu();
                     this.isFocused = true;
+                    this.$emit('on-clickoutside', event);
                 } else {
                     this.caretPosition = -1;
                     this.isFocused = false;
@@ -527,37 +573,45 @@
                 this.focusIndex = -1;
                 this.unchangedQuery = true;
                 this.values = [];
+                this.filterQueryChange = false;
             },
             handleKeydown (e) {
-                if (e.key === 'Backspace'){
+                const key = e.key || e.code;
+                if ( key === 'Backspace'){
                     return; // so we don't call preventDefault
                 }
 
                 if (this.visible) {
                     e.preventDefault();
-                    if (e.key === 'Tab'){
+                    if ( key === 'Tab'){
                         e.stopPropagation();
                     }
 
                     // Esc slide-up
-                    if (e.key === 'Escape') {
+                    if ( key === 'Escape') {
                         e.stopPropagation();
                         this.hideMenu();
                     }
                     // next
-                    if (e.key === 'ArrowUp') {
+                    if ( key === 'ArrowUp') {
                         this.navigateOptions(-1);
                     }
                     // prev
-                    if (e.key === 'ArrowDown') {
+                    if ( key === 'ArrowDown') {
                         this.navigateOptions(1);
                     }
                     // enter
-                    if (e.key === 'Enter') {
+                    if ( key === 'Enter') {
                         if (this.focusIndex === -1) return this.hideMenu();
                         const optionComponent = this.flatOptions[this.focusIndex];
-                        const option = this.getOptionData(optionComponent.componentOptions.propsData.value);
-                        this.onOptionClick(option);
+
+                        // fix a script error when searching
+                        if (optionComponent) {
+                            const option = this.getOptionData(optionComponent.componentOptions.propsData.value);
+                            this.onOptionClick(option);
+                        } else {
+                            this.hideMenu();
+                        }
                     }
                 } else {
                     const keysThatCanOpenSelect = ['ArrowUp', 'ArrowDown'];
@@ -596,7 +650,6 @@
             },
             onOptionClick(option) {
                 if (this.multiple){
-
                     // keep the query for remote select
                     if (this.remote) this.lastRemoteQuery = this.lastRemoteQuery || this.query;
                     else this.lastRemoteQuery = '';
@@ -607,30 +660,45 @@
                     } else {
                         this.values = this.values.concat(option);
                     }
-
                     this.isFocused = true; // so we put back focus after clicking with mouse on option elements
                 } else {
-                    this.query = String(option.label).trim();
+                    this.query = '';
                     this.values = [option];
                     this.lastRemoteQuery = '';
                     this.hideMenu();
                 }
-
-                this.focusIndex = this.flatOptions.findIndex((opt) => {
-                    if (!opt || !opt.componentOptions) return false;
-                    return opt.componentOptions.propsData.value === option.value;
-                });
-
                 if (this.filterable){
                     const inputField = this.$el.querySelector('input[type="text"]');
                     if (!this.autoComplete) this.$nextTick(() => inputField.focus());
                 }
                 this.broadcast('Drop', 'on-update-popper');
+                this.$emit('on-select', this.publicValue); // # 4441
+                setTimeout(() => {
+                    this.filterQueryChange = false;
+                }, ANIMATION_TIMEOUT);
             },
             onQueryChange(query) {
-                if (query.length > 0 && query !== this.query) this.visible = true;
+                if (query.length > 0 && query !== this.query) {
+                  // in 'AutoComplete', when set an initial value asynchronously,
+                  // the 'dropdown list' should be stay hidden.
+                  // [issue #5150]
+                    if (this.autoComplete) {
+                        let isInputFocused =
+                            document.hasFocus &&
+                            document.hasFocus() &&
+                            document.activeElement === this.$el.querySelector('input');
+                        this.visible = isInputFocused;
+                    } else {
+                        this.visible = true;
+                    }
+                }
+
                 this.query = query;
                 this.unchangedQuery = this.visible;
+                this.filterQueryChange = true;
+                if(this.filterable){
+                    this.updateFocusIndex();
+                }
             },
             toggleHeaderFocus({type}){
                 if (this.disabled) {
@@ -645,17 +713,18 @@
                 if (this.getInitialValue().length > 0 && this.selectOptions.length === 0) {
                     this.hasExpectedValue = true;
                 }
-            }
+            },
         },
         watch: {
             value(value){
-                const {getInitialValue, getOptionData, publicValue} = this;
-
+                const {getInitialValue, getOptionData, publicValue, values} = this;
                 this.checkUpdateStatus();
-
+                const vModelValue = (publicValue && this.labelInValue) ? 
+                                    (this.multiple ? publicValue.map(({value}) => value) : publicValue.value) : publicValue;
                 if (value === '') this.values = [];
-                else if (JSON.stringify(value) !== JSON.stringify(publicValue)) {
+                else if (checkValuesNotEqual(value,vModelValue,values)) {
                     this.$nextTick(() => this.values = getInitialValue().map(getOptionData).filter(Boolean));
+                    if (!this.multiple) this.dispatch('FormItem', 'on-form-change', this.publicValue);
                 }
             },
             values(now, before){
@@ -717,14 +786,15 @@
                 const optionInstance = findChild(this, ({$options}) => {
                     return $options.componentName === 'select-item' && $options.propsData.value === optionValue;
                 });
-
-                let bottomOverflowDistance = optionInstance.$el.getBoundingClientRect().bottom - this.$refs.dropdown.$el.getBoundingClientRect().bottom;
-                let topOverflowDistance = optionInstance.$el.getBoundingClientRect().top - this.$refs.dropdown.$el.getBoundingClientRect().top;
-                if (bottomOverflowDistance > 0) {
-                    this.$refs.dropdown.$el.scrollTop += bottomOverflowDistance;
-                }
-                if (topOverflowDistance < 0) {
-                    this.$refs.dropdown.$el.scrollTop += topOverflowDistance;
+                if(optionInstance && optionInstance.$el ){
+                    let bottomOverflowDistance = optionInstance.$el.getBoundingClientRect().bottom - this.$refs.dropdown.$el.getBoundingClientRect().bottom;
+                    let topOverflowDistance = optionInstance.$el.getBoundingClientRect().top - this.$refs.dropdown.$el.getBoundingClientRect().top;
+                    if (bottomOverflowDistance > 0) {
+                        this.$refs.dropdown.$el.scrollTop += bottomOverflowDistance;
+                    }
+                    if (topOverflowDistance < 0) {
+                        this.$refs.dropdown.$el.scrollTop += topOverflowDistance;
+                    }
                 }
             },
             dropVisible(open){
@@ -742,10 +812,30 @@
                 if (this.slotOptions && this.slotOptions.length === 0){
                     this.query = '';
                 }
+
+                 // 当 dropdown 一开始在控件下部显示，而滚动页面后变成在上部显示，如果选项列表的长度由内部动态变更了(搜索情况)
+                 // dropdown 的位置不会重新计算，需要重新计算
+                this.broadcast('Drop', 'on-update-popper');
             },
             visible(state){
                 this.$emit('on-open-change', state);
-            }
+            },
+            slotOptions(options, old){
+                // #4626，当 Options 的 label 更新时，v-model 的值未更新
+                // remote 下，调用 getInitialValue 有 bug
+                if (!this.remote) {
+                    const values = this.getInitialValue();
+                    if (this.flatOptions && this.flatOptions.length && values.length && !this.multiple) {
+                        this.values = values.map(this.getOptionData).filter(Boolean);
+                    }
+                }
+
+                // 当 dropdown 在控件上部显示时，如果选项列表的长度由外部动态变更了，
+                // dropdown 的位置会有点问题，需要重新计算
+                if (options && old && options.length !== old.length) {
+                    this.broadcast('Drop', 'on-update-popper');
+                }
+            },
         }
     };
 </script>

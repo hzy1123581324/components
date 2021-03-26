@@ -7,9 +7,18 @@
                 :prefix-cls="prefixCls"
                 :data="item"
                 :tmp-item="tmpItem"
-                @click.native.stop="handleClickItem(item)"
-                @mouseenter.native.stop="handleHoverItem(item)"></Casitem>
-        </ul><Caspanel v-if="sublist && sublist.length" :prefix-cls="prefixCls" :data="sublist" :disabled="disabled" :trigger="trigger" :change-on-select="changeOnSelect"></Caspanel>
+                @click.native.stop="handleClickItem(item, $event)"
+                @mouseenter.native.stop="handleHoverItem(item)"
+                ></Casitem>
+        </ul>
+        <Caspanel
+      v-if="sublist && sublist.length"
+      :prefix-cls="prefixCls"
+      :data="sublist"
+      :disabled="disabled"
+      :trigger="trigger"
+      :change-on-select="changeOnSelect">
+      </Caspanel>
     </span>
 </template>
 <script>
@@ -48,19 +57,29 @@
             }
         },
         methods: {
-            handleClickItem (item) {
+            isIcon(node){
+                let nodeName = (node.nodeName || "").toLocaleUpperCase();
+                let isIvu = node.classList.contains("ivu-icon");
+                if(nodeName == "I" && isIvu){
+                    return true;
+                }
+                return false;
+            },
+            handleClickItem (item, ev) {
+                let isIcon = this.isIcon(ev.target);
                 if (this.trigger !== 'click' && item.children && item.children.length) return;  // #1922
-                this.handleTriggerItem(item, false, true);
+                this.handleTriggerItem(item, false, true,isIcon);
             },
             handleHoverItem (item) {
                 if (this.trigger !== 'hover' || !item.children || !item.children.length) return;  // #1922
-                this.handleTriggerItem(item, false, true);
+                this.handleTriggerItem(item, false, true,false);
             },
-            handleTriggerItem (item, fromInit = false, fromUser = false) {
+            //#6158 -- default fromInit = false to fromInit = true;
+            handleTriggerItem (item, fromInit = true, fromUser = false,isIcon=false) {
                 if (item.disabled) return;
 
+                const cascader = findComponentUpward(this, 'Cascader');
                 if (item.loading !== undefined && !item.children.length) {
-                    const cascader = findComponentUpward(this, 'Cascader');
                     if (cascader && cascader.loadData) {
                         cascader.loadData(item, () => {
                             // todo
@@ -77,11 +96,19 @@
 
                 // return value back recursion  // 向上递归，设置临时选中值（并非真实选中）
                 const backItem = this.getBaseItem(item);
-                this.tmpItem = backItem;
-                this.emitUpdate([backItem]);
+                // #5021 for this.changeOnSelect，加 if 是因为 #4472
+                if (
+                    this.changeOnSelect ||
+                    (backItem.label !== this.tmpItem.label || backItem.value !== this.tmpItem.value) ||
+                    (backItem.label === this.tmpItem.label && backItem.value === this.tmpItem.value)
+                ) {
+                    this.tmpItem = backItem;
+                    this.emitUpdate([backItem]);
+                }
+
                 if (item.children && item.children.length){
                     this.sublist = item.children;
-                    this.dispatch('Cascader', 'on-result-change', {
+                    !isIcon && this.dispatch('Cascader', 'on-result-change', {
                         lastValue: false,
                         changeOnSelect: this.changeOnSelect,
                         fromInit: fromInit
@@ -96,11 +123,15 @@
                     }
                 } else {
                     this.sublist = [];
-                    this.dispatch('Cascader', 'on-result-change', {
+                    !isIcon && this.dispatch('Cascader', 'on-result-change', {
                         lastValue: true,
                         changeOnSelect: this.changeOnSelect,
                         fromInit: fromInit
                     });
+                }
+
+                if (cascader) {
+                    cascader.$refs.drop.update();
                 }
             },
             updateResult (item) {

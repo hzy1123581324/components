@@ -84,9 +84,12 @@
             };
         },
         watch: {
-            error (val) {
-                this.validateMessage = val;
-                this.validateState = val === '' ? '' : 'error';
+            error: {
+                handler (val) {
+                    this.validateMessage = val;
+                    this.validateState = val ? 'error' : '';
+                },
+                immediate: true
             },
             validateStatus (val) {
                 this.validateState = val;
@@ -114,19 +117,16 @@
             //    }
             //    return parent;
             // },
-            fieldValue: {
-                cache: false,
-                get() {
-                    const model = this.form.model;
-                    if (!model || !this.prop) { return; }
+            fieldValue () {
+                const model = this.form.model;
+                if (!model || !this.prop) { return; }
 
-                    let path = this.prop;
-                    if (path.indexOf(':') !== -1) {
-                        path = path.replace(/:/, '.');
-                    }
-
-                    return getPropByPath(model, path).v;
+                let path = this.prop;
+                if (path.indexOf(':') !== -1) {
+                    path = path.replace(/:/, '.');
                 }
+
+                return getPropByPath(model, path).v;
             },
             labelStyles () {
                 let style = {};
@@ -150,15 +150,19 @@
         methods: {
             setRules() {
                 let rules = this.getRules();
-                if (rules.length) {
+                if (rules.length&&this.required) {
+                    return;
+                }else if (rules.length) {
                     rules.every((rule) => {
                         this.isRequired = rule.required;
                     });
-                    this.$off('on-form-blur', this.onFieldBlur);
-                    this.$off('on-form-change', this.onFieldChange);
-                    this.$on('on-form-blur', this.onFieldBlur);
-                    this.$on('on-form-change', this.onFieldChange);
+                }else if (this.required){
+                    this.isRequired = this.required;
                 }
+                this.$off('on-form-blur', this.onFieldBlur);
+                this.$off('on-form-change', this.onFieldChange);
+                this.$on('on-form-blur', this.onFieldBlur);
+                this.$on('on-form-change', this.onFieldChange);
             },
             getRules () {
                 let formRules = this.form.rules;
@@ -174,29 +178,35 @@
                 return rules.filter(rule => !rule.trigger || rule.trigger.indexOf(trigger) !== -1);
             },
             validate(trigger, callback = function () {}) {
-                const rules = this.getFilteredRule(trigger);
-                if (!rules || rules.length === 0) {
-                    callback();
-                    return true;
-                }
+                this.$nextTick(() => {
+                    let rules = this.getFilteredRule(trigger);
+                    if (!rules || rules.length === 0) {
+                        if (!this.required) {
+                            callback();
+                            return true;
+                        }else {
+                            rules = [{required: true}];
+                        }
+                    }
 
-                this.validateState = 'validating';
+                    this.validateState = 'validating';
 
-                let descriptor = {};
-                descriptor[this.prop] = rules;
+                    let descriptor = {};
+                    descriptor[this.prop] = rules;
 
-                const validator = new AsyncValidator(descriptor);
-                let model = {};
+                    const validator = new AsyncValidator(descriptor);
+                    let model = {};
 
-                model[this.prop] = this.fieldValue;
+                    model[this.prop] = this.fieldValue;
 
-                validator.validate(model, { firstFields: true }, errors => {
-                    this.validateState = !errors ? 'success' : 'error';
-                    this.validateMessage = errors ? errors[0].message : '';
+                    validator.validate(model, { firstFields: true }, errors => {
+                        this.validateState = !errors ? 'success' : 'error';
+                        this.validateMessage = errors ? errors[0].message : '';
 
-                    callback(this.validateMessage);
+                        callback(this.validateMessage);
+                    });
+                    this.validateDisabled = false;
                 });
-                this.validateDisabled = false;
             },
             resetField () {
                 this.validateState = '';

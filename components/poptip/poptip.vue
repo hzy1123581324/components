@@ -52,6 +52,7 @@
     import {directive as clickOutside} from 'v-click-outside-x';
     import TransferDom from '../../directives/transfer-dom';
     import { oneOf } from '../../utils/assist';
+    import { transferIndex, transferIncrease } from '../../utils/transfer-queue';
     import Locale from '../../mixins/locale';
 
     const prefixCls = 'ivu-poptip';
@@ -110,6 +111,11 @@
             // default by css: 8px 16px
             padding: {
                 type: String
+            },
+            // 3.4.0
+            disabled: {
+                type: Boolean,
+                default: false
             }
         },
         data () {
@@ -118,6 +124,7 @@
                 showTitle: true,
                 isInput: false,
                 disableCloseUnderTransfer: false,  // transfer 模式下，点击 slot 也会触发关闭
+                tIndex: this.handleGetIndex()
             };
         },
         computed: {
@@ -144,6 +151,9 @@
                 if (this.width) {
                     style.width = `${this.width}px`;
                 }
+
+                if (this.transfer) style['z-index'] = 1060 + this.tIndex;
+
                 return style;
             },
             localeOkText () {
@@ -172,10 +182,12 @@
                 const styles = {};
                 if (this.padding !== '') styles['padding'] = this.padding;
                 return styles;
-            }
+            },
         },
         methods: {
             handleClick () {
+                if (this.disabled) return;
+
                 if (this.confirm) {
                     this.visible = !this.visible;
                     return true;
@@ -203,6 +215,8 @@
                 this.visible = false;
             },
             handleFocus (fromInput = true) {
+                if (this.disabled) return;
+
                 if (this.trigger !== 'focus' || this.confirm || (this.isInput && !fromInput)) {
                     return false;
                 }
@@ -215,6 +229,8 @@
                 this.visible = false;
             },
             handleMouseenter () {
+                if (this.disabled) return;
+                
                 if (this.trigger !== 'hover' || this.confirm) {
                     return false;
                 }
@@ -254,6 +270,13 @@
                 }
 
                 return $children;
+            },
+            handleGetIndex () {
+                transferIncrease();
+                return transferIndex;
+            },
+            handleIndexIncrease () {
+                this.tIndex = this.handleGetIndex();
             }
         },
         mounted () {

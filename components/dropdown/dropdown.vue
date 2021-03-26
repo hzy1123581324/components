@@ -14,6 +14,7 @@
                 @mouseenter.native="handleMouseenter"
                 @mouseleave.native="handleMouseleave"
                 :data-transfer="transfer"
+                :transfer="transfer"
                 v-transfer-dom><slot name="list"></slot></Drop>
         </transition>
     </div>
@@ -52,7 +53,14 @@
                 default () {
                     return !this.$IVIEW || this.$IVIEW.transfer === '' ? false : this.$IVIEW.transfer;
                 }
-            }
+            },
+            transferClassName: {
+                type: String
+            },
+            stopPropagation: {
+                type: Boolean,
+                default: false
+            },
         },
         computed: {
             transition () {
@@ -60,7 +68,8 @@
             },
             dropdownCls () {
                 return {
-                    [prefixCls + '-transfer']: this.transfer
+                    [prefixCls + '-transfer']: this.transfer,
+                    [this.transferClassName]: this.transferClassName
                 };
             },
             relClasses () {
@@ -159,6 +168,7 @@
         },
         mounted () {
             this.$on('on-click', (key) => {
+                if (this.stopPropagation) return;
                 const $parent = this.hasParent();
                 if ($parent) $parent.$emit('on-click', key);
             });
