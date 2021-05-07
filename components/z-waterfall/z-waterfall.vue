@@ -1,8 +1,8 @@
 <template>
     <view class="waterfall-box flex" :style="`--waterfall-column:${ column}`">
         <view class="items-box" v-for="(items,index) in columnList" :key="index">
-            <view class="item-box" v-for="(item,index2) in items" :key="item.id" @click="point(item)">
-                <slot :item="item" :index="index2*column+index"></slot>
+            <view class="item-box" v-for="(item,index2) in items" :key="item.id" @click="point(item,index2,index)">
+                <slot :item="item" :index="index2*column+index" :row="index2" :col="index" :column="column"></slot>
             </view>
         </view>
     </view>
@@ -17,15 +17,14 @@
      * @property {Array} list 要展示数据
      * @example
      * <waterfall :list='list' :column="column">
-     *
+     *   <template v-slot="{item,index,row,col,column}">
+     *       ...
+     *   </template>
      * </waterfall>
      */
-    import {
-        mapGetters
-    } from "vuex";
     export default {
         name: "waterfall",
-        props: {
+        props: { 
             column: {
                 type: [String, Number],
                 default: 2,
@@ -37,9 +36,9 @@
                 },
             },
         },
+        
         components: {},
         computed: {
-            // ...mapGetters(["IsPhone"]),
             columnList() {
                 let _list = [];
                 let column = this.column;
@@ -61,8 +60,9 @@
         watch: {},
         destroyed() {},
         methods: {
+            //点击事件
             point(item){
-                this.$emit('point',item);
+                this.$emit('point',{item,rowindex,colindex});
             }
         },
     };
