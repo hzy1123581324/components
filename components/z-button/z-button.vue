@@ -136,7 +136,7 @@
                 if (this.ripple&&!this.disabled) {
                 	// 每次点击时，移除上一次的类，再次添加，才能触发动画效果
                 	this.waveActive = false;
-                	this.$nextTick(function() {
+                	this.$nextTick(()=> {
                 		this.getWaveQuery(e);
                 	});
                 }
@@ -146,7 +146,7 @@
                         this.jump();
                         break;
                     default:
-                        // this.$emit('click',)
+                        //this.$emit('click',)
                         break;
                 }
             },

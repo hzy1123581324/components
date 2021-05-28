@@ -61,7 +61,7 @@
         destroyed() {},
         methods: {
             //点击事件
-            point(item){
+            point(item,rowindex,colindex){
                 this.$emit('point',{item,rowindex,colindex});
             }
         },

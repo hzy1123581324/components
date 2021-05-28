@@ -19,7 +19,7 @@
      * @event {Function} fixed 组件吸顶时触发
      * @example <sticky offset="200"><view>塞下秋来风景异，衡阳雁去无留意</view></sticky>
      */
-    import guid from "../utils/guid.js";
+    import guid from "../../utils/guid.js";
     let height = 0;
     export default {
         name: "sticky",
