@@ -49,7 +49,19 @@
 
         },
         methods: {
-            // 数字转中文
+            // 数字转简写中文
+            changeNumMoneyToSimplifiedChinese(n) {
+                var cnum = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+                var s = '';
+                n = '' + n; // 数字转为字符串
+            
+                for (var i = 0; i < n.length; i++) {
+                    s += cnum[parseInt(n.charAt(i))];
+                }
+            
+                return s;
+            },
+            // 数字转繁体中文
             changeNumMoneyToChinese(money) {
                 let cnNums = new Array("零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"); //汉字的数字
                 let cnIntRadice = new Array("", "拾", "佰", "仟"); //基本单位

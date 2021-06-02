@@ -151,8 +151,27 @@ function empty(value){
     }
     return false;    
 }
+/**
+ * 判断是否是JSON字符串
+ */
+function isJSON(str) {
+    if (typeof str == 'string') {
+        try {
+            var obj=JSON.parse(str);
+            if(typeof obj == 'object' && obj ){
+                return (true,obj);
+            }else{
+                return false;
+            }
 
-
+        } catch(e) {
+            // console.log('error：'+str+'!!!'+e);
+            return false;
+        }
+    }
+    return false
+    // console.log('It is not a string!')
+}
 export default {
     email,
     mobile,
@@ -170,5 +189,6 @@ export default {
     contains,
     range,
     rangeLength,
-    empty
+    empty,
+    isJSON
 }
