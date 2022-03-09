@@ -1,8 +1,8 @@
 <template>
   <view v-if="value" class="popup" :class="[popupstyle]" @touchmove.stop.prevent="clear">
-    <z-transition class="mask" v-if="maskShow" :mode-class="['fade']" :styles="maskClass" :duration="duration" :show="showTrans"
+    <z-transition class="mask" v-if="maskShow" :mode-class="['fade']" :duration="duration" :show="showTrans"
       @click="onTap" />
-    <z-transition class="more" :mode-class="ani" :styles="transClass" :duration="duration" :show="showTrans" @click="onTap">
+    <z-transition class="transition-block" :mode-class="ani" :styles="transClass" :duration="duration" :show="showTrans" @click="onTap">
       <view class="popup-wrapper-box" @click.stop="clear">
         <slot></slot>
       </view>
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import popup from './popup.js'
+  import popup from './popup.js';
   /**
    * PopUp 弹出层
    * @description 弹出层组件，为了解决遮罩弹层的问题
@@ -102,14 +102,6 @@
         ani: [],
         // showPopup: false,
         showTrans: false,
-        maskClass: {
-          'position': 'fixed',
-          'bottom': 0,
-          'top': 0,
-          'left': 0,
-          'right': 0,
-          'backgroundColor': 'rgba(0, 0, 0, 0.4)'
-        },
         transClass: {
           'position': 'fixed',
           'left': 0,
@@ -188,9 +180,7 @@
         })
       },
       onTap() {
-        // console.log(this.mkclick);
-        if (!this.mkclick) return
-        this.close()
+        this.mkclick&&this.close()
       },
       /**
        * 顶部弹出样式处理
@@ -287,9 +277,15 @@
 
   .mask {
     margin-top: var(--mask-top, 0);
+    position: 'fixed';
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    backgroundColor: rgba(0, 0, 0, 0.4);
   }
 
-  .more {
+  .transition-block {
     margin-top: var(--mask-top, 0);
   }
 
