@@ -6,7 +6,7 @@
 			type ? `u-type-${type}-light-bg` : ''
 		]">
         <view class="u-icon-wrap">
-            <u-icon class="u-left-icon" v-if="volumeIcon" name="volume-fill" :size="volumeSize" :color="computeColor"></u-icon>
+            <!-- <u-icon class="u-left-icon" v-if="volumeIcon" name="volume-fill" :size="volumeSize" :color="computeColor"></u-icon> -->
         </view>
         <swiper :disable-touch="disableTouch" @change="change" :autoplay="autoplay && playState == 'play'" :vertical="vertical"
             circular :interval="duration" class="u-swiper">
@@ -17,8 +17,8 @@
             </swiper-item>
         </swiper>
         <view class="u-icon-wrap">
-            <u-icon @click="getMore" class="u-right-icon" v-if="moreIcon" name="arrow-right" :size="26" :color="computeColor"></u-icon>
-            <u-icon @click="close" class="u-right-icon" v-if="closeIcon" name="close" :size="24" :color="computeColor"></u-icon>
+            <!-- <u-icon @click="getMore" class="u-right-icon" v-if="moreIcon" name="arrow-right" :size="26" :color="computeColor"></u-icon>
+            <u-icon @click="close" class="u-right-icon" v-if="closeIcon" name="close" :size="24" :color="computeColor"></u-icon> -->
         </view>
     </view>
 </template>

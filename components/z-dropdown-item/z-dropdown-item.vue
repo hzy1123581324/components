@@ -10,7 +10,7 @@
 						 :key="index" :title-style="{
 							color: value == item.value ? activeColor : inactiveColor
 						}">
-							<u-icon v-if="value == item.value" name="checkbox-mark" :color="activeColor" size="32"></u-icon>
+							<!-- <u-icon v-if="value == item.value" name="checkbox-mark" :color="activeColor" size="32"></u-icon> -->
 						</u-cell-item>
 					</u-cell-group>
 				</view>

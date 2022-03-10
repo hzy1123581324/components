@@ -15,6 +15,7 @@
             </view>
         </scroll-view>
         <view class="tab-between"><slot name="between"></slot></view>
+				<!-- 滚动页面插槽 -->
         <scroll-view id="tabsScroll" :show-scrollbar="false" :scroll-with-animation="panelAnimation" scroll-x="true" :scroll-left="scrollLeft_2" :scroll-into-view="'tabs-panel-'+activeIndex" @scroll="tabchange">
             <view class="scroll-view-tabs">
                 <slot></slot>
@@ -70,6 +71,7 @@
      */
     export default {
         name: 'tabs',
+				emits: ['update:index'],
         props: {
             list: {
                 required: true,

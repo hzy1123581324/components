@@ -5,7 +5,7 @@
                 <view class="action-sheet-title-txt">
                     <slot name="title"></slot>
                 </view>
-                <u-icon class="action-sheet-title-icon" name="close" color="#AFBBC4" @click.native="actionSheetShow=false"></u-icon>
+                <!-- <u-icon class="action-sheet-title-icon" name="close" color="#AFBBC4" @click.native="actionSheetShow=false"></u-icon> -->
             </view>
             <view class="place"></view>
             <scroll-view scroll-y="true" class="action-sheet-items" >

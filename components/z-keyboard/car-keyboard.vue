@@ -10,7 +10,7 @@
                 </view>
                 <view @touchstart="backspaceClick" @touchend="clearTimer" :hover-stay-time="100" class="u-keyboard-back"
                     hover-class="u-hover-class">
-                    <u-icon :size="38" name="backspace" :bold="true"></u-icon>
+                    <!-- <u-icon :size="38" name="backspace" :bold="true"></u-icon> -->
                 </view>
                 <view :hover-stay-time="100" class="u-keyboard-change" hover-class="u-carinput-hover" @tap="changeCarInputMode">
                     <text class="zh" :class="[!abc ? 'active' : 'inactive']">中</text>

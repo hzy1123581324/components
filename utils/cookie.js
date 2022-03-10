@@ -1,10 +1,10 @@
-function setCookie(cname,cvalue,exdays){
+export function setCookie(cname,cvalue,exdays){
     var d = new Date();
     d.setTime(d.getTime()+(exdays*24*60*60*1000));
     var expires = "expires="+d.toGMTString();
     document.cookie = cname+"="+cvalue+"; "+expires;
 }
-function getCookie(cname){
+export function getCookie(cname){
     var name = cname + "=";
     var ca = document.cookie.split(';');
     for(var i=0; i<ca.length; i++) {
@@ -13,7 +13,7 @@ function getCookie(cname){
     }
     return "";
 }
-function checkCookie(){
+export function checkCookie(){
     var user=getCookie("username");
     if (user!=""){
         alert("欢迎 " + user + " 再次访问");

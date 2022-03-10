@@ -63,10 +63,10 @@
             />
             <view class="tem-input-right-icon tem-flex" :class="type == 'textarea'? 'tem-felx-textarea':''">
                 <view class="tem-input-right-icon-clear tem-input-right-icon-item" v-if="clearable && value != '' && focused">
-                    <u-icon size="32" name="close-circle-fill" color="#c8c7cc" @touchstart="onClear"/>
-                </view>
+                    <!-- <u-icon size="32" name="close-circle-fill" color="#c8c7cc" @touchstart="onClear"/>
+                </view> -->
                 <view class="tem-input-right-icon-clear tem-input-right-icon-item" v-if="passwordIcon && type == 'password'">
-                    <u-icon size="32" :name="!showPassword ? 'eye-off' : 'eye-fill'" color="#c8c7cc" @click="showPassword = !showPassword"/>
+                    <!-- <u-icon size="32" :name="!showPassword ? 'eye-off' : 'eye-fill'" color="#c8c7cc" @click="showPassword = !showPassword"/> -->
                 </view>
                 <view class="tem-input-right-icon-clear tem-input-right-icon-item tem-code" v-if="verificationCode">
                     <view @click="clickAction" :class="[state === 'normal' ? normalClass : disabledClass]">{{ state === 'normal' ? title : waitTitle.replace('SECORD', currSecord) }}</view>
@@ -74,7 +74,7 @@
                 <view class="tem-input-right-icon-select tem-input-right-icon-item" v-if="type == 'select'" :class="{
                     'tem-input-right-icon-select-reverse': selectOpen
                 }">
-                    <u-icon name="arrow-down-fill" size="26" color="#c8c7cc"></u-icon>
+                    <!-- <u-icon name="arrow-down-fill" size="26" color="#c8c7cc"></u-icon> -->
                 </view>
                 <view class="tem-unit">
                     <slot name='unit'></slot>
@@ -85,6 +85,7 @@
                 <slot name='rules'></slot>
             </view>
         </view>
+	</view>
 	</view>
 </template>
 
@@ -317,7 +318,7 @@ export default {
 	},
 	created() {
 		// 监听u-form-item发出的错误事件，将输入框边框变红色
-		this.$on('on-form-item-error', this.onFormItemError);
+		// this.$on('on-form-item-error', this.onFormItemError);
 	},
 	mounted() {
 	// 	this.getMarginRight();
@@ -422,7 +423,7 @@ export default {
   .dot {
       width: 8rpx;
       height: 8rpx;
-      background: $tem-text-color1;
+      background: #efefef;
       border-radius: 50%;
       margin-right: 13rpx;
     }
@@ -435,14 +436,14 @@ export default {
     position: absolute;
     left: 0;
     top:-40rpx;
-    color: $tem-text-color5;
+    color: #efefef;
     display: flex;
     align-items: center;
     opacity: 1;
     .dot {
         width: 8rpx;
         height: 8rpx;
-        background: $tem-text-color5;
+        background: #efefef;
         border-radius: 50%;
         margin-right: 13rpx;
     }
@@ -454,15 +455,15 @@ export default {
     
 	&-input {
         flex-grow: 1;
-		height: $tem-form-item-height;
+		height: 98rpx;
 		font-size: 28rpx;
-		color: $tem-text-color1;
+		color: var(--color-main);
 	}
 
 	&-textarea {
 		width: auto;
 		font-size: 28rpx;
-		color: $tem-text-color1;
+		color: var();
 		padding: 10rpx 0;
 		line-height: normal;
 	}
@@ -496,15 +497,15 @@ export default {
         position: absolute;
         left: 0;
         bottom:-50rpx;
-        color: $uni-color-error;  
+        color: var(--color-main);  
     }
     
 }
 .normal {
-    color: $tem-main-color; 
+    color: var(--color-main); 
 }
 .disabled {
-    color: $tem-text-color5;
+    color: var(--color-grey);
 }
 </style>
 

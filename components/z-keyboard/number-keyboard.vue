@@ -14,7 +14,7 @@
                 <view class="u-keyboard-grids-btn">{{ item }}</view>
             </view>
             <view class="u-keyboard-grids-item u-bg-gray" hover-class="u-hover-class" :hover-stay-time="100" @touchstart.stop="backspaceClick" @touchend="clearTimer">
-                <view class="u-keyboard-back u-keyboard-grids-btn"><u-icon name="backspace" :size="38" :bold="true"></u-icon></view>
+                <view class="u-keyboard-back u-keyboard-grids-btn"><!-- <u-icon name="backspace" :size="38" :bold="true"></u-icon> --></view>
             </view>
         </view>
     </view>

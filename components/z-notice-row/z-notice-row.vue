@@ -12,7 +12,7 @@
 	>
 		<view class="u-direction-row">
 			<view class="u-icon-wrap">
-				<u-icon class="u-left-icon" v-if="volumeIcon" name="volume-fill" :size="volumeSize" :color="computeColor"></u-icon>
+				<!-- <u-icon class="u-left-icon" v-if="volumeIcon" name="volume-fill" :size="volumeSize" :color="computeColor"></u-icon> -->
 			</view>
 			<view class="u-notice-box" id="u-notice-box">
 				<view
@@ -28,8 +28,8 @@
 				</view>
 			</view>
 			<view class="u-icon-wrap">
-				<u-icon @click="getMore" class="u-right-icon" v-if="moreIcon" name="arrow-right" :size="26" :color="computeColor"></u-icon>
-				<u-icon @click="close" class="u-right-icon" v-if="closeIcon" name="close" :size="24" :color="computeColor"></u-icon>
+				<!-- <u-icon @click="getMore" class="u-right-icon" v-if="moreIcon" name="arrow-right" :size="26" :color="computeColor"></u-icon>
+				<u-icon @click="close" class="u-right-icon" v-if="closeIcon" name="close" :size="24" :color="computeColor"></u-icon> -->
 			</view>
 		</view>
 	</view>

@@ -14,12 +14,12 @@
 				<view :class="[
 					midButton && item.midButton ? 'u-tabbar__content__circle__button' : 'u-tabbar__content__item__button'
 				]">
-					<u-icon 
+					<!-- <u-icon 
 						:size="midButton && item.midButton ? midButtonSize : iconSize" 
 						:name="index == value ? item.selectedIconPath : item.iconPath"
 						:color="index == value ? activeColor : inactiveColor"
 						:custom-prefix="item.customIcon ? 'custom-icon' : 'uicon'"
-					></u-icon>
+					></u-icon> -->
 					<u-badge :count="item.count" :is-dot="item.isDot" 
 						v-if="item.count > 0"
 						:offset="[-2, getOffsetRight(item.count, item.isDot)]"

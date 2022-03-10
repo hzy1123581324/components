@@ -1,10 +1,10 @@
 <template>
-    <view class="navbar-box clear" :style="`--navbar-fixed:${!isFixed?'relative':'fixed'};--status-height:${statusheight}px;`">
+   <view class="navbar-box clear" :style="`--navbar-fixed:${!isFixed?'relative':'fixed'};--status-height:${statusheight}px;`">
         <view :class="['navbar-fixed-box clear',border&&'navbar-border']" >
             <view :class="['navbar-left',isBack&&'hasback']" >
                 <slot name="left">
-                    <z-icon :type="backIconName" class="back-icon"  @click.native="goBack"></z-icon>
-                    <u-avatar class="back-avatar"  :src="src" mode="circle" :size="size" v-if="avatar"></u-avatar>
+                    <z-icon :type="backIconName" class="back-icon"  @click.native="goBack" v-if="showicon"></z-icon>
+                    <z-avatar class="back-avatar"  :src="src" mode="circle" :size="size" v-if="avatar"></z-avatar>
                     <text class="backTxt" v-if="hasbacktxt" @click="goBack">{{backTxt}}</text>
                 </slot>
             </view>
@@ -19,9 +19,10 @@
             </view>
         </view>
     </view>
+
 </template>
 
-<script>
+<script setup>
     /**
      * navbar 自定义导航栏
      * @description 此组件一般用于在特殊情况下，需要自定义导航栏的时候用到，一般建议使用uniapp自带的导航栏。
@@ -53,9 +54,13 @@
      </style>
      */
 
-    export default {
-        name: 'z-navbar',
-        props: {
+		import {ref,computed,onMounted,nextTick} from "vue";
+		let statusheight = ref(0);
+		const props = defineProps({
+						showicon: {
+							type: Boolean,
+							default: true
+						},
             isFixed: {
                 type: Boolean,
                 default: true
@@ -102,60 +107,54 @@
             	type: [String, Number],
             	default: 'default'
             },
-        },
-        data() {
-            return {
-                statusheight: 0,
-                // backIcon:require('./libs/images/back.png'),
-            }
-        },
-        computed: {
-            // navbarStyle() {
-            //     let style = '';
-            //     let {
-            //         isFixed
-            //     } = this;
-            //     if (!isFixed) {
-            //         style += '--navbar-fixed: relative';
-            //     }
+        });
+		console.log(props);
+		console.log('传入++++++++++++');
+		const emit = defineEmits(["navbarHeight"]);
+		onMounted(()=>{
+			uni.getSystemInfo({
+			    success: (res)=> {
+			        // 有些手机没有设置--status-bar-height
+			        statusheight = res.statusBarHeight;
+			    }
+			});
+			nextTick(()=>{
+			    uni.createSelectorQuery().in(this).select('.navbar-fixed-box').fields({
+			        size: true,
+			        rect: true,
+			        scrollOffset: true,
+			    }, data => {
+			        // console.log( "得到布局位置信息" + JSON.stringify(data));
+			        // console.log("节点离页面顶部的距离为" + data.top);
+			        if (data) {
+			           
+			            // tabsScrollWidth = data.width;
+			            emit('navbarHeight',data.height)
+			        }
+			    }).exec();
+			})
+		});
+		
+	 function	goBack() {
+		    // 如果自定义了点击返回按钮的函数，则执行，否则执行返回逻辑
+		    if (typeof this.customBack === 'function') {
+		        this.customBack();
+		    } else {
+		        uni.navigateBack();
+		    }
+		}
+		// let  navbarStyle = computed(()=>{
+		// 	//     let style = '';
+		// 	//     let {
+		// 	//         isFixed
+		// 	//     } = this;
+		// 	//     if (!isFixed) {
+		// 	//         style += '--navbar-fixed: relative';
+		// 	//     }
+			
+		// 	//     return style
+		// })
 
-            //     return style
-            // }
-        },
-        mounted() {
-            uni.getSystemInfo({
-                success: (res)=> {
-                    // 有些手机没有设置--status-bar-height
-                    this.statusheight = res.statusBarHeight;
-                }
-            });
-            this.$nextTick(()=>{
-                uni.createSelectorQuery().in(this).select('.navbar-fixed-box').fields({
-                    size: true,
-                    rect: true,
-                    scrollOffset: true,
-                }, data => {
-                    // console.log( "得到布局位置信息" + JSON.stringify(data));
-                    // console.log("节点离页面顶部的距离为" + data.top);
-                    if (data) {
-                       
-                        this.tabsScrollWidth = data.width;
-                        this.$emit('navbarHeight',data.height)
-                    }
-                }).exec();
-            })
-        },
-        methods: {
-            goBack() {
-                // 如果自定义了点击返回按钮的函数，则执行，否则执行返回逻辑
-                if (typeof this.customBack === 'function') {
-                    this.customBack();
-                } else {
-                    uni.navigateBack();
-                }
-            }
-        }
-    }
 </script>
 
 <style scoped lang="scss">
