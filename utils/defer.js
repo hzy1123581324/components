@@ -5,8 +5,13 @@
  * @param {Boolean} done 传递的参数
  * @return {Function} Promised对象
 */ 
-export default function defer(time, done) {
-	
+export default function defer(time = 0, done = "") {
+	/// 如果延迟时间小于等于0,直接执行
+	if(Number(time.toString())<=0){
+		return new Promise(resolve=>{
+			resolve();
+		})
+	}
 	return new Promise(function(resolve) {
 		
 		setTimeout(resolve, time, done); 

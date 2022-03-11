@@ -1,7 +1,4 @@
 
-<!-- 
- 
- -->
 <template>
     <view class="pay-item">
         <view class="password-items">
@@ -18,7 +15,7 @@
 <script>
     /**
      * payItem 
-     * @description 商品自增自减
+     * @description  验证码密码输入框
      * @tutorial https://www.uviewui.com/components/button.html
      * @property {String} inputType 输入类型
      * @property {String} pwd 用户输入的密码

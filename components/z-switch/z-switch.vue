@@ -45,6 +45,10 @@
                 type: Boolean,
                 default: false
             },
+						onchangebefore: {
+							type: Function,
+							default: null
+						},
             // 开关尺寸，单位rpx
             // size: {
             //     type: [Number, String],

@@ -1,6 +1,6 @@
 <template>
     <view class="avatar-box">
-        <view :class="['avatar-img',mode]" @click="imgtap">
+        <view :class="['avatar-img',mode]" @click="emit('imgtap',)">
             <image :src="src" mode="widthFix" v-if="src"></image>
         </view>
         <view class="title-box">
@@ -12,7 +12,7 @@
     </view>
 </template>
 
-<script>
+<script setup>
     /**
      * z-avatar 头像
      * @description 本组件一般用于展示头像的地方，如个人中心，或者评论列表页的用户头像展示等场所。
@@ -37,37 +37,28 @@
          }
      </style>
      */
-    export default {
-        name: 'z-avatar',
-        props: {
-            //  头像路径，
-            src: {
-                type: String,
-                default: '',
-            },
-            mode: {
-                type: String,
-                default: 'circle'
-            },
-            title: {
-                type: String,
-                default: ''
-            },
-            subtitle: {
-                type: String,
-                default: ''
-            }
-        },
-        methods: {
-
-        	click() {
-        		this.$emit('click', this.index);
-        	},
-            imgtap(){
-                this.$emit('imgtap',)
-            }
-        }
-    }
+		
+		const props = defineProps(
+		{
+		    //  头像路径，
+		    src: {
+		        type: String,
+		        default: '',
+		    },
+		    mode: {
+		        type: String,
+		        default: 'circle'
+		    },
+		    title: {
+		        type: String,
+		        default: ''
+		    },
+		    subtitle: {
+		        type: String,
+		        default: ''
+		    }
+		});
+		const emit = defineEmits(["click","imgtap"]);
 </script>
 
 <style scoped>

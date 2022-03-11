@@ -108,8 +108,6 @@
             	default: 'default'
             },
         });
-		console.log(props);
-		console.log('传入++++++++++++');
 		const emit = defineEmits(["navbarHeight"]);
 		onMounted(()=>{
 			uni.getSystemInfo({
@@ -136,9 +134,10 @@
 		});
 		
 	 function	goBack() {
+		
 		    // 如果自定义了点击返回按钮的函数，则执行，否则执行返回逻辑
-		    if (typeof this.customBack === 'function') {
-		        this.customBack();
+		    if (typeof props.customBack === 'function') {
+		        props.customBack();
 		    } else {
 		        uni.navigateBack();
 		    }
@@ -232,7 +231,7 @@
         height: 38upx;
     }
     .back-icon{
-        --size: 40rpx;
+        --size: 50rpx;
         --icon-size: var(--navbar-back-icon-size,var(--size));
         
         // --icon-color: inhert;
