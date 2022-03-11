@@ -1,5 +1,5 @@
 <template>
-    <view :class="['button-box',plain&&'plain',shape,disable&&'disable']" :style="buttonStyle" @click="buttonClick($event)">
+    <view :class="['button-box',plain&&'plain',shape,disable&&'disable']" @click="buttonClick($event)">
         <slot></slot>
         <!-- 特殊功能，仅button能触发 -->
         <button type="default" v-if="false"></button>
@@ -99,9 +99,6 @@
             },
 
         },
-        components: {
-            // postpone  
-        },
         computed: {
             rippleStyle(){
                 let {rippleTop,rippleLeft,targetWidth} = this;
@@ -109,10 +106,7 @@
                         --btn-ripple-left:${rippleLeft}px;
                         --btn-ripple-size:${targetWidth}px;`
             },
-            buttonStyle() {
 
-                return ``
-            },
         },
         data: () => {
             return {

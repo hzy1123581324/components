@@ -1,8 +1,8 @@
 <template>
 	<view class="counter-box">
 		<view @click="delFun">
-			<slot>
-				<view :class="['del', Num - min <= 0 && 'undel']"></view>
+			<slot name="del">
+				<view :class="['del', currentValue - min <= 0 && 'undel']"></view>
 			</slot>
 		</view>
 		<view class="intobox">
@@ -10,44 +10,22 @@
 			<!-- <view :class="[!Num&&'place']" @click="test()">{{Num||holderTxt}}</view> -->
 			<!-- verify-number还不确定是否成功 -->
 			<!-- <input  type="number" :verify-number="/\d+\.{0,1}\d?/"  v-model="value" @blur.prevent="intoBlur($event)" :placeholder="HolderTxt" placeholder-class="place"/> -->
-			<input type="number" v-model="currentValue" :disabled="disable" @blur.prevent="intoBlur($event)"
-				:placeholder="HolderTxt" placeholder-class="place" />
+			<input type="number" v-model="currentValue" :disabled="!enable" @blur.prevent="intoBlur($event)"
+				:placeholder="HolderTxt" placeholder-class="place"  />
 		</view>
 		<view @click="addFun">
-			<slot>
+			<slot name="add">
 				<!-- 默认 -->
-				<view :class="['add', max != 0 && Num - max >= 0 && 'unadd']"></view>
+				<view :class="['add', max != 0 && currentValue - max >= 0 && 'unadd']"></view>
 			</slot>
 		</view>
 	</view>
 </template>
 
 <script setup>
-	/**
-     * increase 自增自减计数器
-     * @description 商品自增自减
-     * @tutorial https://www.uviewui.com/components/button.html
-     * @property {String,Number} min 最小值
-     * @property {String,Number} max 最大值
-     * @property {String,Number} number 初始化的值
-     * @property {String,Number} step 递增步长
-     * @property {String }  holderTxt  占位符
-     * @example <increase :number.sync="number"></increase>
-     * @example <increase class="couter" :number.sync="number"></increase>
-     * <style>
-     *  .couter{
-        --increase-height: 组件的高度 默认38rpx
-        --increase-bor-width: 组件边框宽度 默认 1px
-        --increase-bor-color ： 组件边框颜色 默认 #333
-        --increase-rate  递增递减按钮尺寸跟加减号的比例 默认 0.35
-        --increase-icon-color 加减号颜色
-        --increase-icon-disable-color 禁用加减号颜色
-        --increase-icon-thick 加减号厚度
-        --increase-input-font  输入框字体大小  默认 28rpx
-        --increase-input-color  输入框字体颜色 默认 #333；
-     * }
-     * </style>
-    */
+	
+	 
+	 
 	import {
 		Mul,
 		Add,
@@ -57,10 +35,34 @@
 	import defer from "../../utils/defer.js";
 	import {
 		onMounted,
-		computed
+		computed,
+		watch,
+		ref,
 	} from "vue";
 
-	
+	/**
+	   * increase 自增自减计数器
+	   * @description 商品自增自减
+	   * @tutorial https://www.uviewui.com/components/button.html
+	   * @property {String,Number} min 最小值
+	   * @property {String,Number} max 最大值
+	   * @property {String,Number} number 初始化的值
+	   * @property {String,Number} step 递增步长
+	   * @property {String }  holderTxt  占位符
+	   * @example <increase :number.sync="number"></increase>
+	   * @example <increase class="couter" :number.sync="number"></increase>
+	   * <style>
+	   *  .couter{
+	      --increase-height: 组件的高度 默认38rpx 
+	      --increase-rate  递增递减按钮尺寸跟加减号的比例 默认 0.35
+	      --increase-icon-color 加减号颜色
+	      --increase-icon-disable-color 禁用加减号颜色
+	      --increase-icon-thick 加减号厚度
+	      --increase-input-font  输入框字体大小  默认 28rpx
+	      --increase-input-color  输入框字体颜色 默认 #333；
+	   * }
+	   * </style>
+	  */
 	const props = defineProps({
 		min: {
 			type: [String, Number],
@@ -84,34 +86,35 @@
 		holderTxt: {
 			type: String,
 		},
-		init: {
-			type: Boolean,
-			default: true
-		},
 		/// 是否禁用
-		disable: {
+		enable: {
 			type: Boolean,
 			default: false
 		},
-		value: {
+		modelVlaue: {
 			type: [String, Number],
 		},
 		/// 切换前钩子
-		changeBefore: {
+		onChangeBefore: {
 			type: Function,
 			default: defer
 		}
 	})
-	let currentValue = computed({
-		get() {
-			return +age.value + 1
-		},
-		set(value) {
-			console.log(value) //  输出新修改的值
-			return age.value = value - 1
+	console.log(props,'这个是珊珊');
+	const currentValue = ref(1);
+	/// 监听v-model
+	watch(()=>props.modelValue,(newval,oldval)=>{
+		currentValue.value = newval;
+	});
+	
+	watch(currentValue,(newval,oldval)=>{
+		if(newval==''|| newval-props.min<0&&props.min!=-1){
+			currentValue.value = props.min.value;
 		}
 	});
-
+	
+	const emit = defineEmits(['update:modelVlaue']);
+	
 	// 输入框失去焦点
 	function intoBlur(e) {
 		let val = e.target.value;
@@ -126,25 +129,21 @@
 			val = max;
 		}
 		currentValue.value = val;
-		// console.log(this.Num, "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
 	}
+	
+	
 	// 点击加号
 	async function addFun() {
-		if (props.disable) {
-			return;
-		}
-		await props.onchangebefore().then(res => {
+		console.log(props);
+		 props.onChangeBefore().then(res => {
 			if (currentValue.value - (props.max || 0) < 0 || props.max == 0) {
-				currentValue.value = Add(currentValue.value, this.step);
+				currentValue.value = Add(currentValue.value, props.step);
 			}
 		});
 	}
 	// 点击减号
 	async function delFun() {
-		if (props.disable) {
-			return;
-		}
-		props.onchangebefore().then(res => {
+		props.onChangeBefore().then(res => {
 			// (Num - min > 0 && (Num = Sub(Num, step)))
 			if (currentValue.value - props.min > 0 || props.min == -1) {
 				currentValue.value = Sub(currentValue.value, props.step);
@@ -160,8 +159,7 @@
 		--height: 88rpx;
 		--icon-size: calc(var(--increase-height, var(--height)) - var(--increase-bor-width, 1px) * 2);
 		/* 递增递减按钮尺寸 */
-		border: var(--increase-bor-width, 1px) solid var(--increase-bor-color, #333);
-		height: var(--increase-height, var(--height));
+		height: var(--increase-height, auto);
 		max-width: 100%;
 		border-radius: var(--radius, 4px);
 		display: flex;

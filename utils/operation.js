@@ -17,7 +17,7 @@ export function Add(arg1, arg2) {
 	}
 	m = Math.pow(100, Math.max(r1, r2));
 	return (Mul(arg1, m) + Mul(arg2, m)) / m;
-},
+}
 //减法函数，用来得到精确的减法结果
 //说明：javascript的加法结果会有误差，在两个浮点数相加的时候会比较明显。这个函数返回较为精确的减法结果。
 //调用：$h.Sub(arg1,arg2)
@@ -39,7 +39,7 @@ export function Sub(arg1, arg2) {
 	m = Math.pow(10, Math.max(r1, r2)); //动态控制精度长度
 	n = r1 >= r2 ? r1 : r2;
 	return ((Mul(arg1, m) - Mul(arg2, m)) / m).toFixed(n);
-},
+}
 /*乘法函数，用来得到精确的乘法结果
  **说明：javascript的乘法结果会有误差，在两个浮点数相乘的时候会比较明显。这个函数返回较为精确的乘法结果。
  **调用：$h.Mul(arg1,arg2)
@@ -62,7 +62,7 @@ export function Mul(arg1, arg2) {
 		// console.log(e);
 	}
 	return (Number(s1.replace('.', '')) * Number(s2.replace('.', ''))) / Math.pow(10, m);
-},
+}
 /*
  *除法函数，用来得到精确的除法结果
  *说明：javascript的除法结果会有误差，在两个浮点数相除的时候会比较明显。这个函数返回较为精确的除法结果。

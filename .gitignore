@@ -1,0 +1,17 @@
+unpackage/
+!/unpackage/res
+node_modules
+uni_modules
+.ide
+.idea
+__pycache__
+*.DS_Store
+util/api/config.js
+
+package-lock.json
+.idea
+.hbuilderx
+.vscode
+.c9
+*.sh
+git/

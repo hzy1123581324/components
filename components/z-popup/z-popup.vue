@@ -1,5 +1,5 @@
 <template>
-	<view v-if="value" class="popup" :class="[popupstyle]" @touchmove.stop.prevent="clear">
+	<view v-if="modelValue" class="popup" :class="[popupstyle]" @touchmove.stop.prevent="clear">
 		<z-transition class="mask" v-if="maskShow" :mode-class="['fade']" :duration="duration" :show="showTrans"
 			@click="onTap" />
 		<z-transition class="transition-block" :mode-class="ani" :styles="transClass" :duration="duration"
@@ -40,7 +40,7 @@
 	export default {
 		name: 'z-popup',
 		props: {
-			value: {
+			modelValue: {
 				type: Boolean,
 				default: false,
 			},
@@ -88,8 +88,8 @@
 			maskClick(val) {
 				this.mkclick = val
 			},
-			value(newval) {
-				this.$emit('input', newval);
+			modelValue(newval) {
+				this.$emit('update:modelValue', newval);
 				if (newval) {
 					this.open();
 				} else {
@@ -120,7 +120,7 @@
 			} else {
 				this.duration = 0
 			}
-			if (this.value) {
+			if (this.modelValue) {
 				this.open()
 			} else {
 				this.close();
@@ -129,7 +129,7 @@
 		methods: {
 			clear(e) {
 				// TODO nvue 取消冒泡
-				e.stopPropagation()
+				e.stopPropagation();
 			},
 			open() {
 				// this.showPopup = true
@@ -176,7 +176,7 @@
 					// this.customOpen && this.customClose()
 					this.timer = setTimeout(() => {
 						// this.showPopup = false
-						this.$emit('input', false);
+						this.$emit('update:modelValue', false);
 					}, 300)
 				})
 			},
@@ -265,6 +265,8 @@
 		/* #ifndef APP-NVUE */
 		z-index: var(--popup-index, 999);
 		/* #endif */
+		// height: 100vh;
+		
 	}
 
 	.popup-mask {
@@ -279,7 +281,7 @@
 
 	.mask {
 		margin-top: var(--mask-top, 0);
-		position: 'fixed';
+		position: fixed;
 		bottom: 0;
 		top: 0;
 		left: 0;
