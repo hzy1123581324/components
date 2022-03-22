@@ -1,10 +1,11 @@
 <template>
-   <view class="navbar-box clear" :style="`--navbar-fixed:${!isFixed?'relative':'fixed'};--status-height:${statusheight}px;`">
-        <view :class="['navbar-fixed-box clear',border&&'navbar-border']" >
-            <view :class="['navbar-left',isBack&&'hasback']" >
+    <view class="navbar-box clear"
+        :style="`--status-height:${statusheight}px;`">
+        <view :class="['navbar-fixed-box clear',border&&'navbar-border']">
+            <view :class="['navbar-left',isBack&&'hasback']">
                 <slot name="left">
-                    <z-icon :type="backIconName" class="back-icon"  @click.native="goBack" v-if="showicon"></z-icon>
-                    <z-avatar class="back-avatar"  :src="src" mode="circle" :size="size" v-if="avatar"></z-avatar>
+                    <z-icon :type="backIconName" class="back-icon" @click.native="goBack" v-if="showicon"></z-icon>
+                    <z-avatar class="back-avatar" :src="src" mode="circle" :size="size" v-if="avatar"></z-avatar>
                     <text class="backTxt" v-if="hasbacktxt" @click="goBack">{{backTxt}}</text>
                 </slot>
             </view>
@@ -54,129 +55,133 @@
      </style>
      */
 
-		import {ref,computed,onMounted,nextTick} from "vue";
-		let statusheight = ref(0);
-		const props = defineProps({
-						showicon: {
-							type: Boolean,
-							default: true
-						},
-            isFixed: {
-                type: Boolean,
-                default: true
-            },
-            isBack: {
-                type: Boolean,
-                default: true
-            },
-            // 左边返回的图标
-            backIconName: {
-                type: String,
-                default: 'icon-arrow-left'
-            },
-            backTxt: {
-                type: String,
-                default: '返回'
-            },
-            backicon: {
-                type: String,
-                default:'',
-            },
-            hasbacktxt: {
-                 type: Boolean,
-                 default: false,
-            },
-            // 自定义返回逻辑
-            customBack: {
-                type: [Function,null],
-                default: null
-            },
-            border: {
-            	type: [String, Boolean],
-            	default: true
-            },
-            avatar: {
-                type: Boolean,
-                default: false,
-            },
-            src: {
-                type: String,
-                default: ''
-            },
-            size: {
-            	type: [String, Number],
-            	default: 'default'
-            },
+    import {
+        ref,
+        computed,
+        onMounted,
+        nextTick
+    } from "vue";
+    let statusheight = ref(0);
+    const props = defineProps({
+        showicon: {
+            type: Boolean,
+            default: true
+        },
+        isBack: {
+            type: Boolean,
+            default: true
+        },
+        // 左边返回的图标
+        backIconName: {
+            type: String,
+            default: 'icon-arrow-left'
+        },
+        backTxt: {
+            type: String,
+            default: '返回'
+        },
+        backicon: {
+            type: String,
+            default: '',
+        },
+        hasbacktxt: {
+            type: Boolean,
+            default: false,
+        },
+        // 自定义返回逻辑
+        customBack: {
+            type: [Function, null],
+            default: null
+        },
+        border: {
+            type: [String, Boolean],
+            default: true
+        },
+        avatar: {
+            type: Boolean,
+            default: false,
+        },
+        src: {
+            type: String,
+            default: ''
+        },
+        size: {
+            type: [String, Number],
+            default: 'default'
+        },
+    });
+    const emit = defineEmits(["navbarHeight"]);
+    onMounted(() => {
+        uni.getSystemInfo({
+            success: (res) => {
+                // 有些手机没有设置--status-bar-height
+                statusheight = res.statusBarHeight;
+            }
         });
-		const emit = defineEmits(["navbarHeight"]);
-		onMounted(()=>{
-			uni.getSystemInfo({
-			    success: (res)=> {
-			        // 有些手机没有设置--status-bar-height
-			        statusheight = res.statusBarHeight;
-			    }
-			});
-			nextTick(()=>{
-			    uni.createSelectorQuery().in(this).select('.navbar-fixed-box').fields({
-			        size: true,
-			        rect: true,
-			        scrollOffset: true,
-			    }, data => {
-			        // console.log( "得到布局位置信息" + JSON.stringify(data));
-			        // console.log("节点离页面顶部的距离为" + data.top);
-			        if (data) {
-			           
-			            // tabsScrollWidth = data.width;
-			            emit('navbarHeight',data.height)
-			        }
-			    }).exec();
-			})
-		});
-		
-	 function	goBack() {
-		
-		    // 如果自定义了点击返回按钮的函数，则执行，否则执行返回逻辑
-		    if (typeof props.customBack === 'function') {
-		        props.customBack();
-		    } else {
-		        uni.navigateBack();
-		    }
-		}
-		// let  navbarStyle = computed(()=>{
-		// 	//     let style = '';
-		// 	//     let {
-		// 	//         isFixed
-		// 	//     } = this;
-		// 	//     if (!isFixed) {
-		// 	//         style += '--navbar-fixed: relative';
-		// 	//     }
-			
-		// 	//     return style
-		// })
+        nextTick(() => {
+            uni.createSelectorQuery().in(this).select('.navbar-fixed-box').fields({
+                size: true,
+                rect: true,
+                scrollOffset: true,
+            }, data => {
+                // console.log( "得到布局位置信息" + JSON.stringify(data));
+                // console.log("节点离页面顶部的距离为" + data.top);
+                if (data) {
 
+                    // tabsScrollWidth = data.width;
+                    emit('navbarHeight', data.height)
+                }
+            }).exec();
+        })
+    });
+
+    function goBack() {
+
+        // 如果自定义了点击返回按钮的函数，则执行，否则执行返回逻辑
+        if (typeof props.customBack === 'function') {
+            props.customBack();
+        } else {
+            uni.navigateBack();
+        }
+    }
+    // let  navbarStyle = computed(()=>{
+    // 	//     let style = '';
+    // 	//     let {
+    // 	//         isFixed
+    // 	//     } = this;
+    // 	//     if (!isFixed) {
+    // 	//         style += '--navbar-fixed: relative';
+    // 	//     }
+
+    // 	//     return style
+    // })
 </script>
 
 <style scoped lang="scss">
-    .clear::after, .clear::before {
-    	content: '';
-    	display: table;
-    	clear: both;
+    .clear::after,
+    .clear::before {
+        content: '';
+        display: table;
+        clear: both;
     }
+
     .navbar-box {
         --status-height: 0;
         --height: 88rpx;
         --center-width: 300rpx;
         padding-top: var(--status-bar-height, var(--status-height));
         height: var(--navbar-height, var(--height));
+        width: 100%;
         // box-sizing: border-box;
         position: relative;
-        color: var(--navbar-color, var(--color-main,#333));
+        color: var(--navbar-color, var(--color-main, #333));
         box-sizing: content-box;
         /* #ifndef APP-NVUE */
         flex-shrink: 0;
         /* #endif */
         // background-color: red;
         // background-image: linear-gradient(to bottom,red 0,red 88rpx, blue 88rpx, blue 100%);
+        z-index: var(--navbar-index, 9999);
     }
 
     .navbar-fixed-box {
@@ -209,11 +214,11 @@
         align-items: center;
         align-content: center;
         justify-content: flex-start;
-        padding-left:var(--navbar-pad-lf,var(--pad-lf));
+        padding-left: var(--navbar-pad-lf, var(--pad-lf));
         font-size: var(--navbar-lf-font, var(--font));
         opacity: 0;
         pointer-events: none;
-        white-space : nowrap;
+        white-space: nowrap;
         /* background-color: red; */
     }
 
@@ -226,19 +231,23 @@
         padding-left: 0.3em;
         color: inherit;
     }
-    .backicon{
+
+    .backicon {
         width: 38upx;
         height: 38upx;
     }
-    .back-icon{
+
+    .back-icon {
         --size: 50rpx;
-        --icon-size: var(--navbar-back-icon-size,var(--size));
-        
+        --icon-size: var(--navbar-back-icon-size, var(--size));
+
         // --icon-color: inhert;
     }
+
     .back-avatar {
         margin-left: 10rpx;
     }
+
     /* 标题中部 */
     .navbar-center {
         --font: 34rpx;
@@ -275,7 +284,7 @@
         align-content: center;
         justify-content: flex-end;
         font-size: var(--navbar-rg-font, var(--font));
-        padding-right: var(--navbar-pad-rg,1em);
+        padding-right: var(--navbar-pad-rg, 1em);
     }
 
     .navbar-full {
@@ -296,10 +305,10 @@
         opacity: 0;
         pointer-events: none;
     }
-    
-    .navbar-border{
-      /* --btm: 0 1rpx 0 0 #f4f4f4; */
-      --btm: none;
-      box-shadow: var(--navbar-btm,var(--btm));
+
+    .navbar-border {
+        /* --btm: 0 1rpx 0 0 #f4f4f4; */
+        --btm: none;
+        box-shadow: var(--navbar-btm, var(--btm));
     }
 </style>

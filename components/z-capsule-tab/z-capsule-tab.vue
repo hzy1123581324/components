@@ -10,6 +10,7 @@
 </template>
 
 <script>
+	// 胶囊标签
     export default {
         name: 'capsule-tab',
         props: {

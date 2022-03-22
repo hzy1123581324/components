@@ -263,7 +263,7 @@
 	.popup {
 		position: fixed;
 		/* #ifndef APP-NVUE */
-		z-index: var(--popup-index, 999);
+		z-index: var(--popup-index, 9999);
 		/* #endif */
 		// height: 100vh;
 		
@@ -286,7 +286,7 @@
 		top: 0;
 		left: 0;
 		right: 0;
-		backgroundColor: rgba(0, 0, 0, 0.4);
+		background-color: rgba(0, 0, 0, 0.4);
 	}
 
 	.transition-block {

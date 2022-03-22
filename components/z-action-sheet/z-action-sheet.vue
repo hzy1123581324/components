@@ -95,7 +95,7 @@
         },
         methods:{
             change(data){
-                console.log(data,'监听popup变化');
+                // console.log(data,'监听popup变化');
             },
             sellItem(index){
                 this.$emit("update:active",index);

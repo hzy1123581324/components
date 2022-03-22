@@ -25,7 +25,7 @@
         },
         methods: {
             mverify(e){
-                console.log('验证结果:',e);
+                // console.log('验证结果:',e);
             }
         }
     }

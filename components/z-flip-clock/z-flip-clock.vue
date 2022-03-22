@@ -12,6 +12,7 @@
 </template>
 
 <script>
+// 翻牌倒计时
 import Flipper from './flipper'
 export default {
   name: 'FlipClock',

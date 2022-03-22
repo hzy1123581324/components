@@ -7,11 +7,13 @@
 		</view>
 		<view class="intobox">
 			<!-- <input type="text" v-model="Num" @blur.prevent="intoBlur($event)" /> -->
-			<!-- <view :class="[!Num&&'place']" @click="test()">{{Num||holderTxt}}</view> -->
+			<!-- <view :class="[!Num&&'place']" @click="test()">{{Num||
+			
+			}}</view> -->
 			<!-- verify-number还不确定是否成功 -->
 			<!-- <input  type="number" :verify-number="/\d+\.{0,1}\d?/"  v-model="value" @blur.prevent="intoBlur($event)" :placeholder="HolderTxt" placeholder-class="place"/> -->
 			<input type="number" v-model="currentValue" :disabled="!enable" @blur.prevent="intoBlur($event)"
-				:placeholder="HolderTxt" placeholder-class="place"  />
+				:placeholder="holderTxt" placeholder-class="place"  />
 		</view>
 		<view @click="addFun">
 			<slot name="add">
@@ -23,16 +25,13 @@
 </template>
 
 <script setup>
-	
-	 
-	 
 	import {
 		Mul,
 		Add,
 		Sub,
 		Div
 	} from '../../utils/operation.js';
-	import defer from "../../utils/defer.js";
+	import {defer} from "../../utils/optimize.js";
 	import {
 		onMounted,
 		computed,
@@ -100,7 +99,7 @@
 			default: defer
 		}
 	})
-	console.log(props,'这个是珊珊');
+	// console.log(props,'这个是珊珊');
 	const currentValue = ref(1);
 	/// 监听v-model
 	watch(()=>props.modelValue,(newval,oldval)=>{
@@ -134,7 +133,7 @@
 	
 	// 点击加号
 	async function addFun() {
-		console.log(props);
+		// console.log(props);
 		 props.onChangeBefore().then(res => {
 			if (currentValue.value - (props.max || 0) < 0 || props.max == 0) {
 				currentValue.value = Add(currentValue.value, props.step);
@@ -149,7 +148,7 @@
 				currentValue.value = Sub(currentValue.value, props.step);
 			}
 		}).catch(err => {
-			console.log(err);
+			// console.log(err);
 		});
 	}
 </script>
@@ -159,10 +158,11 @@
 		--height: 88rpx;
 		--icon-size: calc(var(--increase-height, var(--height)) - var(--increase-bor-width, 1px) * 2);
 		/* 递增递减按钮尺寸 */
-		height: var(--increase-height, auto);
+		height: var(--increase-height, var(--icon-size,auto));
 		max-width: 100%;
 		border-radius: var(--radius, 4px);
 		display: flex;
+		align-content: stretch;
 	}
 
 	.add,
@@ -172,6 +172,7 @@
 		position: relative;
 		cursor: pointer;
 		flex-shrink: 0;
+		background-color: var(--increase-icon-bg,transparent);
 	}
 
 	.add::before,
@@ -216,9 +217,10 @@
 		/*默认#333*/
 		box-sizing: border-box;
 		position: relative;
+		
 	}
 
-	.intobox view.place {
+	.intobox .place {
 		font-size: var(--placeholder-font-size, inherit);
 		color: var(--placeholder-color, inherit);
 	}
@@ -236,6 +238,7 @@
 	}
 
 	.intobox input {
+		background-color: var(--increase-input-bg);
 		padding: 0 0.5em;
 		height: 100%;
 		max-width: 100%;

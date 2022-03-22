@@ -57,7 +57,7 @@
             --separator-color 分隔符的颜色（默认#303133
             --bor-radius:  数字盒子圆角 默认6rpx
             --bor-width:  边框大小
-            --bor-color   边框颜色 默认#303133
+            --border-color   边框颜色 默认#303133
             --bg-color    背景颜色 默认#fff
             --bg-img      背景图片
             --shadow      阴影
@@ -213,7 +213,7 @@
         transform: translateZ(0);
         width: var(--size,auto);
         height: var(--size,auto);
-        border: var(--bor-width,var(--bor-w)) solid var(--bor-color,#303133);
+        border: var(--bor-width,var(--bor-w)) solid var(--border-color,#303133);
         border-radius: var(--bor-radius,var(--bor-ra));
         background-color: var(--bg-color,#fff);
         background-image: var(--bg-img);

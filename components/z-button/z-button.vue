@@ -60,7 +60,11 @@
             // 按钮形状，circle（两边为半圆），square（带圆角）
             shape: {
                 type: String,
-                default: 'square'
+                default: 'square',
+                validator: function(value) {
+                	// 这个值必须匹配下列字符串中的一个
+                	return ['square','circle' ].indexOf(value) !== -1
+                }  
             },
             // 按钮是否镂空，false不镂空， true镂空
             plain: {
@@ -106,7 +110,6 @@
                         --btn-ripple-left:${rippleLeft}px;
                         --btn-ripple-size:${targetWidth}px;`
             },
-
         },
         data: () => {
             return {
@@ -123,7 +126,7 @@
                     return ;
                 }
                 if (this.postpone) {
-                    console.log('异步处理')
+                    // console.log('异步处理')
                     return this.unrepeat(); 
                 }
                 // 是否开启水波纹效果
@@ -213,29 +216,7 @@
                     this.canclick = true;
                 }
             },
-            jump() {
-                // if(item.state==0
-                // ){
-                //     return uni.showToast({
-                //         title: '待开放',
-                //         icon: 'none',
-                //     })
-                // }
-
-                // if(item.path=="#"||!item.path){
-                //     return uni.showToast({
-                //         title: '没有定义路由',
-                //         icon: 'none',
-                //     })
-                // }else{
-                //     let openType = (!item.openType)?'navigateTo':item.openType==1?'reLaunch':'redirectTo'
-
-                //     uni[openType]({
-                //         url: item.path
-                //     })
-                // }
-
-            },
+            
         }
 
     }
@@ -247,7 +228,7 @@
         /* 很操蛋var默认值rpx转不过来 */
         --height: 84rpx;
         --bor-width: 2rpx;
-        --btn-bor: var(--btn-bor-width,var(--bor-width)) solid var(--btn-bor-color, currentColor);
+        --btn-bor: 1rpx solid currentColor;
         --font-size: 32rpx;
         --Radius: calc(var(--btn-height,var(--height)) / 2);
         display: var(--display, block);
@@ -272,6 +253,8 @@
         box-sizing: var(--btn-box-sizing,border-box);
         position: relative;
         overflow: hidden;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .square {

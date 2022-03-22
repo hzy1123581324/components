@@ -1,5 +1,5 @@
 <template>
-    <view class="icon-box iconfont" :class="[type]" :style='coinStyle'></view>
+    <view  :class="['icon-box iconfont', type]" :style='coinStyle'></view>
 </template>
 
 <script>

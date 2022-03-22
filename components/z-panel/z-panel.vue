@@ -16,7 +16,7 @@
 	/**
      * input 面板
      * @description 此组件为一个面板,分为panel-head, panel-body,panel-foot 三部分
-     * @tutorial http://uviewui.com/components/input.html
+     * @tutorial http://zviewui.com/components/input.html
      * @property {String} title 标题
      * @example <z-panel class="panel"></z-panel>
      * @example <z-panel class="panel" title="这是个标题"></z-panel>

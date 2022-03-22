@@ -132,7 +132,7 @@
             // },
             // 滑动中
             move(e) {
-                console.log(e);
+                // console.log(e);
                 let move = e.changedTouches[0].clientY;
                 let {
                     scrollTop,
@@ -168,7 +168,7 @@
             },
 
             end(e) {
-                console.log(e);
+                // console.log(e);
                 save = null;
                 this.transition = 'all ease-in-out 0.4s 0s';
                 if (this.showTopShadow > 0) {

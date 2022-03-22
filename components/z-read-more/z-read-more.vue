@@ -125,7 +125,6 @@
         },
         methods: {
             init() {
-
                 let view = uni.createSelectorQuery().in(this).select('.content');
                 view.boundingClientRect(data => {
                     // console.log("得到布局位置信息" + JSON.stringify(data));

@@ -1,5 +1,5 @@
 <template>
-	<view v-if="show" class="loading" :class="'loading-'+mode" :style="[cricleStyle]"></view>
+	<view v-if="show" class="loading" :class="'loading-'+mode"></view>
 </template>
 
 <script setup>

@@ -30,7 +30,7 @@ var myChart;
 // 弹窗
 function alertError(title) {
 	document.addEventListener('plusready',function() {
-		console.log('......')
+		// console.log('......')
 	})
 	try{
 		plus.nativeUI.toast(title, {

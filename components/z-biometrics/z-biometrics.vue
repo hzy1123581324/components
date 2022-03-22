@@ -29,13 +29,13 @@
             checkIsSupportSoterAuthentication() {
                 uni.checkIsSupportSoterAuthentication({
                     success(res) {
-                        console.log(res);
+                        // console.log(res);
                     },
                     fail(err) {
-                        console.log(err);
+                        // console.log(err);
                     },
                     complete(res) {
-                        console.log(res);
+                        // console.log(res);
                     }
                 })
             },
@@ -44,13 +44,13 @@
                 uni.checkIsSoterEnrolledInDevice({
                     checkAuthMode: 'fingerPrint',
                     success(res) {
-                        console.log(res);
+                        // console.log(res);
                     },
                     fail(err) {
-                        console.log(err);
+                        // console.log(err);
                     },
                     complete(res) {
-                        console.log(res);
+                        // console.log(res);
                     }
                 })
             },
@@ -59,13 +59,13 @@
                 uni.checkIsSoterEnrolledInDevice({
                     checkAuthMode: 'facial',
                     success(res) {
-                        console.log(res);
+                        // console.log(res);
                     },
                     fail(err) {
-                        console.log(err);
+                        // console.log(err);
                     },
                     complete(res) {
-                        console.log(res);
+                        // console.log(res);
                     }
                 })
             },
@@ -76,13 +76,13 @@
                     challenge: '123456',
                     authContent: '请用指纹解锁',
                     success(res) {
-                        console.log(res);
+                        // console.log(res);
                     },
                     fail(err) {
-                        console.log(err);
+                        // console.log(err);
                     },
                     complete(res) {
-                        console.log(res);
+                        // console.log(res);
                     }
                 })
             },
@@ -93,13 +93,13 @@
                     challenge: '123456',
                     authContent: '请用FaceID解锁',
                     success(res) {
-                        console.log(res);
+                        // console.log(res);
                     },
                     fail(err) {
-                        console.log(err);
+                        // console.log(err);
                     },
                     complete(res) {
-                        console.log(res);
+                        // console.log(res);
                     }
                 })
             }

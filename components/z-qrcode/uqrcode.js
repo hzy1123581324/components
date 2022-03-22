@@ -1320,7 +1320,7 @@ let uQRCode = {};
 				}
 				options = defaultOptions;
 				if (!options.canvasId) {
-					console.error('uQRCode: Please set canvasId!');
+					// console.error('uQRCode: Please set canvasId!');
 					return;
 				}
 

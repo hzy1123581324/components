@@ -68,7 +68,7 @@
         },
         methods:{
             pwdChange(e){
-                console.log(e,'*************');
+                // console.log(e,'*************');
                 let pwd =e.detail.value;
                 // if(pwd.length==6){
                     this.$emit('update:pwd', pwd);

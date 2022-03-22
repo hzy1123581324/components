@@ -71,7 +71,7 @@
      */
     export default {
         name: 'tabs',
-				emits: ['update:index'],
+				emits: ['update:index','tabtap'],
         props: {
             list: {
                 required: true,

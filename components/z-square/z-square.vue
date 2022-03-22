@@ -1,12 +1,12 @@
 <template>
-    <div class="square-box">
+    <div class="square-box" :style='squareStyle'>
         <div class="square">
             <slot></slot>
         </div>
     </div>
 </template>
 
-<script>
+<script setup>
     /**
      * square  正方形
      * @description 仅用css制作正方形
@@ -16,27 +16,23 @@
      * <square></square>
      */
 
-    export default {
-        name: "square",
-        props: {},
-        //   components: {},
-        computed: {
-            squareStyle() {
-                if (this.src) {
-                    return `--bg-image: url(${this.src})`;
-                } else {
-                    return "";
-                }
-            },
-        },
-        //   data() {
-        //     return {};
-        //   },
-        //   mounted() {},
-        //   watch: {},
-        //   destroyed() {},
-        //   methods: {},
-    };
+    export default {};
+		
+		import {computed,} from 'vue';
+		const props = defineProps({
+			src: {
+				type: String,
+				default: '',
+			}
+		})
+		const squareStyle = computed(()=>{
+			if (src.value) {
+			    return `--bg-image: url(${src.value})`;
+			} else {
+			    return "";
+			}
+		});
+		
 </script>
 
 <style scoped>

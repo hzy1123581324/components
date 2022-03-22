@@ -83,7 +83,7 @@ export function base64ToPath(base64) {
 				resolve(filePath)
 			},
 			fail(err) {
-				console.error('获取base64图片失败', JSON.stringify(err))
+				// console.error('获取base64图片失败', JSON.stringify(err))
 				reject(err)
 			}
 		})
@@ -143,7 +143,7 @@ export function pathToBase64(path) {
 			};
 			fileReader.readAsDataURL(path);
 			fileReader.onerror = (error) => {
-				console.error('blobToBase64 error:', JSON.stringify(error))
+				// console.error('blobToBase64 error:', JSON.stringify(error))
 			    reject(new Error('blobToBase64 error'));
 			};
 		} else {
@@ -179,7 +179,7 @@ export function pathToBase64(path) {
 			        resolve('data:image/png;base64,' + res.data)
 			    },
 			    fail: (error) => {
-					console.error('urlToBase64 error:', JSON.stringify(error))
+					// console.error('urlToBase64 error:', JSON.stringify(error))
 			        reject(error)
 			    }
 			})
@@ -194,16 +194,16 @@ export function pathToBase64(path) {
 		            resolve(data.target.result)
 		        }
 		        fileReader.onerror = (error) => {
-					console.error('pathToBase64 error:', JSON.stringify(error))
+					// console.error('pathToBase64 error:', JSON.stringify(error))
 		            reject(error)
 		        }
 		        fileReader.readAsDataURL(file)
 		    }, (error) => {
-				console.error('pathToBase64 error:', JSON.stringify(error))
+				// console.error('pathToBase64 error:', JSON.stringify(error))
 		        reject(error)
 		    })
 		}, (error) => {
-			console.error('pathToBase64 error:', JSON.stringify(error))
+			// console.error('pathToBase64 error:', JSON.stringify(error))
 		    reject(error)
 		})
 		// #endif
