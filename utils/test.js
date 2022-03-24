@@ -1,28 +1,27 @@
 /**
  * 验证电子邮箱格式
  */
-export function email(value) {
+export function isEmail(value) {
     return /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/.test(value);
 }
 
 /**
  * 验证手机格式
  */
-export function mobile(value) {
+export function isMobile(value) {
     return /^1[23456789]\d{9}$/.test(value)
 }
-
 /**
  * 验证URL格式
  */
-export function url(value) {
+export function isUrl(value) {
     return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i
         .test(value)
 }
 /**
  * 是否数组
  */
-export function array(value) {
+export function isArray(value) {
     if (typeof Array.isArray === 'function') {
         return Array.isArray(value)
     }
@@ -31,41 +30,41 @@ export function array(value) {
 /**
  * 是否对象
  */
-export function object(value) {
+export function isObject(value) {
     return Object.prototype.toString.call(value) === '[object Object]'
 }
 /**
  * 验证日期格式
  */
-export function date(value) {
+export function isDate(value) {
     return !/Invalid|NaN/.test(new Date(value).toString())
 }
 
 /**
  * 验证ISO类型的日期格式
  */
-export function dateISO(value) {
+export function isDateISO(value) {
     return /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/.test(value)
 }
 
 /**
  * 验证十进制数字
  */
-export function number(value) {
+export function isNumber(value) {
     return /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test(value)
 }
 
 /**
  * 验证整数
  */
-export function digits(value) {
+export function isDigits(value) {
     return /^\d+$/.test(value)
 }
 
 /**
  * 验证身份证号码
  */
-export function idCard(value) {
+export function isIdCard(value) {
     return /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/.test(
         value)
 }
@@ -73,7 +72,7 @@ export function idCard(value) {
 /**
  * 是否车牌号
  */
-export function carNo(value) {
+export function isCarNo(value) {
     // 新能源车牌
     const xreg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}(([0-9]{5}[DF]$)|([DF][A-HJ-NP-Z0-9][0-9]{4}$))/;
     // 旧车牌
@@ -90,7 +89,7 @@ export function carNo(value) {
 /**
  * 金额,只允许2位小数
  */
-export function amount(value) {
+export function isAmount(value) {
     //金额，只允许保留两位小数
     return /^[1-9]\d*(,\d{3})*(\.\d{1,2})?$|^0.\d{1,2}$/.test(value);
 }
@@ -98,7 +97,7 @@ export function amount(value) {
 /**
  * 中文
  */
-export function chinese(value) {
+export function isChinese(value) {
     let reg = /^[\u4e00-\u9fa5]+$/gi;
     return reg.test(value);
 }
@@ -106,14 +105,14 @@ export function chinese(value) {
 /**
  * 只能输入字母
  */
-export function letter(value) {
+export function isLetter(value) {
     return /^[a-zA-Z]*$/.test(value);
 }
 
 /**
  * 只能是字母或者数字
  */
-export function enOrNum(value) {
+export function isEnOrNum(value) {
     //英文或者数字
     let reg = /^[0-9a-zA-Z]*$/g;
     return reg.test(value);
@@ -122,28 +121,28 @@ export function enOrNum(value) {
 /**
  * 验证是否包含某个值
  */
-export function contains(value, param) {
+export function isContains(value, param) {
     return value.indexOf(param) >= 0
 }
 
 /**
  * 验证一个值范围[min, max]
  */
-export function range(value, param) {
+export function isRange(value, param) {
     return value >= param[0] && value <= param[1]
 }
 
 /**
  * 验证一个长度范围[min, max]
  */
-export function rangeLength(value, param) {
+export function isRangeLength(value, param) {
     return value.length >= param[0] && value.length <= param[1]
 }
 
 /**
  * 判断是否为空
  */
-export function empty(value){
+export function isEmpty(value){
     switch (typeof value) {
         case 'undefined':
             return true;
@@ -184,26 +183,5 @@ export function isJSON(str) {
         }
     }
     return false
-    // console.log('It is not a string!')
+    
 }
-// export default {
-//     email,
-//     mobile,
-//     url,
-//     date,
-//     dateISO,
-//     number,
-//     digits,
-//     idCard,
-//     carNo,
-//     amount,
-//     chinese,
-//     letter,
-//     enOrNum,
-//     contains,
-//     range,
-//     rangeLength,
-//     empty,
-//     isJSON,
-// 		object
-// }

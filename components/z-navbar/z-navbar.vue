@@ -1,6 +1,6 @@
 <template>
     <view class="navbar-box clear"
-        :style="`--status-height:${statusheight}px;`">
+        :style="`--status-height:${statusheight}px;--navbar-fixed:${isFixed?'fixed':'relative'}`">
         <view :class="['navbar-fixed-box clear',border&&'navbar-border']">
             <view :class="['navbar-left',isBack&&'hasback']">
                 <slot name="left">
@@ -67,9 +67,15 @@
             type: Boolean,
             default: true
         },
+        // 是否显示返回
         isBack: {
             type: Boolean,
             default: true
+        },
+        // 当值是true时，不占位
+        isFixed: {
+          type: Boolean,
+          default: false,
         },
         // 左边返回的图标
         backIconName: {
@@ -93,6 +99,7 @@
             type: [Function, null],
             default: null
         },
+        /// 是否显示底部边框
         border: {
             type: [String, Boolean],
             default: true
@@ -101,10 +108,12 @@
             type: Boolean,
             default: false,
         },
+        /// 上面头像的url
         src: {
             type: String,
             default: ''
         },
+        /// 上面头像的尺寸
         size: {
             type: [String, Number],
             default: 'default'
@@ -119,7 +128,7 @@
             }
         });
         nextTick(() => {
-            uni.createSelectorQuery().in(this).select('.navbar-fixed-box').fields({
+            uni.createSelectorQuery().in().select('.navbar-fixed-box').fields({
                 size: true,
                 rect: true,
                 scrollOffset: true,
@@ -127,7 +136,6 @@
                 // console.log( "得到布局位置信息" + JSON.stringify(data));
                 // console.log("节点离页面顶部的距离为" + data.top);
                 if (data) {
-
                     // tabsScrollWidth = data.width;
                     emit('navbarHeight', data.height)
                 }
@@ -173,7 +181,7 @@
         height: var(--navbar-height, var(--height));
         width: 100%;
         // box-sizing: border-box;
-        position: relative;
+        position:var(--navbar-fixed);
         color: var(--navbar-color, var(--color-main, #333));
         box-sizing: content-box;
         /* #ifndef APP-NVUE */
@@ -186,7 +194,7 @@
 
     .navbar-fixed-box {
         width: 100%;
-        position: var(--navbar-fixed, fixed);
+        position: fixed;
         padding-top: var(--status-bar-height, var(--status-height));
         height: var(--navbar-height, var(--height));
         top: 0;

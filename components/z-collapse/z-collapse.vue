@@ -52,19 +52,16 @@
     return `--collapse-height:${clientHeight.value}px;`
   });
   let clientHeight = ref(0);
-  let currentValue = computed({
-    get() {
-      if(valueMuster&&valueMuster[props.index.toString()]!=undefined){
-        return valueMuster[props.index.toString()];
-      }else{
-        // console.log('2@@@@@@@@@');
-        return props.modelValue;
-      }
-    },
-    // set(value) {
-    //   console.log(value) //  输出新修改的值
-    //   return age.value = value - 1
-    // }
+  let  currentValue = ref(false);
+  
+  if(valueMuster){
+    watch(()=>[...valueMuster],(newval,oldval)=>{
+        currentValue.value = newval[props.index.toString()]||false;
+    })
+  }
+  
+  watch(()=>props.modelVal,(newval,oldval)=>{
+    currentValue.value = newval;
   })
   /// 监听reload 
   watch(() => props.reload, (newval, oldval) => {
@@ -83,9 +80,7 @@
   onMounted(() => {
     // console.log(props.index);
     // console.log(valueMuster,'**********');
-    defer(200).then(() => {
-      clientHeight.value = collapse.value.$el.clientHeight;
-    });
+    defer(200).then(init);
 
     valueMuster&&(valueMuster[props.index] = currentValue.value);
 
@@ -117,8 +112,10 @@
       }else{
         valueMuster[props.index] = !valueMuster[props.index];
       }
+    }else{
+      // 有可能没有v-model
+      currentValue.value = !currentValue.value;
     }
-    
     
     // 使用了v-model 才会起作用
     emit('update:modelValue', !props.modelValue);
