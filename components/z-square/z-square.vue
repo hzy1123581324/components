@@ -16,7 +16,7 @@
      * <square></square>
      */
 
-    export default {};
+    // export default {};
 		
 		import {computed,} from 'vue';
 		const props = defineProps({
