@@ -15,7 +15,9 @@ export function debounce(fn,wait) {
 // 节流
 export function throttle(fn, delay) {
     let canRun = true;//通过闭包保存该变量
+    console.log('999999999999++++');
     return (res)=> {
+      console.log('--------------++++');
 			// console.log(canRun,'7777777777777');
         if (!canRun) return;//立刻返回
         canRun = false;

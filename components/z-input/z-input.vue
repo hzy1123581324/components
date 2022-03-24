@@ -38,7 +38,10 @@
    * @dev z-input 组件实现了前置跟后置，加 错误提示
    *
    */
-
+  import {
+    throttle,
+    debounce
+  } from "../../utils/optimize.js";
   import {
     ref,
     computed,
@@ -47,7 +50,6 @@
   } from "vue";
   let errMsg = ref('');
   let defaultValue = ref("");
-  let throttle, watchThrottle;
   // 密码是否可见
   let showPassword = ref(false);
   const emit = defineEmits(['update:modelValue', 'focus', 'confirm', "change"]);
@@ -59,7 +61,8 @@
       default: "horizontal",
       validator: function(value) {
         // 这个值必须匹配下列字符串中的一个
-        return ['horizontal', 'vertical'].indexOf(value) !== -1
+        // overlap 重叠，输入值后错开
+        return ['horizontal', 'vertical', 'overlap'].indexOf(value) !== -1
       }
     },
     modelValue: {
@@ -121,10 +124,28 @@
     // 	clearTimeout(watchThrottle);
     // }
     // watchThrottle = setTimeout(() => {
+
     defaultValue.value = newval;
     // }, 100);
 
   })
+  // 节流，每间隔500毫秒执行一次
+  const inputThrottle =
+    throttle((newval) => {
+      // console.log('&&&&&&&&&&&&&777777777');
+      emit("change", newval);
+    }, 500);
+  
+  // 防抖，防止上面没有取到最新值
+  const inputDebounce =debounce((newval) => {
+    // console.log('&&&&&&&&&&&&&444444444');
+    emit("change", newval);
+  }, 1000);
+  watch(defaultValue, (newval, oldval) => {
+    emit("update:modelValue", newval);
+    // console.log('监听++++++');
+   
+  });
 
   // 监听获得焦点事件
   function handleFocus() {
@@ -140,18 +161,12 @@
     let {
       value = ""
     } = e.detail || {};
-    emit('change', e);
-    // if (throttle) {
-    // 	clearTimeout(throttle);
-    // 	throttle = null;
-    // }
-    // throttle = setTimeout(() => {
+    
     defaultValue.value = value;
-    if (defaultValue.value != props.modelValue) {
-      emit("update:modelValue", defaultValue);
-    }
-    // }, 300);
-
+    // 节流，每间隔500毫秒执行一次
+    inputThrottle(e);
+    // 防抖，防止上面没有取到最新值
+    inputDebounce(e);
   }
   // 点击键盘确认键
   function onConfirm() {
@@ -160,7 +175,7 @@
   /// 清空输入框
   function clear() {
     defaultValue.value = '';
-    emit("update:modelVlaue", defaultValue);
+    emit('change', defaultValue)
   }
 </script>
 

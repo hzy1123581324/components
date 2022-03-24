@@ -86,7 +86,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  modelVlaue: {
+  modelValue: {
     type: [String, Number],
   },
   /// 切换前钩子
@@ -95,13 +95,17 @@ const props = defineProps({
     default: defer,
   },
 });
-const emit = defineEmits(["update:modelVlaue", "change"]);
-// console.log(props,'这个是珊珊');
+const emit = defineEmits(["update:modelValue", "change"]);
 const currentValue = ref(1);
+
+onMounted(()=>{
+  currentValue.value = props.modelValue;
+})
 /// 监听v-model
 watch(
   () => props.modelValue,
   (newval, oldval) => {
+
     currentValue.value = newval;
   }
 );
