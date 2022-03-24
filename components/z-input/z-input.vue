@@ -14,12 +14,16 @@
     <!-- 后缀 -->
     <view class="input-suffix">
       <slot name='suffix'>
-        <view class=" iconfont iconicon-shanchu" @click="clear" v-if="defaultValue&&type=='text'"></view>
-        <view class=" iconfont iconicon-yanjing-biyan" @click="showPassword=true"
-          v-if="defaultValue&&type=='password'&&showPassword==false"></view>
+        <!-- 默认清除按钮 -->
+        <view class="iconfont iconicon-shanchu" @click="clear" v-if="showSuffixIcon&&defaultValue&&type=='text'"></view>
+        <view class="iconfont iconicon-yanjing-biyan" @click="showPassword=true"
+          v-if="showSuffixIcon&&defaultValue&&type=='password'&&showPassword==false"></view>
         <view class=" iconfont iconicon-yanjing-zhengyan" @click="showPassword=false"
-          v-if="defaultValue&&type=='password'&&showPassword==true"></view>
+          v-if="showSuffixIcon&&defaultValue&&type=='password'&&showPassword==true"></view>
       </slot>
+      <!-- 在需要用到上面默认suffix时,可以用下面补救 -->
+      <slot name="suffixAfter"></slot>
+
     </view>
 
     <!-- 报错提示 -->
@@ -93,8 +97,8 @@
       type: Number,
       default: -1
     },
-    /// 是否显示清除图标
-    showClear: {
+    /// 是否显示Suffix 默认图标
+    showSuffixIcon: {
       type: Boolean,
       default: true,
     }
@@ -145,19 +149,19 @@
     // throttle = setTimeout(() => {
     defaultValue.value = value;
     if (defaultValue.value != props.modelValue) {
-      emit("update:modelValue", value);
+      emit("update:modelValue", defaultValue);
     }
     // }, 300);
 
   }
   // 点击键盘确认键
   function onConfirm() {
-    emit("confirm", defaultValue.value);
+    emit("confirm", defaultValue);
   }
   /// 清空输入框
   function clear() {
     defaultValue.value = '';
-    emit("update:modelVlaue", '');
+    emit("update:modelVlaue", defaultValue);
   }
 </script>
 
@@ -180,10 +184,19 @@
     flex-shrink: 0;
     color: inherit;
     font-size: inherit;
-    border-top-right-radius: var(--input-into-radius-top-right, var(--input-into-radius, inherit));
-    border-top-left-radius: var(--input-into-radius-top-right, var(--input-into-radius, inherit));
-    border-bottom-right-radius: var(--input-into-radius-top-right, var(--input-into-radius, inherit));
-    border-bottom-left-radius: var(--input-into-radius-top-right, var(--input-into-radius, inherit));
+    --all-raduis: var(--input-into-radius, inherit);
+    --top-radius: var(--input-into-raduis-top);
+    --btm-radius: var(--input-into-raduis-btm);
+    --lf-radius: var(--input-into-raduis-lf);
+    --rg-radius: var(--input-into-raduis-rg);
+    --top-right-raduis: var(--top-radius, var(--rg-radius, var(--all-raduis)));
+    --top-left-raduis: var(--top-radius, var(--lf-radius, var(--all-raduis)));
+    --btm-right-raduis: var(--btm-radius, var(--rg-radius, var(--all-raduis)));
+    --btm-left-raduis: var(--btm-radius, var(--lf-radius, var(--all-raduis)));
+    border-top-right-radius: var(--input-into-radius-top-rg, var(--top-right-raduis));
+    border-top-left-radius: var(--input-into-radius-top-lf, var(--top-left-raduis));
+    border-bottom-right-radius: var(--input-into-radius-btm-rg, var(--btm-right-raduis));
+    border-bottom-left-radius: var(--input-into-radius-btm-lf, var(--btm-left-raduis));
     border-top: var(--input-into-border-top, var(--input-into-border));
     border-right: var(--input-into-border-rg, var(--input-into-border));
     border-bottom: var(--input-into-border-btm, var(--input-into-border));
