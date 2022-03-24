@@ -23,6 +23,7 @@
       </slot>
       <!-- 在需要用到上面默认suffix时,可以用下面补救 -->
       <slot name="suffixAfter"></slot>
+
     </view>
 
     <!-- 报错提示 -->

@@ -1,3 +1,4 @@
+
 <template>
   <!-- 添加这层是因为在组件直接加class失效 -->
   <view class="w_100">
