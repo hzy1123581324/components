@@ -15,7 +15,7 @@
             <view class="navbar-right">
                 <slot name="right"></slot>
             </view>
-            <view class="navbar-full">
+            <view class="navbar-full flex flex-center-y">
                 <slot name="full"></slot>
             </view>
         </view>
