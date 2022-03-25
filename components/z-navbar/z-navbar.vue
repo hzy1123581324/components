@@ -1,26 +1,5 @@
 <template>
-<<<<<<< HEAD
-    <view class="navbar-box clear"
-        :style="`--status-height:${statusheight}px;--navbar-fixed:${isFixed?'fixed':'relative'}`">
-        <view :class="['navbar-fixed-box clear',border&&'navbar-border']">
-            <view :class="['navbar-left',isBack&&'hasback']">
-                <slot name="left">
-                    <z-icon :type="backIconName" class="back-icon" @click.native="goBack" v-if="showicon"></z-icon>
-                    <z-avatar class="back-avatar" :src="src" mode="circle" :size="size" v-if="avatar"></z-avatar>
-                    <text class="backTxt" v-if="hasbacktxt" @click="goBack">{{backTxt}}</text>
-                </slot>
-            </view>
-            <view class="navbar-center">
-                <slot></slot>
-            </view>
-            <view class="navbar-right">
-                <slot name="right"></slot>
-            </view>
-            <view class="navbar-full flex flex-center-y">
-                <slot name="full"></slot>
-            </view>
-        </view>
-=======
+
   <view
     class="navbar-box clear"
     :style="`--status-height:${statusheight}px;--navbar-fixed:${
@@ -52,10 +31,9 @@
       <view class="navbar-right">
         <slot name="right"></slot>
       </view>
-      <view class="navbar-full">
+      <view class="navbar-full flex flex-center-y">
         <slot name="full"></slot>
       </view>
->>>>>>> feda5462ac8c40b310e91d3cc762d86f9ec4e728
     </view>
   </view>
 </template>
