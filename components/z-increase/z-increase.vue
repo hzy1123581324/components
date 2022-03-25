@@ -98,14 +98,13 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue", "change"]);
 const currentValue = ref(1);
 
-onMounted(()=>{
+onMounted(() => {
   currentValue.value = props.modelValue;
-})
+});
 /// 监听v-model
 watch(
   () => props.modelValue,
   (newval, oldval) => {
-
     currentValue.value = newval;
   }
 );
@@ -261,6 +260,7 @@ async function delFun() {
   right: 0;
   bottom: 0;
   font-weight: var(--increase-input-weight, 400);
+  font-family: "微软雅黑";
   /*   opacity: 0;
         pointer-events: none; */
   /* font-size: inherit; */
