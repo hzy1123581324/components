@@ -66,6 +66,7 @@
      */
     export default {
         name: 'z-count-down',
+        // emit: ['end'],
         props: {
             // 倒计时的时间，秒为单位
             timestamp: {

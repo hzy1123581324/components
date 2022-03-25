@@ -247,9 +247,7 @@
     font-size: var(--input-close-fs, var(--font-size));
     color: var(--input-close-colose, #A6A6AC);
     box-sizing: content-box;
-
     border: 10rpx solid transparent;
-    margin-right: 10rpx;
   }
 
   /* 前缀 */
