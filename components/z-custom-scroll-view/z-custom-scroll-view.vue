@@ -1,17 +1,19 @@
 <template>
 	<scroll-view class="scroll-big-box" scroll-y="true" @scroll="throttleFun">
-		<view class="scroll-content">
+
 			<view class="expand-box" v-if="expanded>0">
 				<slot name="expand" :percentage="percentage"></slot>
 			</view>
-			<view class="grow">
-				<slot></slot>
-			</view>
+      
+      <view class="grow " style="height: 50%;">
+        <slot></slot>
+      </view>
+			
 			<!-- 通常固定在左下角，用于返回 -->
 			<view class="scroll-fixed" v-if="fixed>0" @click="onTapScrollFixed">
 				<slot name="fixed" :percentage="fixedPercentage"></slot>
 			</view>
-		</view>
+
 	</scroll-view>
 	<view class="scroll-footer">
 		<slot name="footer"></slot>
@@ -79,13 +81,15 @@
 	.scroll-big-box {
 		position: relative;
 		flex-grow: 1;
-		height: 80vh;
+		height: 50vh;
 	}
 
 	.scroll-content {
 		display: flex;
 		flex-shrink: 0;
 		flex-direction: column;
+    flex-grow: 1;
+    height: ;
 	}
 
 	.scroll-fixed {
