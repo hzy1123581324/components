@@ -244,7 +244,7 @@
   .iconicon-yanjing-zhengyan {
     --font-size: 36rpx;
     font-size: var(--input-close-fs, var(--font-size));
-    color: var(--input-close-colose, #A6A6AC);
+    color: var(--input-close-color, #A6A6AC);
     box-sizing: content-box;
 
     border: 10rpx solid transparent;
