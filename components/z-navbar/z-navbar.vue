@@ -29,7 +29,12 @@
         <slot></slot>
       </view>
       <view class="navbar-right">
-        <slot name="right"></slot>
+        <slot name="right">
+          <view class="navbar-right-icon"  v-for="item in actions" :key="item.logo">
+            
+          </view>
+          
+        </slot>
       </view>
       <view class="navbar-full flex flex-center-y">
         <slot name="full"></slot>
@@ -117,6 +122,11 @@ const props = defineProps({
   avatar: {
     type: Boolean,
     default: false,
+  },
+  // 右上角图标
+  actions: {
+    type: Array,
+    default: []
   },
   /// 上面头像的url
   src: {

@@ -3,21 +3,26 @@
     <!-- 前缀 -->
     <view :class="['input-prefix',layout=='horizontal'?'horizontal': 'vertical']">
       <slot name='prefix'>
+        <!-- type==search,显示搜索图标 -->
+        <view class="search-icon iconfont iconicon-sousuo" v-if="showPrefixIcon&&type=='search'"></view>
       </slot>
     </view>
 
     <!-- 输入框 -->
-    <input class="input-into" :type="type == 'password' ? 'text' : type" :value="defaultValue"
-      :password="type == 'password' && !showPassword" :placeholder="placeholder" :placeholder-style="placeholderStyle"
-      placeholderClass="input-placeholder" :disabled="disabled" :maxlength="maxlength" :focus="focus"
-      @focus="handleFocus" @blur="handleBlur" @input="handleInput" @confirm="onConfirm" />
+    <input class="input-into" :type="inputType" :value="defaultValue" :password="type == 'password' && !showPassword"
+      :placeholder="placeholder" :placeholder-style="placeholderStyle" placeholderClass="input-placeholder"
+      :disabled="disabled" :maxlength="maxlength" :focus="focus" @focus="handleFocus" @blur="handleBlur"
+      @input="handleInput" @confirm="onConfirm" />
     <!-- 后缀 -->
     <view class="input-suffix">
       <slot name='suffix'>
         <!-- 默认清除按钮 -->
-        <view class="iconfont iconicon-shanchu" @click="clear" v-if="showSuffixIcon&&defaultValue&&type=='text'"></view>
+        <view class="close-icon iconfont iconicon-shanchu" @click="clear"
+          v-if="showSuffixIcon&&defaultValue&&type=='text'"></view>
+        <!-- type == password,密码不可见 -->
         <view class="iconfont iconicon-yanjing-biyan" @click="showPassword=true"
           v-if="showSuffixIcon&&defaultValue&&type=='password'&&showPassword==false"></view>
+        <!-- type == password,密码可见 -->
         <view class=" iconfont iconicon-yanjing-zhengyan" @click="showPassword=false"
           v-if="showSuffixIcon&&defaultValue&&type=='password'&&showPassword==true"></view>
       </slot>
@@ -47,13 +52,15 @@
     ref,
     computed,
     onBeforeMount,
-    watch
+    watch,
+
   } from "vue";
   let errMsg = ref('');
   let defaultValue = ref("");
   // 密码是否可见
   let showPassword = ref(false);
   const emit = defineEmits(['update:modelValue', 'focus', 'confirm', "change"]);
+
   const props = defineProps({
     // 布局 horizontal，一行排列
     // 布局 vertical，多行排列
@@ -69,11 +76,16 @@
     modelValue: {
       type: String,
       default: "",
+
     },
     /// 输入类型默认文本框
     type: {
       type: String,
       default: "text",
+      validator(value) {
+        // 这个值必须与下列字符串中的其中一个相匹配
+        return ['text', 'search', 'password', 'number'].includes(value)
+      }
     },
     /// 是否自动获取焦点
     focus: {
@@ -104,6 +116,11 @@
     showSuffixIcon: {
       type: Boolean,
       default: true,
+    },
+    /// 是否显示Suffix 默认图标
+    showPrefixIcon: {
+      type: Boolean,
+      default: true,
     }
   });
 
@@ -115,7 +132,15 @@
   // 		props.focus
   // 	}
   // });
-
+  const inputType = computed(() => {
+    switch (props.type) {
+      case 'password':
+      case 'search':
+        return 'text';
+      default:
+        return props.type;
+    }
+  });
   onBeforeMount(() => {
     defaultValue.value = props.modelValue;
   });
@@ -136,16 +161,16 @@
       // console.log('&&&&&&&&&&&&&777777777');
       emit("change", newval);
     }, 500);
-  
+
   // 防抖，防止上面没有取到最新值
-  const inputDebounce =debounce((newval) => {
+  const inputDebounce = debounce((newval) => {
     // console.log('&&&&&&&&&&&&&444444444');
     emit("change", newval);
   }, 1000);
   watch(defaultValue, (newval, oldval) => {
     emit("update:modelValue", newval);
     // console.log('监听++++++');
-   
+
   });
 
   // 监听获得焦点事件
@@ -162,7 +187,7 @@
     let {
       value = ""
     } = e.detail || {};
-    
+
     defaultValue.value = value;
     // 节流，每间隔500毫秒执行一次
     inputThrottle(e);
@@ -189,7 +214,7 @@
     align-content: center;
     box-sizing: border-box;
     flex-wrap: wrap;
-    
+
   }
 
   .input-into {
@@ -240,14 +265,54 @@
     z-index: 10;
   }
 
+
+  /* 当使用背景图标是需要通过设置透明度隐藏字体图标 */
+  .search-icon::before {
+    opacity: var(--input-search-icon-opacity, 1);
+  }
+
+  .close-icon::before {
+    opacity: var(--input-close-icon-opacity, 1);
+  }
+
+  .password-icon::before {
+    content: var(--input-password-icon-opacity, unset);
+  }
+
+  .unpassword-icon::before {
+    content: var(--input-unpassword-icon-opacity, unset);
+  }
+
+  .search-icon {
+    background-image: var(--input-search-icon);
+  }
+
+  .iconicon-shanchu {
+    background-image: var(--input-close-icon);
+  }
+
+  .iconicon-yanjing-biyan {
+    background-image: var(--input-password-icon);
+  }
+
+  .iconicon-yanjing-zhengyan {
+    background-image: var(--input-unpassword-icon);
+  }
+
+  .search-icon,
   .iconicon-shanchu,
   .iconicon-yanjing-biyan,
   .iconicon-yanjing-zhengyan {
     --font-size: 36rpx;
+    width: 1em;
+    height: 1em;
     font-size: var(--input-close-fs, var(--font-size));
-    color: var(--input-close-colose, #A6A6AC);
+    color: var(--input-close-color, #A6A6AC);
     box-sizing: content-box;
     border: 10rpx solid transparent;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
   }
 
   /* 前缀 */

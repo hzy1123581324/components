@@ -1,17 +1,15 @@
 <template>
-    <view class="u-notice-bar-wrap" v-if="isShow" :style="{
-		borderRadius: borderRadius + 'rpx',
-	}">
+    <view class="u-notice-bar-wrap" v-if="isShow" >
         <block v-if="mode == 'horizontal' && isCircular">
-            <notice-row :type="type" :color="color" :bgColor="bgColor" :list="list" :volumeIcon="volumeIcon" :moreIcon="moreIcon"
+            <z-notice-row :type="type" :color="color" :bgColor="bgColor" :list="list" :volumeIcon="volumeIcon" :moreIcon="moreIcon"
                 :volumeSize="volumeSize" :closeIcon="closeIcon" :mode="mode" :fontSize="fontSize" :speed="speed"
-                :playState="playState" :padding="padding" @getMore="getMore" @close="close" @click="click"></notice-row>
+                :playState="playState" :padding="padding" @getMore="getMore" @close="close" @click="click"></z-notice-row>
         </block>
         <block v-if="mode == 'vertical' || (mode == 'horizontal' && !isCircular)">
-            <notice-column :type="type" :color="color" :bgColor="bgColor" :list="list" :volumeIcon="volumeIcon"
+            <z-notice-column :type="type" :color="color" :bgColor="bgColor" :list="list" :volumeIcon="volumeIcon"
                 :moreIcon="moreIcon" :closeIcon="closeIcon" :mode="mode" :volumeSize="volumeSize" :disable-touch="disableTouch"
                 :fontSize="fontSize" :duration="duration" :playState="playState" :padding="padding" @getMore="getMore"
-                @close="close" @click="click" @end="end"></notice-column>
+                @close="close" @click="click" @end="end"></z-notice-column>
         </block>
     </view>
 </template>
@@ -37,7 +35,6 @@
      * @property {String Number} font-size 字体大小，单位rpx（默认28）
      * @property {Boolean} is-circular mode为horizontal时，指明是否水平衔接滚动（默认true）
      * @property {String} play-state 播放状态，play - 播放，paused - 暂停（默认play）
-     * @property {String Nubmer} border-radius 通知栏圆角（默认为0）
      * @property {String Nubmer} padding 内边距，字符串，与普通的内边距css写法一直（默认"18rpx 24rpx"）
      * @property {Boolean} no-list-hidden 列表为空时，是否显示组件（默认false）
      * @property {Boolean} disable-touch 是否禁止通过手动滑动切换通知，只有mode = vertical，或者mode = horizontal且is-circular = false时有效（默认true）
@@ -45,16 +42,12 @@
      * @event {Function} close 点击右侧关闭图标触发
      * @event {Function} getMore 点击右侧向右图标触发
      * @event {Function} end 列表的消息每次被播放一个周期时触发，只有mode = vertical，或者mode = horizontal且is-circular = false时有效
-     * @example <u-notice-bar :more-icon="true" :list="list"></u-notice-bar>
+     * @example <z-notice-bar :more-icon="true" :list="list"></z-notice-bar>
      */
-    import noticeColumn from "../notice-column/notice-column.vue";
-    import noticeRow from "../notice-row/notice-row.vue";
+
     export default {
         name: "notice-bar",
-        components: {
-            'notice-column': noticeColumn,
-            'notice-row': noticeRow,
-        },
+
         props: {
             // 显示的内容，数组
             list: {
@@ -145,11 +138,6 @@
                 type: Boolean,
                 default: true
             },
-            // 滚动通知设置圆角
-            borderRadius: {
-                type: [Number, String],
-                default: 0
-            },
             // 通知的边距
             padding: {
                 type: [Number, String],
@@ -192,6 +180,7 @@
 <style lang="scss" scoped>
     .u-notice-bar-wrap {
         overflow: hidden;
+        border-radius: var(--notice-bar-radius,unset);
     }
 
     .u-notice-bar {

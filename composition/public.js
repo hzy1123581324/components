@@ -17,21 +17,22 @@ export let limit = ref(10);
 //   }
 // }
 
+// 通用跳转
 export function jump(url, {
-  type = 1,
+  type = 'navigateTo',
 }) {
   if (url == '' || url == '#') {
     toast('待开发')
   }
-  let openType = ['navigateTo','redirectTo','switchTab',"reLaunch"];
+  
   switch (type) {
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    uni[openType-1]({url});
+    case 'navigateTo':
+    case 'redirectTo':
+    case 'switchTab':
+    case 'reLaunch':
+    uni[type]({url});
     break;
-    case 5:
+    case 'navigateBack':
     // 返回上一页
     uni.navigateBack({delta:url});
     default:

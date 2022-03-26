@@ -140,7 +140,7 @@
                 switch (this.type) {
                     // 链接成功，可以放送订阅
                     case 'navigation':
-                        this.jump();
+                        // this.jump();
                         break;
                     default:
                         //this.$emit('click',)
@@ -230,7 +230,7 @@
         --bor-width: 2rpx;
         --btn-bor: 1rpx solid currentColor;
         --font-size: 32rpx;
-        --Radius: calc(var(--btn-height,var(--height)) / 2);
+        --calc-radius: calc(var(--btn-height,var(--height)) / 2);
         display: var(--display, block);
         /* line-height: calc(var(--btn-height,var(--height)) - 2 * var(--btn-bor-width,var(--bor-width))); */
         display: flex;
@@ -244,7 +244,7 @@
         color: var(--btn-color, #fff);
         letter-spacing: 4rpx;
         padding: 0 1em;
-        border-radius: var(--btn-radius,var(--Radius));
+        border-radius: var(--btn-radius,var(--radius,var(--calc-radius)));
         /*默认是半圆*/
         background-image: var(--btn-img);
         background-color: var(--btn-bg,var(--theme,red));
@@ -258,8 +258,8 @@
     }
 
     .square {
-        --Radius: 8rpx;
-        border-radius: var(--btn-radius,var(--radius,var(--Radius)));
+        --square-radius: 8rpx;
+        border-radius: var(--btn-radius,var(--radius,var(--square-radius)));
     }
 
     .button-box.plain {
