@@ -1,5 +1,5 @@
 <template>
-    <view :class="['root',themeDataClass]" :style="themeData">
+    <view :class="['root flex-reverse',themeDataClass]" :style="themeData">
         <slot></slot>
     </view>
 </template>
@@ -12,7 +12,8 @@
      * @description 该组件用于切换风格
      * @tutorial https://www.uviewui.com/components/noticeBar.html
      * @property {String} theme 强制指定风格
-     * @example <z-theme-box class="tabs" :index.sync="index" :list="list"></z-theme-box>
+     * @example <z-theme class="tabs" :index.sync="index" :list="list"></z-theme>
+     * * @example <z-theme class="tabs" :index.sync="index" :list="list"></z-theme>
      * <style>
          .theme-box{
          }
