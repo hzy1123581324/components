@@ -11,7 +11,7 @@ export function useState(mapper,moduleName="",) {
     let mapperFn = mapState;
     
 	// 如果使用模块化，则使用vuex提供的createNamespacedHelpers方法找到对应模块的mapState方法
-    if (Object.prototype.toString(moduleName) === "[object String]" && moduleName.length > 0) {
+    if (Object.prototype.toString.call(moduleName) === "[object String]" && moduleName.length > 0) {
         mapperFn = createNamespacedHelpers(moduleName).mapState
     }
     

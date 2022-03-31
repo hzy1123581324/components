@@ -1,5 +1,5 @@
 <template>
-    <view :class="['root flex-reverse',themeDataClass]" :style="themeData">
+    <view :class="['root flex-reverse grow-full',themeDataClass]" :style="themeData">
         <slot></slot>
     </view>
 </template>

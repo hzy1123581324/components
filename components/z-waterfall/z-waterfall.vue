@@ -72,7 +72,7 @@
     overflow-x: hidden;
     width: 100%;
     padding: var(--waterfall-pad, var(--fall-pad));
-    display: flex;
+    flex-shrink: 0;
     justify-content: space-between;
   }
 

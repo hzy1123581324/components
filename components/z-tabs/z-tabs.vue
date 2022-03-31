@@ -354,6 +354,9 @@
         height: var(--tabs-progress-height, var(--height));
         background-color: var(--tabs-progress-color, #EA4D5E);
         background-image: var(--tabs-progress-img,unset);
+        background-repeat: no-repeat;
+        background-position:var(--tabs-progress-position,top center);
+        background-size: var(--tabs-progress-bg-size,unset);
         transition: var(--transition-progress, none);
         box-shadow: var(--tabs-progress-shadow,none);
         border-radius: var(--tabs-progress-radius,0);

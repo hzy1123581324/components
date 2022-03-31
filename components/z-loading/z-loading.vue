@@ -2,7 +2,7 @@
     <view v-if="show" :class="['loading','loading-'+mode]" :style="[cricleStyle]"></view>
 </template>
 
-<script>
+<script setup>
     /**
      * loading 加载动画
      * @description 警此组件为一个小动画，目前用在zView的loadmore加载更多和switch开关等组件的正在加载状态场景。
@@ -18,45 +18,52 @@
             }
      </style>
      */
-    export default {
-        name: "loading",
-        props: {
-            // 动画的类型
-            mode: {
-                type: String,
-                default: 'circle',
-                validator: function(value) {
-                    // 这个值必须匹配下列字符串中的一个
-                    return ['circle', 'flower'].indexOf(value) !== -1
-                }
-            },
-            show: {
-                type: Boolean,
-                default: true
-            }
-        },
-        computed: {
-
-        }
-    }
+    
+    const props = defineProps({
+      // 动画的类型
+      mode: {
+          type: String,
+          default: 'circle',
+          validator: (value)=> {
+              // 这个值必须匹配下列字符串中的一个
+              return ['circle', 'flower'].indexOf(value) !== -1
+          }
+      },
+      show: {
+          type: Boolean,
+          default: true
+      }
+    });
+  
 </script>
 
 <style scoped>
     .loading{
-        --size: 34rpx;
-        width: var(--loading-size,var(--size));
-        height: var(--loading-size,var(--size));
-        
+        width: var(--loading-size,1em);
+        height: var(--loading-size,1em);
     }
     .loading-circle {
+        position: relative;
         display: inline-block;
         vertical-align: middle;
         background: 0 0;
         border-radius: 50%;
-        border: 2px solid;
-        border-color: var(--loading-light,#e4e4e4) var(--loading-light,#e4e4e4) var(--loading-light,#e4e4e4)  var(--loading-dark,#c7c7c7);
+        border: 4rpx solid;
+        border-color: var(--loading-light) var(--loading-light) var(--loading-light)  var(--loading-dark);
         -webkit-animation: circle 1s linear infinite;
         animation: circle 1s linear infinite;
+    }
+    .loading-circle::after{
+      content: "";
+      position: absolute;
+      top: -4rpx;
+      left: -4rpx;
+      width: var(--loading-size,1em);
+      height: var(--loading-size,1em);
+      border: 4rpx solid transparent;
+      border-radius: 50%;
+      opacity: 0.5;
+      border-left-color: var(--loading-dark,rgb(150,150,150));
     }
 
     .loading-flower {

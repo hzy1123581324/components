@@ -65,12 +65,16 @@
   })
   /// 监听reload 
   watch(() => props.reload, (newval, oldval) => {
+    // console.log(newval,'&&&&&&&&&&&&&&');
     if (newval) {
-      init();
+      defer(600).then(() => {
+        init();
+      })
+      defer(800).then(() => {
+        emit('update:reload', !newval);
+      });
     }
-    nextTick(() => {
-      emit('update:reload', newval);
-    });
+    
   });
   // 监听index 
   // watch(() => props.index, (newval, oldval) => {
@@ -90,6 +94,7 @@
   /// 初始化
   function init() {
     clientHeight.value = collapse.value.$el.clientHeight;
+    console.log(collapse.value.$el.clientHeight,'^^^^^^^^^^');
   }
 
   /// 监听

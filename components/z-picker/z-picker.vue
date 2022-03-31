@@ -6,7 +6,7 @@
     </view>
     <z-popup v-model="show" type="bottom" @close="closeHandler">
       <view class="picker-box" :style="`--current-column:${currentColumn}`">
-        <view class="picker-head flex_between_x flex_center_y">
+        <view class="picker-head flex-between-x flex-center-y">
           <!-- 这这个是标题 -->
           <slot name="head">
             <view class="cancel" @click="currentColumn--" v-if="isPrevious">
@@ -44,7 +44,7 @@
             @click="currentColumn = parentIndex"
           >
             <view
-              class="picker-item flex flex_center"
+              class="picker-item flex flex-center"
               v-for="(item, index) in itemParents"
               :key="index"
             >
@@ -354,6 +354,7 @@ function confirmHandler() {
 }
 
 .picker-column {
+  width: 100%;
   transition: all ease-in-out 0.5s 0s;
 }
 

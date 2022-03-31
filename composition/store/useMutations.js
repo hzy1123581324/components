@@ -6,7 +6,7 @@ import {useActionMapper} from './useMapper'
  * @param {*} mapper 方法名集合 ['fn1', 'fn2']
  * @returns 
  */
-export function useMutations(moduleName, mapper) {
+export function useMutations( mapper,moduleName,) {
     let mapperFn = mapMutations;
     
 	// 如果使用模块化，则使用vuex提供的createNamespacedHelpers方法找到对应模块的mapMutations方法
