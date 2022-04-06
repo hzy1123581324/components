@@ -3,7 +3,7 @@
   <view class="scroll-head">
     <slot name="head"></slot>
   </view>
-  <scroll-view class="scroll-big-box grow—full" scroll-y="true" @scroll="throttleFun">
+  <scroll-view class="scroll-big-box grow—full" scroll-y="true" @scroll="throttleFun" @scrolltolower="scrolltolower">
 
     <view class="expand-box" v-if="expanded>0">
       <slot name="expand" :percentage="percentage"></slot>
@@ -53,7 +53,7 @@
 
   });
   let scrollTop = ref(0);
-  const emit = defineEmits(['onTapScrollFixed']);
+  const emit = defineEmits(['tapScrollFixed','scrolltolower']);
 
   let percentage = ref(0);
   let fixedPercentage = ref(0);
@@ -80,11 +80,14 @@
       scrollTop.value = e.detail.scrollTop;
     });
   }
-
+  // 上拉加载更多
+  function scrolltolower(){
+    emit('scrolltolower');
+  }
 
   /// 点击了滚动固定元素
   function onTapScrollFixed() {
-    emit('onTapScrollFixed', );
+    emit('tapScrollFixed', );
   }
 </script>
 
@@ -106,10 +109,11 @@
   }
 
   .scroll-fixed-disable {
-    top: var(--custom-scroll-fixed-disabel-top, unset);
-    left: var(--custom-scroll-fixed-disabel-lf, unset);
-    bottom: var(--custom-scroll-fixed-disabel-btm, unset);
-    right: var(--custom-scroll-fixed-disabel-rg, unset);
+    top: var(--custom-scroll-fixed-disabel-top, var(--custom-scroll-fixed-top, unset));
+    left: var(--custom-scroll-fixed-disabel-lf, var(--custom-scroll-fixed-lf, unset));
+    bottom: var(--custom-scroll-fixed-disabel-btm, var(--custom-scroll-fixed-btm, unset));
+    right: var(--custom-scroll-fixed-disabel-rg, var(--custom-scroll-fixed-rg, unset));
     opacity: var(--custom-scroll-fixed-disabel-opacity, 0);
+    pointer-events: none;
   }
 </style>

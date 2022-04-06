@@ -215,6 +215,7 @@ async function delFun() {
 .intobox {
   --input-color: #333;
   --input-font: 28rpx;
+  min-width: var(--increase-input-min-width,unset);
   border: var(--increase-input-border);
   border-top: 0;
   border-bottom: 0;
@@ -247,6 +248,7 @@ async function delFun() {
 }
 
 .intobox input {
+   border-radius: var(--increase-input-radius,unset);
   background-color: var(--increase-input-bg);
   padding: 0 0.5em;
   height: 100%;

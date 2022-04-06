@@ -6,24 +6,24 @@
 			<slot></slot>
 		</view>
 		<view class="paymentBox  fs36" v-show="showPayment" @click="showPayment = !showPayment">
-			<view class="paymentTitleBox lh98 bg_f9 txt_c bor_btm bor_e2" @click.stop>
-				<!-- <view class="absolute_rg_center  size38 z_9999 mar_lf_30 color_97" @click="showPayment = !showPayment">{{i18n.cancel_txt}}</view> -->
+			<view class="paymentTitleBox lh98 bg_f9 txt_c bor-btm bor-e2" @click.stop>
+				<!-- <view class="absolute-rg-center  size38 z_9999 mar-lf-30 color_97" @click="showPayment = !showPayment">{{i18n.cancel_txt}}</view> -->
 				<!--取消-->
 				<view class="color_13 paymentTitle">{{i18n.$validation.into_payPwd}}</view>
 				<!--请输入支付密码-->
 			</view>
 			<view class="bg_f9 clear" @click.stop>
-				<view class="payment-init-box h98 flex radius_10">
+				<view class="payment-init-box h98 flex radius-10">
 					<view :class="['payment-init',passWord.length-1>=index&&'satisfy']" v-for="(item,index) in 6"
 						:key="item"></view>
 				</view>
 				<view class="payment-forget" v-show="forget">
-					<view class="txt_rg fs32 mar_rg_30" @click="forget">{{i18n.$validation.forgetPwd}}</view>
+					<view class="txt_rg fs32 mar-rg-30" @click="forget">{{i18n.$validation.forgetPwd}}</view>
 					<!--忘记密码-->
 				</view>
 			</view>
 
-			<view class="payment-keyboard flex flex_center flex_wrap" @click.stop>
+			<view class="payment-keyboard flex flex-center flex-wrap" @click.stop>
 				<view class="w_33 txt_c payment-numcell color_31" hover-class="payment-numcell-active"
 					hover-stay-time="300" v-for="item in nums" :key="item" @click="passWord += item">{{item}}</view>
 				<view class="payment-cancel w_33 lh98 h98 " @click=" passWord = passWord.slice(0,-1)">

@@ -1,5 +1,5 @@
 <template>
-    <view class="font-bg" :style="`--font-bg-opacity:${opacity}` " >
+    <view class="font-bg" :style="commontstyle " >
         <slot></slot>
     </view>
 </template>
@@ -20,10 +20,18 @@
     import {computed} from 'vue';
     const props = defineProps({
         opacity: {
-            type: Number,
+            type: [Number,String],
             default: 0,
         }
     });
+    
+     const commontstyle = computed(()=>{
+      if(props.opacity){
+        return `--font-bg-opacity:${props.opacity};`
+      }else{
+        return '';
+      }
+    })
 </script>
 
 <style scoped>
@@ -40,6 +48,7 @@
         background-color: currentColor;
         /* z-index:-1; */
         opacity: var(--font-bg-opacity,0);
+        border-radius: inherit;
     }
     
 </style>

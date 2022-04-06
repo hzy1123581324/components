@@ -1,5 +1,5 @@
 <template>
-	<view class="u-swiper-wrap" :style="{
+	<view class="swiper-wrap" :style="{
 		borderRadius: `${borderRadius}rpx`
 	}">
 		<swiper :current="elCurrent" @change="change" @animationfinish="animationfinish" :interval="interval" :circular="circular" :duration="duration" :autoplay="autoplay"
@@ -8,14 +8,14 @@
 				height: height + 'rpx',
 				backgroundColor: bgColor
 			}">
-			<swiper-item class="u-swiper-item" v-for="(item, index) in list" :key="index">
-				<view class="u-list-image-wrap" @tap.stop.prevent="listClick(index)" :class="[uCurrent != index ? 'u-list-scale' : '']" :style="{
+			<swiper-item class="swiper-item flex" v-for="(item, index) in list" :key="index">
+				<view class="list-image-wrap" @tap.stop.prevent="listClick(index)" :class="[uCurrent != index ? 'list-scale' : '']" :style="{
 						borderRadius: `${borderRadius}rpx`,
 						transform: effect3d && uCurrent != index ? 'scaleY(0.9)' : 'scaleY(1)',
 						margin: effect3d && uCurrent != index ? '0 20rpx' : 0,
 					}">
-					<image class="u-swiper-image" :src="item[name] || item" :mode="imgMode"></image>
-					<view v-if="title && item.title" class="u-swiper-title u-line-1" :style="[{
+					<image class="swiper-image" :src="item[name] || item" :mode="imgMode"></image>
+					<view v-if="title && item.title" class="swiper-title line-1" :style="[{
 							'padding-bottom': titlePaddingBottom
 						}, titleStyle]">
 						{{ item.title }}
@@ -23,7 +23,7 @@
 				</view>
 			</swiper-item>
 		</swiper>
-		<view class="u-swiper-indicator" :style="{
+		<view class="swiper-indicator flex" :style="{
 				top: indicatorPos == 'topLeft' || indicatorPos == 'topCenter' || indicatorPos == 'topRight' ? '12rpx' : 'auto',
 				bottom: indicatorPos == 'bottomLeft' || indicatorPos == 'bottomCenter' || indicatorPos == 'bottomRight' ? '218rpx' : 'auto',
 				justifyContent: justifyContent,
@@ -31,19 +31,19 @@
 				padding: `0 ${effect3d ? '74rpx' : '24rpx'}`
 			}">
 			<block v-if="mode == 'rect'">
-				<view class="u-indicator-item-rect" :class="{ 'u-indicator-item-rect-active': index == uCurrent }" v-for="(item, index) in list"
+				<view class="indicator-item-rect" :class="{ 'indicator-item-rect-active': index == uCurrent }" v-for="(item, index) in list"
 				 :key="index"></view>
 			</block>
 			<block v-if="mode == 'dot'">
-				<view class="u-indicator-item-dot" :class="{ 'u-indicator-item-dot-active': index == uCurrent }" v-for="(item, index) in list"
+				<view class="indicator-item-dot" :class="{ 'indicator-item-dot-active': index == uCurrent }" v-for="(item, index) in list"
 				 :key="index"></view>
 			</block>
 			<block v-if="mode == 'round'">
-				<view class="u-indicator-item-round" :class="{ 'u-indicator-item-round-active': index == uCurrent }" v-for="(item, index) in list"
+				<view class="indicator-item-round" :class="{ 'indicator-item-round-active': index == uCurrent }" v-for="(item, index) in list"
 				 :key="index"></view>
 			</block>
 			<block v-if="mode == 'number'">
-				<view class="u-indicator-item-number">{{ uCurrent + 1 }}/{{ list.length }}</view>
+				<view class="indicator-item-number">{{ uCurrent + 1 }}/{{ list.length }}</view>
 			</block>
 		</view>
 	</view>
@@ -69,7 +69,7 @@
 	 * @property {String Number} effect3d-previous-margin mode = true模式的情况下，激活项与前后项之间的距离，单位rpx（默认50）
 	 * @property {String} img-mode 图片的裁剪模式，详见image组件裁剪模式（默认aspectFill）
 	 * @event {Function} click 点击轮播图时触发
-	 * @example <u-swiper :list="list" mode="dot" indicator-pos="bottomRight"></u-swiper>
+	 * @example <z-swiper :list="list" mode="dot" indicator-pos="bottomRight"></z-swiper>
 	 */
 	export default {
 		name: "z-swiper",
@@ -236,16 +236,16 @@
 	};
 </script>
 
-<style lang="scss" scoped>
-	@import "../../libs/css/style.components.scss";
+<style scoped>
 	
-	.u-swiper-wrap {
+	
+	.swiper-wrap {
 		position: relative;
 		overflow: hidden;
 		transform: translateY(0);
 	}
 
-	.u-swiper-image {
+	.swiper-image {
 		width: 100%;
 		will-change: transform;
 		height: 100%;
@@ -257,15 +257,15 @@
 		/* #endif */
 	}
 
-	.u-swiper-indicator {
+	.swiper-indicator {
 		padding: 0 24rpx;
 		position: absolute;
-		@include vue-flex;
+		
 		width: 100%;
 		z-index: 1;
 	}
 
-	.u-indicator-item-rect {
+	.indicator-item-rect {
 		width: 26rpx;
 		height: 8rpx;
 		margin: 0 6rpx;
@@ -273,11 +273,11 @@
 		background-color: rgba(0, 0, 0, 0.3);
 	}
 
-	.u-indicator-item-rect-active {
+	.indicator-item-rect-active {
 		background-color: rgba(255, 255, 255, 0.8);
 	}
 
-	.u-indicator-item-dot {
+	.indicator-item-dot {
 		width: 14rpx;
 		height: 14rpx;
 		margin: 0 6rpx;
@@ -286,11 +286,11 @@
 		background-color: rgba(0, 0, 0, 0.3);
 	}
 
-	.u-indicator-item-dot-active {
+	.indicator-item-dot-active {
 		background-color: rgba(255, 255, 255, 0.8);
 	}
 
-	.u-indicator-item-round {
+	.indicator-item-round {
 		width: 14rpx;
 		height: 14rpx;
 		margin: 0 6rpx;
@@ -299,12 +299,12 @@
 		background-color: rgba(255, 255, 255, 0.7);
 	}
 
-	.u-indicator-item-round-active {
+	.indicator-item-round-active {
 		height: 28rpx;
 		background-color: rgba(255, 255, 255, 1);
 	}
 
-	.u-indicator-item-number {
+	.indicator-item-number {
 		padding: 6rpx 16rpx;
 		line-height: 1;
 		background-color: rgba(0, 0, 0, 0.3);
@@ -313,11 +313,11 @@
 		color: rgba(255, 255, 255, 0.8);
 	}
 
-	.u-list-scale {
+	.list-scale {
 		transform-origin: center center;
 	}
 
-	.u-list-image-wrap {
+	.list-image-wrap {
 		width: 100%;
 		height: 100%;
 		flex: 1;
@@ -327,7 +327,7 @@
 		position: relative;
 	}
 
-	.u-swiper-title {
+	.swiper-title {
 		position: absolute;
 		background-color: rgba(0, 0, 0, 0.3);
 		bottom: 0;
@@ -338,8 +338,7 @@
 		color: rgba(255, 255, 255, 0.9);
 	}
 
-	.u-swiper-item {
-		@include vue-flex;
+	.swiper-item {
 		overflow: hidden;
 		align-items: center;
 	}

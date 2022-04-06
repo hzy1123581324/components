@@ -3,7 +3,6 @@ import { computed } from 'vue'
 
 export function useStateMapper(mapper, mapFn) {
     const store = useStore();
-
     const storeStateFns = mapFn(mapper);
 
     const storeState = {};
