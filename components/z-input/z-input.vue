@@ -399,7 +399,7 @@
     background-repeat: no-repeat;
     background-size: 100% 100%;
     border: 10rpx solid transparent;
-    margin-right: 10rpx;
+    margin-right: var(--input-icon-mar-rg,unset);
   }
 
   /* 前缀 */
