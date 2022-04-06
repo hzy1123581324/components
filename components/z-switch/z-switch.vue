@@ -58,7 +58,7 @@
         },
         // 通过v-model双向绑定的值
         modelValue: {
-            type: Boolean,
+            type: [Number, String, Boolean],
             default: false
         },
         // 是否使手机发生短促震动，目前只在iOS的微信小程序有效(2020-05-06)

@@ -92,7 +92,7 @@
     },
     /// 是否禁用
     disabled: {
-      type: Boolean,
+      type: [Boolean,String],
       default: false,
     },
     /// 输入的最大长度
@@ -189,7 +189,6 @@
     align-content: center;
     box-sizing: border-box;
     flex-wrap: wrap;
-    
   }
 
   .input-into {
@@ -247,7 +246,9 @@
     font-size: var(--input-close-fs, var(--font-size));
     color: var(--input-close-color, #A6A6AC);
     box-sizing: content-box;
+
     border: 10rpx solid transparent;
+    margin-right: 10rpx;
   }
 
   /* 前缀 */
