@@ -1,14 +1,17 @@
 <template>
-	<view v-if="modelValue" class="popup" :class="[popupstyle]" @touchmove.stop.prevent="clear">
-		<z-transition class="mask" v-if="maskShow" :mode-class="['fade']" :duration="duration" :show="showTrans"
-			@click="onTap" />
-		<z-transition class="transition-block" :mode-class="ani" :styles="transClass" :duration="duration"
-			:show="showTrans" @click="onTap">
-			<view class="popup-wrapper-box" @click.stop="clear">
-				<slot></slot>
-			</view>
-		</z-transition>
-	</view>
+  <teleport to="body">
+    <view v-if="modelValue" class="popup" :class="[popupstyle]" @touchmove.stop.prevent="clear">
+    	<z-transition class="mask" v-if="maskShow" :mode-class="['fade']" :duration="duration" :show="showTrans"
+    		@click="onTap" />
+    	<z-transition class="transition-block" :mode-class="ani" :styles="transClass" :duration="duration"
+    		:show="showTrans" @click="onTap">
+    		<view class="popup-wrapper-box" @click.stop.prpen>
+    			<slot></slot>
+    		</view>
+    	</z-transition>
+    </view>
+  </teleport>
+	
 </template>
 
 <script>
@@ -176,6 +179,7 @@
 					// this.customOpen && this.customClose()
 					this.timer = setTimeout(() => {
 						// this.showPopup = false
+
 						this.$emit('update:modelValue', false);
 					}, 300)
 				})

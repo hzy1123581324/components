@@ -32,6 +32,10 @@
       show: {
           type: Boolean,
           default: true
+      },
+      cricleStyle: {
+        type: String,
+        default: ''
       }
     });
   

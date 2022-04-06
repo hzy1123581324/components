@@ -20,9 +20,23 @@
      * @property {String} classStyle 外部样式
      * @example <z-textarea v-model="value" placeholder="占位符" classStyle=''></z-textarea>
      */
-    import {ref} from "vue";
+    import {ref,inject,watch,onBeforeMount} from "vue";
+    import {throttle,debounce} from '../../utils/optimize.js';
     let currentValue = ref("");
     let showTextarea = ref(false);
+    // 从z-form 传递下来的数据
+    const formValue = inject('formValue',null);
+    const formName = inject('formName','');
+    
+    onBeforeMount(() => {
+      currentValue.value = props.modelValue;
+      // console.log(formName.value);
+      if (formName && formName.value == '' && props.name != '') {
+        // console.log('9999999999999')
+        formName.value = props.name;
+      }
+    });
+    
     const props = defineProps({
         autoFocus: {
             type: Boolean,
@@ -36,6 +50,10 @@
         modelValue: {
             type: String,
             default: '',
+        },
+        // v-model 修饰符
+        modelModifiers: {
+          default: () => ({}),
         },
         maxlength: {
             type: Number,
@@ -62,16 +80,64 @@
 
     });
     let isOverlap = ref(true);
-    function textareaBlur() {
-        showTextarea = false;
-        isOverlap.value = currentValue.value==''
-    }
+
     
     function change(e){
         currentValue.value = e.detail.value;
+        // 传递到form
+        if(formValue){
+          formValue[props.name] = e.detail.value;
+        }
     }
     function clear(){
         
+    }
+    // 用于 v-mode.defer=""
+    // 节流，每间隔500毫秒执行一次
+    let cacheval = '';
+    const inputThrottle2 =
+      throttle(() => {
+        // console.log('&&&&&&&&&&&&&777777777');
+        emit("update:modelValue", cacheval);
+    
+      }, 500);
+    // 防抖，防止上面没有取到最新值
+    const inputDebounce2 = debounce(() => {
+      // console.log('&&&&&&&&&&&&&444444444');
+      emit("update:modelValue", cacheval);
+    }, 600);
+    watch(currentValue, (newval, oldval) => {
+      // console.log(newval);
+      // console.log('$$$$$$$$$$$');
+      if (formValue) {
+        formValue[formName.value] = newval;
+      }
+      // 检验规则
+      if (validateField) {
+        validateField(formName.value, 'change');
+      }
+      cacheval = newval;
+      if (props.modelModifiers.defer) {
+        // 节流，每间隔500毫秒执行一次
+        inputThrottle2();
+        // 防抖，防止上面没有取到最新值
+        inputDebounce2();
+      } else {
+        emit("update:modelValue", newval)
+      }
+    });
+    
+    // 监听失去焦点事件
+    function textareaBlur() {
+      showTextarea = false;
+      isOverlap.value = currentValue.value == '';
+      if (formValue) {
+        formValue[formName.value] = defaultValue.value || '';
+      }
+      // 检验规则
+      if (validateField) {
+        validateField(formName.value, 'blur');
+      }
     }
 </script>
 

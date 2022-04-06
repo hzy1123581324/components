@@ -43,3 +43,8 @@
 		})
 		
 </script>
+<style scoped>
+  .root{
+    height: 100%;
+  }
+</style>

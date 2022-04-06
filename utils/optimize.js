@@ -36,8 +36,8 @@ export function throttle(fn, delay) {
  * @return {Function} Promised对象
 */ 
 export function defer(time = 0, done = "") {
-  console.log(time);
-  console.log('%%%%%%%%%%')
+  // console.log(time);
+  // console.log('%%%%%%%%%%')
 	/// 如果延迟时间小于等于0,直接执行
 	if(Number(time.toString())<=0){
 		return new Promise(resolve=>{
