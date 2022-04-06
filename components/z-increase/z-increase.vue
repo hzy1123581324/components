@@ -1,5 +1,5 @@
 <template>
-  <view class="counter-box">
+  <view class="counter-box" @click.stop>
     <view @click="delFun">
       <slot name="del" :candel="candel">
         <view :class="['del', currentValue - min <= 0 && 'undel']"></view>

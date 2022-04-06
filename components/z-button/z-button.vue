@@ -52,10 +52,12 @@
   import {
     ref,
     computed,
-    nextTick
+    nextTick,
+    getCurrentInstance
   } from "vue";
   import {defer} from "../../utils/optimize.js";
   import {getElQuery} from "../../composition/public.js";
+      const { proxy } = getCurrentInstance();
   const props = defineProps({
     // 按钮形状，circle（两边为半圆），square（带圆角）
     shape: {
@@ -113,6 +115,7 @@
 
 
   const rippleStyle = computed(() => {
+    
     return `--btn-ripple-top:${rippleTop.value}px;
             --btn-ripple-left:${rippleLeft.value}px;
             --btn-ripple-size:${targetWidth.value}px;`
@@ -134,14 +137,13 @@
       // 每次点击时，移除上一次的类，再次添加，才能触发动画效果
       waveActive.value = false;
       nextTick(() => {
-       
         getWaveQuery(e);
       });
     }
     if(props.showloading){
       isLoading.value = true
     }
-    await props.onClickBefore()
+    await props.onClickBefore();
     // if (props.onClickBefore) {
     //   // console.log('异步处理')
     //   return unrepeat();
@@ -149,23 +151,24 @@
     if(props.showloading){
       isLoading.value = false
     }
-    console.log('22222222222222');
+    // console.log('22222222222222');
     
-    emit('click')
-    switch (props.type) {
-      // 链接成功，可以放送订阅
-      case 'navigation':
-        break;
-      default:
-        break;
-    }
+    emit('click');
+    // switch (props.type) {
+    //   // 链接成功，可以放送订阅
+    //   case 'navigation':
+    //     break;
+    //   default:
+    //     break;
+    // }
   }
   // 查询按钮的节点信息
   function getWaveQuery(e) {
-    console.log(getElQuery('.button-box'));
-    getElQuery('.button-box').then(res => {
+    console.log('&&&&&&');
+    // console.log(getElQuery('.button-box'));
+    getElQuery('.button-box',proxy).then(res => {
       // 查询返回的是一个数组节点
-      console.log(res,e);
+      // console.log(res,e);
       let data = res[0];
       // 查询不到节点信息，不操作
       if (!data.width || !data.width) return;
@@ -192,31 +195,16 @@
       // 但是由于`transform-origin`默认是center，所以这里再减去半径才是水波纹view应该的位置
       // 总的来说，就是把水波纹的矩形（变换后的圆形）的中心点，移动到我们的触摸点位置
       // 使用data.left/data.top 计算，当有多少按钮时有样式错乱问题
-      rippleTop.value = touchesY - e.target.offsetTop - data.targetWidth / 2;
-      rippleLeft.value = touchesX - e.target.offsetLeft - data.targetWidth / 2;
+      rippleTop.value = touchesY - data.top - data.targetWidth / 2;
+      rippleLeft.value = touchesX - data.left - data.targetWidth / 2;
+      // rippleLeft.value = touchesX - e.target.offsetLeft - data.targetWidth / 2;
       nextTick(() => {
         waveActive.value = true;
       });
     });
   }
 
-  // 仿重复点击
- // async function  unrepeat() {
- //    canclick = false;
- //    if (props.outTime) {
- //      setTimeout(() => {
- //        canclick = true;
- //      }, props.outTime)
- //    }
- //    await props.onClickBefore();
- //    if (props.stayTime) {
- //      setTimeout(() => {
- //        canclick = true;
- //      }, props.stayTime)
- //    } else {
- //      canclick = true;
- //    }
- //  }
+
 </script>
 
 <style scoped>

@@ -7,7 +7,7 @@
         <view class="search-icon iconfont iconicon-sousuo" v-if="showPrefixIcon&&type=='search'"></view>
       </slot>
     </view>
-    
+
     <!-- 输入框 -->
     <input class="input-into" :type="inputType" :value="defaultValue" :password="type == 'password' && !showPassword"
       :placeholder="placeholder" :placeholder-style="placeholderStyle" placeholderClass="input-placeholder"
@@ -31,10 +31,6 @@
 
     </view>
 
-    <!-- 报错提示 -->
-    <view class="input-error" v-if="errMsg">
-      {{errMsg}}
-    </view>
   </view>
 
 </template>
@@ -91,21 +87,20 @@
     inject,
 
   } from "vue";
-  
-  
+
   let defaultValue = ref("");
   // 密码是否可见
   let showPassword = ref(false);
   const emit = defineEmits(['update:modelValue', 'focus', 'confirm', "change"]);
-  
-  
-  // 从z-form 传递下来的数据
-  const formValue = inject('formValue',null);
-  const rules = inject('rules',null);
-  const verification = inject('verification',null);
 
-  
-  
+
+  // 从z-form 传递下来的数据
+  const formValue = inject('formValue', null);
+
+  // 检查某一个规则
+  const validateField = inject('validateField', null);
+  // 从form-item 传递过来
+  let formName = inject("formName", '');
 
   const props = defineProps({
     // 用于form 表单提交
@@ -130,7 +125,7 @@
 
     },
     // v-model 修饰符
-    modelModifiers:{
+    modelModifiers: {
       default: () => ({}),
     },
     /// 输入类型默认文本框
@@ -148,7 +143,7 @@
       default: false
     },
     rule: {
-      type: Boolean,
+      type: [Object, Array],
       default: {}
     },
     /// 占位符
@@ -183,15 +178,6 @@
     }
   });
 
-  // let focused = computed({
-  // 	get() {
-  // 		return props.focus;
-  // 	},
-  // 	set(val) {
-  // 		props.focus
-  // 	}
-  // });
-  
   let isOverlap = ref(true);
   // 处理type显示问题
   const inputType = computed(() => {
@@ -203,13 +189,15 @@
         return props.type;
     }
   });
- 
- // 目前只考虑form 验证，不考虑z-input rules 验证
-  const errMsg = computed(()=>{
-    verification
-  });
+
+
   onBeforeMount(() => {
     defaultValue.value = props.modelValue;
+    // console.log(formName.value);
+    if (formName && formName.value == '' && props.name != '') {
+      // console.log('9999999999999')
+      formName.value = props.name;
+    }
   });
 
   watch(() => props.modelValue, (newval, oldval) => {
@@ -233,7 +221,7 @@
     // console.log('&&&&&&&&&&&&&444444444');
     emit("change", newval);
   }, 800);
-  
+
   // 用于 v-mode.defer=""
   // 节流，每间隔500毫秒执行一次
   let cacheval = '';
@@ -251,20 +239,22 @@
   watch(defaultValue, (newval, oldval) => {
     // console.log(newval);
     // console.log('$$$$$$$$$$$');
+    if (formValue) {
+      formValue[formName.value] = newval;
+    }
+    // 检验规则
+    if (validateField) {
+      validateField(formName.value, 'change');
+    }
     cacheval = newval;
-    if(props.modelModifiers.defer){
+    if (props.modelModifiers.defer) {
       // 节流，每间隔500毫秒执行一次
       inputThrottle2();
       // 防抖，防止上面没有取到最新值
       inputDebounce2();
-    }
-    else{
+    } else {
       emit("update:modelValue", newval)
     }
-    
-    
-    // console.log('监听++++++');
-
   });
 
   // 监听获得焦点事件
@@ -275,8 +265,15 @@
   }
   // 监听失去焦点事件
   function handleBlur() {
-    
-    isOverlap.value = defaultValue.value=='';
+
+    isOverlap.value = defaultValue.value == '';
+    if (formValue) {
+      formValue[formName.value] = defaultValue.value || '';
+    }
+    // 检验规则
+    if (validateField) {
+      validateField(formName.value, 'blur');
+    }
   }
   //监听输入框输入
   function handleInput(e) {
@@ -288,6 +285,7 @@
     inputThrottle(e);
     // 防抖，防止上面没有取到最新值
     inputDebounce(e);
+    
   }
   // 点击键盘确认键
   function onConfirm() {
@@ -340,7 +338,7 @@
     border-left: var(--input-into-border-lf, var(--input-into-border));
     padding-left: var(--input-into-pd-lf, 0);
     padding-right: var(--input-into-pd-rg, 0.5em);
-    transition: all ease-in-out 0.3s 0s; 
+    transition: all ease-in-out 0.3s 0s;
   }
 
   .input-placeholder {
@@ -350,18 +348,7 @@
     padding-right: var(--input-place-pd-rg, inherit);
   }
 
-  /* 错误信息 */
-  .input-error {
-    width: auto;
-    color: var(--input-err-color, red);
-    font-size: var(--input-err-fs, inherit);
-    padding: var(--input-pad, 1em);
-    position:var(--input-error-position,absolute);
-    top: var(--input-error-top,100%);
-    left: var(--input-error-lf,0);
-    right: var(--input-error-rg,0);
-    z-index: 10;
-  }
+
 
 
   /* 当使用背景图标是需要通过设置透明度隐藏字体图标 */
@@ -408,26 +395,27 @@
     color: var(--input-icon-right-color, #A6A6AC);
     box-sizing: content-box;
     border: 10rpx solid transparent;
-    margin-right: 10rpx;
     background-position: center;
     background-repeat: no-repeat;
     background-size: 100% 100%;
-
+    border: 10rpx solid transparent;
+    margin-right: 10rpx;
   }
 
   /* 前缀 */
   .input-prefix {
     width: auto;
-    transition: all ease-in-out .3s 0s; 
+    transition: all ease-in-out .3s 0s;
   }
 
   .input-prefix.vertical {
     width: 100%;
   }
-    /* 重叠 */
-  .input-prefix.overlap{
+
+  /* 重叠 */
+  .input-prefix.overlap {
     width: 100%;
-    
+
     font-size: var(--input-overlap-font-size);
     color: var(--input-overlap-color);
     pointer-events: none;
@@ -435,10 +423,11 @@
     padding-bottom: var(--input-overlap-btm, 0);
     padding-left: var(--input-overlap-lf, 0);
     padding-right: var(--input-overlap-rg, 0);
-    transform: translateY(var(--input-overlap-move,100%));
+    transform: translateY(var(--input-overlap-move, 100%));
     pointer-events: none;
   }
-  .input-prefix.noOverlap{
+
+  .input-prefix.noOverlap {
     width: 100%;
     font-size: var(--input-no-overlap-font-size);
     color: var(--input-no-overlap-color);
@@ -449,8 +438,9 @@
     padding-right: var(--input-no-overlap-rg, 0);
     transform: translateY(0);
   }
-  .overlap+.input-into{
-    transform: translateY(calc(var(--input-overlap-input-move,0) / -2));
+
+  .overlap+.input-into {
+    transform: translateY(calc(var(--input-overlap-input-move, 0) / -2));
     height: var(--input-overlap-input-height, unset);
   }
 </style>

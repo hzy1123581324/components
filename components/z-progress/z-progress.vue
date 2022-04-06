@@ -1,11 +1,12 @@
 <template>
-    <view class="progress" :style="`--progress-width:${percent}%`">
-        <view :class="['progress-bar',striped && 'striped',striped && stripedActive && 'striped-active']">{{showPercent ? percent + '%' : ''}}</view>
-    </view>
+  <view class="progress" :style="`--progress-width:${percent}%`">
+    <view :class="['progress-bar',striped && 'striped',striped && stripedActive && 'striped-active']">
+      {{showPercent ? percent + '%' : ''}}</view>
+  </view>
 </template>
 
-<script>
-    /**
+<script setup>
+  /**
 	 * lineProgress 线型进度条
 	 * @description 展示操作或任务的当前进度，比如上传文件，是一个线形的进度条。
 	 * @tutorial https://www.uviewui.com/components/lineProgress.html
@@ -29,82 +30,74 @@
         }
      </style>
 	 */
-    export default {
-        name: "z-progress",
-        props: {
-            // 进度百分比，数值
-            percent: {
-                type: [Number,String],
-                default: 0
-            },
-            // 是否在进度条内部显示百分比的值
-            showPercent: {
-                type: Boolean,
-                default: false
-            },
-            // 是否显示条纹
-            striped: {
-                type: Boolean,
-                default: false
-            },
-            // 条纹是否显示活动状态
-            stripedActive: {
-                type: Boolean,
-                default: false
-            }
-        },
-        data() {
-            return {}
-        },
-        methods: {
 
-        }
+  const props = defineProps({
+    // 进度百分比，数值
+    percent: {
+      type: [Number, String],
+      default: 0
+    },
+    // 是否在进度条内部显示百分比的值
+    showPercent: {
+      type: Boolean,
+      default: false
+    },
+    // 是否显示条纹
+    striped: {
+      type: Boolean,
+      default: false
+    },
+    // 条纹是否显示活动状态
+    stripedActive: {
+      type: Boolean,
+      default: false
     }
+  })
 </script>
 
 <style scoped>
-    .progress {
-        overflow: hidden;
-        height:var(--progress-height,15px);
-        display: inline-flex;
-        align-items: center;
-        width: 100%;
-        border-radius: var(--progress-radius,50px);
-        background-color: var(--progress-inactive-color,#ececec);
-        vertical-align: top;
+  .progress {
+    overflow: hidden;
+    height: var(--progress-height, 15px);
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    border-radius: var(--progress-radius, 50px);
+    background-color: var(--progress-inactive-color, #ececec);
+    vertical-align: top;
+  }
+
+  .progress-bar {
+    --tran: all 0.4s ease;
+    width: var(--progress-width, 0);
+    height: 100%;
+    align-items: center;
+    display: flex;
+    justify-items: flex-end;
+    justify-content: space-around;
+    font-size: var(--progress-font-size, inherit);
+    color: var(--progress-color, #fff);
+    transition: var(--progress-trans, var(--tran));
+    background-color: var(--progress-active-bg, var(--color-theme, #19be6b));
+  }
+
+  .striped {
+    --shadow: linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    background-image: var(--progress-striped, var(--shadow));
+    background-size: 39px 39px;
+  }
+
+  .striped-active {
+    animation: progress-stripes 2s linear infinite;
+  }
+
+  @keyframes progress-stripes {
+    0% {
+      background-position: 0 0;
     }
 
-    .progress-bar {
-        --tran: all 0.4s ease;
-        width: var(--progress-width,0);
-        height: 100%;
-        align-items: center;
-        display: flex;
-        justify-items: flex-end;
-        justify-content: space-around;
-        font-size: var(--progress-font-size,inherit);
-        color: var(--progress-color,#fff);
-        transition: var(--progress-trans,var(--tran));
-        background-color: var(--progress-active-bg,var(--color-theme, #19be6b));
+    100% {
+      background-position: 39px 0;
     }
-
-    .striped {
-        --shadow: linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
-        background-image: var(--progress-striped,var(--shadow));
-        background-size: 39px 39px;
-    }
-
-    .striped-active {
-        animation: progress-stripes 2s linear infinite;
-    }
-
-    @keyframes progress-stripes {
-        0% {
-            background-position: 0 0;
-        }
-
-        100% {
-            background-position: 39px 0;
-        }
-    }
+  }
 </style>

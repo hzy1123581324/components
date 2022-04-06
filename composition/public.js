@@ -92,17 +92,22 @@ export async function getCopy() {
 
 
 // 获取节点信息
- export function getElQuery(className) {
+ export function getElQuery(className,component = null) {
+    // 组件内需要传component 
+    // const { proxy } = getCurrentInstance();
+    // component = proxy
     return new Promise(resolve => {
       let queryInfo = '';
       // 获取元素节点信息，请查看uniapp相关文档
       // https://uniapp.dcloud.io/api/ui/nodes-info?id=nodesrefboundingclientrect
-      queryInfo = uni.createSelectorQuery().in();
+      queryInfo = uni.createSelectorQuery().in(component);
       //#ifdef MP-ALIPAY
       queryInfo = uni.createSelectorQuery();
       //#endif
       queryInfo.select(className).boundingClientRect();
       queryInfo.exec(data => {
+        // console.log(data);
+        // console.log('%%%%%%%%%%%%%%%');
         resolve(data);
       });
     });

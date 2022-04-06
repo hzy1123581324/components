@@ -4,7 +4,7 @@
     <view class="picker-inset" @click="_handlBefore">
       <slot :isopen="show"></slot>
     </view>
-    <z-popup v-model="show" type="bottom" @close="closeHandler">
+    <z-popup v-model="show" type="bottom" >
       <view class="picker-box" :style="`--current-column:${currentColumn}`">
         <view class="picker-head flex-between-x flex-center-y">
           <!-- 这这个是标题 -->
@@ -295,7 +295,6 @@ function bindChange(e) {
 /// 点击了取消按钮
 function closeHandler() {
   emit("cancel", "");
-
   _handlBefore();
 }
 /// 点击了确认按钮
