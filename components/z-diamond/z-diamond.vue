@@ -4,7 +4,7 @@
     </view>
 </template>
 
-<script>
+<script setup>
     /**
      * navbar 菱形，梯形组件
      * @description ''
@@ -22,9 +22,7 @@
     
      </style>
      */
-    export default {
-        name: 'z-diamond',
-    }
+   
 </script>
 
 <style scoped>

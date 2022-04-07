@@ -1,6 +1,6 @@
 <template>
-    <view :class="['place','error']">
-        <image class="image-target" :src="src" mode="" @error="imageErr" @load="imageLoad"></image>
+    <view :class="['place','error']" >
+        <image :class="['image-target', show&&'active']" :src="src" :mode="mode" @error="imageErr" @load="imageLoad" ></image>
     </view>
 </template>
 
@@ -8,6 +8,9 @@
     import {ref,reactive} from "vue";
     const props = defineProps({
       src: {
+        type: String,
+      },
+      mode:{
         type: String,
       }
     })
@@ -20,16 +23,21 @@
 </script>
 
 <style scoped>
+  .place,.error{
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
   .place{
     background-image: var(--image-fade-place);
-    background-size: 100% 100%;
   }
   .error{
     background-image: var(--image-fade-error);
-    background-size: 100% 100%;
   }
   .image-target{
      opacity: 0;
+     width: 100%;
+     height: 100%;
   }
   .image-target.active{
     opacity: 1;
