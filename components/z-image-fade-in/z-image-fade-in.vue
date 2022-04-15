@@ -1,6 +1,6 @@
 <template>
     <view v-bind="$attrs" :class="['image-fade-in',state]" >
-        <image v-bind="$attrs" :class="['image-target', state ]" :src="src" :mode="mode" @error="imageErr" @load="imageLoad" ></image>
+      <image v-bind="$attrs" :class="['image-target', state ]" :src="src" :mode="mode" @error="imageErr" @load="imageLoad" ></image>
     </view>
 </template>
 
@@ -45,10 +45,12 @@
 </script>
 
 <style scoped>
+
   .image-fade-in{
     border-radius: var(--image-fade-radius,inherit);
   }
   /* 可以通过伪类+高斯模糊实现动画效果 */
+
   .place,.error{
     background-size: 100% 100%;
     background-repeat: no-repeat;

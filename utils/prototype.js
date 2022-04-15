@@ -1,5 +1,6 @@
 //添加原型链
 
+
 /*
 大数相加
 在 js 中，对于超大整数的运算，还存在格式问题
@@ -117,6 +118,7 @@ Math.Div = function(arg1, arg2) {
   r1 = Number(arg1.toString().replace(".", ""));
   r2 = Number(arg2.toString().replace(".", ""));
   return r1 / r2 * Math.pow(10, t2 - t1);
+
 }
 
 
@@ -149,6 +151,7 @@ Number.prototype.toFixed = function(length) {
     }
   }
   return result;
+
 }
 // 下取整，保留n位小数，不足补零
 
@@ -159,6 +162,7 @@ Number.prototype.fixedPoint = function(n = 2) {
   let int = String(this).split('.')[0];
   // 后补零
   // console.log(Array(n),Array(n+1).join(0))
+
   return int + '.' + point.padEnd(n, '0')
 }
 /********************************字符串拓展*************************************************************/ 
@@ -180,3 +184,6 @@ String.prototype.trim = function(str, pos = 'both') {
     return this;
   }
 }
+
+
+
