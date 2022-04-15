@@ -7,7 +7,7 @@
     </view>
 </template>
 
-<script>
+<script setup>
     /**
      * z-icon-shadow 
      * @description 图标变色，带透明度的图标
@@ -23,17 +23,7 @@
         
      </style>
      */
-    export default {
-        name: "icon-shadow",
-
-        data() {
-            return {};
-        },
-        mounted() {},
-        methods: {},
-        watch: {},
-        computed: {}
-    };
+    
 </script>
 <style scoped>
     .icon-shadow {

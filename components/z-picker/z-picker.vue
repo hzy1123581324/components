@@ -282,10 +282,6 @@ function bindChange(e) {
   currentIndex.push(...e.detail.value);
   // console.log(currentIndex);
   // debounce(()=>{
-  setTimeout(() => {
-    currentIndex[1] = 6;
-  }, 2000);
-  console.log(currentIndex.value);
   // emit('update:current',currentIndex);
   // },500)
   emit("change", []);
@@ -345,7 +341,7 @@ function confirmHandler() {
 .confirm {
   text-align: right;
   min-width: 5em;
-  color: var(--color-theme);
+  color: var(--theme);
 }
 
 .picker-indicator {

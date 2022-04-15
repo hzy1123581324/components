@@ -6,7 +6,7 @@
         
         <textarea :class="['test-area-into',classStyle]" v-model="modelValue" :maxlength="maxlength" :auto-height="true" :auto-focus="true" @blur="textareaBlur"
             :placeholder="placeholder" placeholder-class="placeholder-class" @input="change" v-if="showTextarea" />
-        <view :class="['test-area-view',currentValue==''&&'placeholder-class' ,classStyle]"  v-show="!showTextarea"  @click="showTextarea = true,isOverlap=false">{{currentValue||placeholder}}</view>
+        <view :class="['test-area-view',currentValue==''&&'placeholder-class',classStyle]"  v-show="!showTextarea"  @click="showTextarea = true,isOverlap=false">{{currentValue||placeholder}}</view>
     </view>
 </template>
 
@@ -22,20 +22,15 @@
      */
     import {ref,inject,watch,onBeforeMount} from "vue";
     import {throttle,debounce} from '../../utils/optimize.js';
+    const emit = defineEmits(["update:modelValue"]);
     let currentValue = ref("");
     let showTextarea = ref(false);
     // 从z-form 传递下来的数据
     const formValue = inject('formValue',null);
     const formName = inject('formName','');
+    // 检查某一个规则
+    const validateField = inject('validateField', null);
     
-    onBeforeMount(() => {
-      currentValue.value = props.modelValue;
-      // console.log(formName.value);
-      if (formName && formName.value == '' && props.name != '') {
-        // console.log('9999999999999')
-        formName.value = props.name;
-      }
-    });
     
     const props = defineProps({
         autoFocus: {
@@ -80,8 +75,27 @@
 
     });
     let isOverlap = ref(true);
-
-    
+    onBeforeMount(() => {
+      if (formName && formName.value == '' && props.name != '') {
+        formName.value = props.name;
+      }
+      console.log(formValue,formName.value,formValue[formName.value],'txtxtxtxtttttt')
+      if(props.modelValue){
+        currentValue.value = props.modelValue;
+      }else if(formValue&&formValue[formName.value]){
+        currentValue.value = formValue&&formValue[formName.value];
+        isOverlap.value = false;
+      }
+      
+      
+    });
+    watch(()=>formValue&&formValue[formName.value],(newval,oldval)=>{
+      if(newval!=''&& !currentValue.value){
+        currentValue.value = formValue[formName.value];
+        isOverlap.value = false;
+      }
+      // console.log('333333')
+    });
     function change(e){
         currentValue.value = e.detail.value;
         // 传递到form
@@ -129,10 +143,10 @@
     
     // 监听失去焦点事件
     function textareaBlur() {
-      showTextarea = false;
+      showTextarea.value = false;
       isOverlap.value = currentValue.value == '';
       if (formValue) {
-        formValue[formName.value] = defaultValue.value || '';
+        formValue[formName.value] = currentValue.value || '';
       }
       // 检验规则
       if (validateField) {
@@ -166,8 +180,8 @@
     }
 
     .placeholder-class{
-        color: var(var(--textarea-place-color),inherit);
-        font-size: var(var(--textarea-place-font-size),inherit);
+        color: var(--textarea-place-color,inherit);
+        font-size: var(--textarea-place-font-size,inherit);
     }
     .test-area-into {
         z-index: 10;

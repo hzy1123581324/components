@@ -66,7 +66,7 @@
       default: 'block',
       validator: (value) => {
         // 这个值必须匹配下列字符串中的一个
-        let typeTxt = "line,block"; //line 在同一行，block另起一行
+        const typeTxt = "line,block"; //line 在同一行，block另起一行
         // let typeList = typeTxt.split(',');
         return typeTxt.indexOf(value) !== -1
       }

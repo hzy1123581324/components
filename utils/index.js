@@ -29,33 +29,9 @@ export function getPx(value, unit = false) {
     return unit ? `${parseInt(value)}px` : parseInt(value)
 }
 
-/**
- * @description 进行延时，以达到可以简写代码的目的 比如: await uni.$u.sleep(20)将会阻塞20ms
- * @param {number} value 堵塞时间 单位ms 毫秒
- * @returns {Promise} 返回promise
- */
-export function sleep(value = 30) {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve()
-        }, value)
-    })
-}
-/**
- * @description 运行期判断平台
- * @returns {string} 返回所在平台(小写) 
- * @link 运行期判断平台 https://uniapp.dcloud.io/frame?id=判断平台
- */
-export function os() {
-    return uni.getSystemInfoSync().platform.toLowerCase()
-}
-/**
- * @description 获取系统信息同步接口
- * @link 获取系统信息同步接口 https://uniapp.dcloud.io/api/system/info?id=getsysteminfosync 
- */
-export function sys() {
-    return uni.getSystemInfoSync()
-}
+
+
+
 
 /**
  * @description 取一个区间数
@@ -70,39 +46,7 @@ export function random(min, max) {
     return 0
 }
 
-/**
- * @param {Number} len uuid的长度
- * @param {Boolean} firstU 将返回的首字母置为"u"
- * @param {Nubmer} radix 生成uuid的基数(意味着返回的字符串都是这个基数),2-二进制,8-八进制,10-十进制,16-十六进制
- */
-export function guid(len = 32, firstU = true, radix = null) {
-    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
-    const uuid = []
-    radix = radix || chars.length
 
-    if (len) {
-        // 如果指定uuid长度,只是取随机的字符,0|x为位运算,能去掉x的小数位,返回整数位
-        for (let i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix]
-    } else {
-        let r
-        // rfc4122标准要求返回的uuid中,某些位为固定的字符
-        uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-'
-        uuid[14] = '4'
-
-        for (let i = 0; i < 36; i++) {
-            if (!uuid[i]) {
-                r = 0 | Math.random() * 16
-                uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r]
-            }
-        }
-    }
-    // 移除第一个字符,并用u替代,因为第一个字符为数值时,该guuid不能用作id或者class
-    if (firstU) {
-        uuid.shift()
-        return `u${uuid.join('')}`
-    }
-    return uuid.join('')
-}
 
 /**
 * @description 获取父组件的参数，因为支付宝小程序不支持provide/inject的写法
@@ -238,15 +182,7 @@ export function error(err) {
     }
 }
 
-/**
- * @description 打乱数组
- * @param {array} array 需要打乱的数组
- * @returns {array} 打乱后的数组
- */
-export function randomArray(array = []) {
-    // 原理是sort排序,Math.random()产生0<= x < 1之间的数,会导致x-0.05大于或者小于0
-    return array.sort(() => Math.random() - 0.5)
-}
+
 
 // padStart 的 polyfill，因为某些机型或情况，还无法支持es7的padStart，比如电脑版的微信小程序
 // 所以这里做一个兼容polyfill的兼容处理
@@ -372,86 +308,6 @@ export function timeFrom(timestamp = null, format = 'yyyy-mm-dd') {
 }
 
 /**
- * @description 去除空格
- * @param String str 需要去除空格的字符串
- * @param String pos both(左右)|left|right|all 默认both
- */
-export function trim(str, pos = 'both') {
-    str = String(str)
-    if (pos == 'both') {
-        return str.replace(/^\s+|\s+$/g, '')
-    }
-    if (pos == 'left') {
-        return str.replace(/^\s*/, '')
-    }
-    if (pos == 'right') {
-        return str.replace(/(\s*$)/g, '')
-    }
-    if (pos == 'all') {
-        return str.replace(/\s+/g, '')
-    }
-    return str
-}
-
-/**
- * @description 对象转url参数
- * @param {object} data,对象
- * @param {Boolean} isPrefix,是否自动加上"?"
- * @param {string} arrayFormat 规则 indices|brackets|repeat|comma
- */
-export function queryParams(data = {}, isPrefix = true, arrayFormat = 'brackets') {
-    const prefix = isPrefix ? '?' : ''
-    const _result = []
-    if (['indices', 'brackets', 'repeat', 'comma'].indexOf(arrayFormat) == -1) arrayFormat = 'brackets'
-    for (const key in data) {
-        const value = data[key]
-        // 去掉为空的参数
-        if (['', undefined, null].indexOf(value) >= 0) {
-            continue
-        }
-        // 如果值为数组，另行处理
-        if (value.constructor === Array) {
-            // e.g. {ids: [1, 2, 3]}
-            switch (arrayFormat) {
-                case 'indices':
-                    // 结果: ids[0]=1&ids[1]=2&ids[2]=3
-                    for (let i = 0; i < value.length; i++) {
-                        _result.push(`${key}[${i}]=${value[i]}`)
-                    }
-                    break
-                case 'brackets':
-                    // 结果: ids[]=1&ids[]=2&ids[]=3
-                    value.forEach((_value) => {
-                        _result.push(`${key}[]=${_value}`)
-                    })
-                    break
-                case 'repeat':
-                    // 结果: ids=1&ids=2&ids=3
-                    value.forEach((_value) => {
-                        _result.push(`${key}=${_value}`)
-                    })
-                    break
-                case 'comma':
-                    // 结果: ids=1,2,3
-                    let commaStr = ''
-                    value.forEach((_value) => {
-                        commaStr += (commaStr ? ',' : '') + _value
-                    })
-                    _result.push(`${key}=${commaStr}`)
-                    break
-                default:
-                    value.forEach((_value) => {
-                        _result.push(`${key}[]=${_value}`)
-                    })
-            }
-        } else {
-            _result.push(`${key}=${value}`)
-        }
-    }
-    return _result.length ? prefix + _result.join('&') : ''
-}
-
-/**
  * 显示消息提示框
  * @param {String} title 提示的内容，长度与 icon 取值有关。
  * @param {Number} duration 提示的延迟时间，单位毫秒，默认：2000
@@ -464,39 +320,7 @@ export function toast(title, duration = 2000) {
     })
 }
 
-/**
- * @description 根据主题type值,获取对应的图标
- * @param {String} type 主题名称,primary|info|error|warning|success
- * @param {boolean} fill 是否使用fill填充实体的图标
- */
-export function type2icon(type = 'success', fill = false) {
-    // 如果非预置值,默认为success
-    if (['primary', 'info', 'error', 'warning', 'success'].indexOf(type) == -1) type = 'success'
-    let iconName = ''
-    // 目前(2019-12-12),info和primary使用同一个图标
-    switch (type) {
-        case 'primary':
-            iconName = 'info-circle'
-            break
-        case 'info':
-            iconName = 'info-circle'
-            break
-        case 'error':
-            iconName = 'close-circle'
-            break
-        case 'warning':
-            iconName = 'error-circle'
-            break
-        case 'success':
-            iconName = 'checkmark-circle'
-            break
-        default:
-            iconName = 'checkmark-circle'
-    }
-    // 是否是实体类型,加上-fill,在icon组件库中,实体的类名是后面加-fill的
-    if (fill) iconName += '-fill'
-    return iconName
-}
+
 
 /**
  * @description 数字格式化
@@ -673,35 +497,3 @@ export function setConfig({
     uni.$u.color = deepMerge(uni.$u.color, color)
     uni.$u.zIndex = deepMerge(uni.$u.zIndex, zIndex)
 }
-
-// export default {
-// 	range,
-// 	getPx,
-// 	sleep,
-// 	os,
-// 	sys,
-// 	random,
-// 	guid,
-// 	$parent,
-// 	addStyle,
-// 	addUnit,
-// 	deepClone,
-// 	deepMerge,
-// 	error,
-// 	randomArray,
-// 	timeFormat,
-// 	timeFrom,
-// 	trim,
-// 	queryParams,
-// 	toast,
-// 	type2icon,
-// 	priceFormat,
-// 	getDuration,
-// 	padZero,
-// 	formValidate,
-// 	getProperty,
-// 	setProperty,
-// 	page,
-// 	pages,
-// 	setConfig
-// }

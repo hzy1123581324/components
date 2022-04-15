@@ -158,7 +158,7 @@
     },
     /// 是否禁用
     disabled: {
-      type: [Boolean,String],
+      type: [Boolean, String],
       default: false,
     },
     /// 输入的最大长度
@@ -192,12 +192,25 @@
 
 
   onBeforeMount(() => {
-    defaultValue.value = props.modelValue;
-    // console.log(formName.value);
+
     if (formName && formName.value == '' && props.name != '') {
-      // console.log('9999999999999')
       formName.value = props.name;
     }
+    if (props.modelValue) {
+      defaultValue.value = props.modelValue;
+    } else if (formValue && formValue[formName.value]) {
+      defaultValue.value = formValue[formName.value];
+      isOverlap.value = false;
+    }
+
+
+  });
+  watch(() => formValue && formValue[formName.value], (newval, oldval) => {
+    if (newval != '' && !defaultValue.value) {
+      defaultValue.value = formValue[formName.value];
+      isOverlap.value = false;
+    }
+    // console.log('333333')
   });
 
   watch(() => props.modelValue, (newval, oldval) => {
@@ -285,7 +298,7 @@
     inputThrottle(e);
     // 防抖，防止上面没有取到最新值
     inputDebounce(e);
-    
+
   }
   // 点击键盘确认键
   function onConfirm() {
@@ -399,7 +412,7 @@
     background-repeat: no-repeat;
     background-size: 100% 100%;
     border: 10rpx solid transparent;
-    margin-right: var(--input-icon-mar-rg,unset);
+    margin-right: var(--input-icon-mar-rg, unset);
   }
 
   /* 前缀 */

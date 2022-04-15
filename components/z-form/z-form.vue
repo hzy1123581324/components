@@ -11,7 +11,9 @@
     provide,
     watch,
     computed,
-    nextTick
+    nextTick,
+    onBeforeMount,
+    
   } from "vue";
   import Schema from "../../utils/validator.js";
   // 去除警告信息
@@ -56,11 +58,13 @@
   // const verification = computed(()=>{
   //   return {}
   // });
-
+  onBeforeMount(()=>{
+    Object.assign(formValue,props.modelValue);
+  })
 
   // 验证
   function validateField(name, event) {
-    console.log(props.rules[name]);
+    // console.log(props.rules[name]);
     const validator = new Schema({
       [name]: props.rules[name]
     });
@@ -79,13 +83,27 @@
     });
 
   }
+  
+  // 清理验证信息 
+  function clearVerificationResults(){
+    for(let key in verificationResults){
+      delete verificationResults[key];
+    }
+  }
+  // 清理验证信息
+  function clearVerificationResultsOne(key){
+
+    delete verificationResults[key];
+    
+  }
+  
   // 验证全部
   async function validate() {
-    const validator = new Schema({
-      [name]: props.rules[name]
-    });
+    // console.log(props.rules,formValue);
+    const validator = new Schema(props.rules);
     // console.log(validator,'验证子类');
     await nextTick(async () => {
+      // console.log('77777777777');
       await validator.validate(formValue).then(() => {
         // console.log('32323');
         // validation passed or without error message
@@ -94,18 +112,26 @@
         errors,
         fields
       }) => {
-        verificationResults[name] = fields[name];
+        // console.log( errors,fields);
+        Object.assign(verificationResults,fields)
+
       })
     });
-
+    // console.log(verificationResults);
     // 等于零全部通过
     return Object.keys(verificationResults).length == 0;
   }
-
+  
   provide("formValue", formValue);
   provide("rules", props.rules);
   provide("validateField", validateField);
   provide("verificationResults", verificationResults);
+  expose({
+    validateField,
+    validate,
+    clearVerificationResults,
+    clearVerificationResultsOne
+  })
 </script>
 
 <style scoped>

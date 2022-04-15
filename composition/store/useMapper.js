@@ -18,7 +18,7 @@ export function useStateMapper(mapper, mapFn) {
 
 export function useActionMapper(mapper, mapFn) {
     const store = useStore();
-    
+    // console.log(store);
     const storeActionsFns = mapFn(mapper);
 
     const storeAction = {};

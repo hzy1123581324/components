@@ -12,12 +12,14 @@
       <slot></slot>
     </view>
     <!-- 通常固定在右下角，用于返回 -->
-    
-    <view
-      :class="['scroll-fixed',(!showFixed)?'scroll-fixed-disable':fixed==0?'':fixedPercentage!=1?'scroll-fixed-disable':'']"
-      @click="onTapScrollFixed">
-      <slot name="fixed" :percentage="fixedPercentage"></slot>
-    </view>
+    <!-- <teleport to="body"> -->
+      <view
+        :class="['scroll-fixed',(!showFixed)?'scroll-fixed-disable':fixed==0?'':fixedPercentage!=1?'scroll-fixed-disable':'']"
+        @click="onTapScrollFixed">
+        <slot name="fixed" :percentage="fixedPercentage"></slot>
+      </view>
+    <!-- </teleport> -->
+   
 
   </scroll-view>
   <view class="scroll-footer">

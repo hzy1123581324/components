@@ -105,8 +105,13 @@
       type: Boolean,
       default: false,
     },
-    // 自定义返回逻辑
+    // 命名不规范，以后废弃使用下面的 onCustomBack
     customBack: {
+      type: [Function, null],
+      default: null,
+    },
+    // 自定义返回逻辑
+    onCustomBack: {
       type: [Function, null],
       default: null,
     },
@@ -178,8 +183,17 @@
 
   function goBack() {
     // 如果自定义了点击返回按钮的函数，则执行，否则执行返回逻辑
+    // customBack以后要废弃
+    // customBack以后要废弃
+    // customBack以后要废弃
+    // customBack以后要废弃
+    // customBack以后要废弃
+    // customBack以后要废弃
+    // customBack以后要废弃
     if (typeof props.customBack === "function") {
       props.customBack();
+    } else if (typeof props.onCustomBack === "function") {
+      props.onCustomBack();
     } else {
       uni.navigateBack();
     }
@@ -221,7 +235,7 @@
     /* #endif */
     // background-color: red;
     // background-image: linear-gradient(to bottom,red 0,red 88rpx, blue 88rpx, blue 100%);
-    z-index: var(--navbar-index, 9999);
+    z-index: var(--navbar-index, 99);
   }
 
   .navbar-fixed-box {

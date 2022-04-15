@@ -2,7 +2,7 @@
     <view class="icon-mode-box"></view>
 </template>
 
-<script>
+<script setup>
     /**
      * z-icon-mode
      * @description 图标变色，使用前提： 图片的底色为白色，主色为黑色 

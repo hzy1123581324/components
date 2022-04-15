@@ -1,10 +1,7 @@
 <template>
-    <view class="join-txt-item" v-for="(item,index) in txtlist" :key="item">
-      <template v-if='index!=0'>&nbsp;</template>
-      <template class="" v-if="item==''">
-        
-        <slot name="match"></slot>
-        &nbsp;
+    <view class="join-txt-item" v-for="(item,index) in txtlist" :key="item+index">
+      <template class="" v-if="item==target">
+        <slot name="match" :text="item"></slot>
       </template>
       <template v-else>
         <slot  name="default" :text="item" ></slot>
@@ -32,8 +29,8 @@
       }else if(props.target==''){
         return [props.modelValue]
       }else{
-       console.log(props.modelValue.split(props.target));
-        return props.modelValue.split(props.target);
+        const reg = new RegExp('/'+props.target+'/','gi')
+        return props.modelValue.replace(reg,','+props.target+',').replace(/^,+|,+$/g,'').replace(/,+/g,',');
       }
     });
     

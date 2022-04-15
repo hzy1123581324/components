@@ -1,6 +1,7 @@
 <template>
-  <teleport to="body">
-    <view v-if="modelValue" class="popup" :class="[popupstyle]" @touchmove.stop.prevent="clear">
+  <!-- 加v-bind="$attrs" 是因为父组件加了样式列会警告，同时可以继承样式类 -->
+  <teleport to="body" v-bind="$attrs">
+    <view v-if="modelValue" v-bind="$attrs" :class="['popup', popupstyle]" @touchmove.stop.prevent>
     	<z-transition class="mask" v-if="maskShow" :mode-class="['fade']" :duration="duration" :show="showTrans"
     		@click="onTap" />
     	<z-transition class="transition-block" :mode-class="ani" :styles="transClass" :duration="duration"
@@ -74,6 +75,7 @@
 			}
 		},
 		mixins: [popup],
+
 		watch: {
 			/**
 			 * 监听type类型
@@ -130,10 +132,6 @@
 			}
 		},
 		methods: {
-			clear(e) {
-				// TODO nvue 取消冒泡
-				e.stopPropagation();
-			},
 			open() {
 				// this.showPopup = true
 				this.$emit('input', true);
@@ -267,7 +265,7 @@
 	.popup {
 		position: fixed;
 		/* #ifndef APP-NVUE */
-		z-index: var(--popup-index, 9999);
+		z-index: var(--popup-index, 999);
 		/* #endif */
 		// height: 100vh;
 		

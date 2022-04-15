@@ -13,7 +13,7 @@ export function debounce(fn,wait) {
 }
 
 // 节流
-export function throttle(fn, delay) {
+export function throttle(fn, delay=500) {
     let canRun = true;//通过闭包保存该变量
     // console.log('999999999999++++');
     return (res)=> {

@@ -164,7 +164,7 @@
   }
   // 查询按钮的节点信息
   function getWaveQuery(e) {
-    console.log('&&&&&&');
+    // console.log('&&&&&&');
     // console.log(getElQuery('.button-box'));
     getElQuery('.button-box',proxy).then(res => {
       // 查询返回的是一个数组节点

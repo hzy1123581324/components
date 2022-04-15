@@ -36,6 +36,12 @@ export function isUrl(value) {
 /**
  * 是否数组
  */
+export function isString(value) {
+    return Object.prototype.toString.call(value) === '[object String]';
+}
+/**
+ * 是否数组
+ */
 export function isArray(value) {
     if (typeof Array.isArray === 'function') {
         return Array.isArray(value)

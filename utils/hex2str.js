@@ -1,5 +1,5 @@
 // hex转json字符串,16进制ASCII
-var hex2str = function(hex) {
+export function hex2str(hex) {
     var arr = hex.split("")
     var out = ""
     for (var i = 0; i < arr.length / 2; i++) {
@@ -11,7 +11,7 @@ var hex2str = function(hex) {
 };
 
 // json字符串转hex
-var str2hex = function(str) {
+export function str2hex(str) {
     var val = "";
     for (var i = 0; i < str.length; i++) {
 
@@ -20,9 +20,4 @@ var str2hex = function(str) {
     }
 
     return "0x" + val
-}
-
-export default {
-    str2hex,
-    hex2str
 }

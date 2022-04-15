@@ -6,7 +6,7 @@
 			<slot></slot>
 		</view>
 		<view class="paymentBox  fs36" v-show="showPayment" @click="showPayment = !showPayment">
-			<view class="paymentTitleBox lh98 bg_f9 txt_c bor-btm bor-e2" @click.stop>
+			<view class="paymentTitleBox lh98 bg_f9 txt-c bor-btm bor-e2" @click.stop>
 				<!-- <view class="absolute-rg-center  size38 z_9999 mar-lf-30 color_97" @click="showPayment = !showPayment">{{i18n.cancel_txt}}</view> -->
 				<!--取消-->
 				<view class="color_13 paymentTitle">{{i18n.$validation.into_payPwd}}</view>
@@ -24,7 +24,7 @@
 			</view>
 
 			<view class="payment-keyboard flex flex-center flex-wrap" @click.stop>
-				<view class="w_33 txt_c payment-numcell color_31" hover-class="payment-numcell-active"
+				<view class="w_33 txt-c payment-numcell color_31" hover-class="payment-numcell-active"
 					hover-stay-time="300" v-for="item in nums" :key="item" @click="passWord += item">{{item}}</view>
 				<view class="payment-cancel w_33 lh98 h98 " @click=" passWord = passWord.slice(0,-1)">
 					<svg class="payment-cancel-item" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400.67 253">

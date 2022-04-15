@@ -32,7 +32,7 @@ function guid(len = 32, firstU = true, radix = null) {
     // 移除第一个字符,并用u替代,因为第一个字符为数值时,该guuid不能用作id或者class
     if (firstU) {
         uuid.shift();
-        return 'u' + uuid.join('');
+        return 'z' + uuid.join('');
     } else {
         return uuid.join('');
     }

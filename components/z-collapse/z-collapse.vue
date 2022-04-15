@@ -20,11 +20,16 @@
     computed,
     watch,
     nextTick,
-    inject
+    inject,
+    onBeforeMount
   } from "vue";
   import {
     defer
   } from "../../utils/optimize.js";
+
+  onBeforeMount(()=>{
+    currentValue.value = props.modelValue;
+  })
 
   let valueMuster = inject('valueMuster',null);
   let showOne = inject('showOne',null);
@@ -93,8 +98,20 @@
 
   /// 初始化
   function init() {
-    clientHeight.value = collapse.value.$el.clientHeight;
-    console.log(collapse.value.$el.clientHeight,'^^^^^^^^^^');
+  
+    if(collapse.value?.$el){
+      clientHeight.value = collapse.value?.$el.clientHeight;
+    }else{
+      const timer = setInterval(()=>{
+        if(collapse.value?.$el){
+          clientHeight.value = collapse.value?.$el.clientHeight;
+          clearInterval(timer);
+        }
+      },800);
+      
+    }
+    
+    
   }
 
   /// 监听

@@ -1,4 +1,4 @@
-import queryParams from '../../libs/function/queryParams.js';
+import queryParams from './queryParams.js';
 /**
  * 路由跳转
  * 注意:本方法没有对跳转的回调函数进行封装
