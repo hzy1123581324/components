@@ -26,6 +26,7 @@
          }
      </style>
      */
+    import {computed} from 'vue';
   export default {
     name: 'z-badge',
     props: {
@@ -34,21 +35,20 @@
         default: "-1"
       }
     },
-    data() {
-      return {}
-    },
-    computed: {
-      number() {
-        if (this.num - 99 > 0) {
+    setup(props,{emit}){
+      const number = computed(()=>{
+        if (props.num - 99 > 0) {
           return "99+";
-        } else if (parseFloat(this.num) == 0) {
+        } else if (parseFloat(props.num) == 0) {
           return "";
         } else {
-          return this.num;
+          return props.num;
         }
+      })
+      return {
+        number
       }
     }
-
   }
 </script>
 

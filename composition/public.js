@@ -1,6 +1,7 @@
 import {
   ref,
 } from "vue";
+import {parseParam} from '../utils/queryParams.js';
 //要在js中使用国际化
 // import { useI18n } from 'vue-i18n';
 // const { t as $t } = useI18n()
@@ -42,6 +43,17 @@ export function jump(url, {
     case 'redirectTo':
     case 'switchTab':
     case 'reLaunch':
+      //  'switchTab','reLaunch' 参数传递不了
+      if(['switchTab','reLaunch'].indexOf(type)>-1){
+       const  param =  parseParam(url);
+       const router = {
+         param,
+         path: url.split(',')[0],
+         fullPath: url,
+       }
+        uni.setStorageSync('lastRouter',router);
+      }
+      
       uni[type]({
         url,
         fail() {
@@ -72,7 +84,7 @@ export function jump(url, {
       })
       //#endif
       // #ifdef H5
-      window.location.href = url
+      window.open(url,'_blank')
       //#endif
     default:
       break;
@@ -90,6 +102,7 @@ export function toast(title, duration = 1500) {
 
 // 设置粘贴板
 export function setCopy(data = "") {
+
   uni.setClipboardData({
     data,
     success: () => {

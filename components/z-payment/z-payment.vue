@@ -1,44 +1,43 @@
 <!-- 仿支付宝支付密码组件 -->
 <template>
-	<view class="">
-		<view class="w_100 h_100" @click="showPayment = !showPayment" v-if="type=='embed'">
-
+    <!-- 点击区域 -->
+		<view v-bind="$attr" class="w_100" @click="showPayment = !showPayment" v-if="type=='embed'">
 			<slot></slot>
 		</view>
-		<view class="paymentBox  fs36" v-show="showPayment" @click="showPayment = !showPayment">
-			<view class="paymentTitleBox lh98 bg_f9 txt-c bor-btm bor-e2" @click.stop>
-				<!-- <view class="absolute-rg-center  size38 z_9999 mar-lf-30 color_97" @click="showPayment = !showPayment">{{i18n.cancel_txt}}</view> -->
-				<!--取消-->
-				<view class="color_13 paymentTitle">{{i18n.$validation.into_payPwd}}</view>
-				<!--请输入支付密码-->
-			</view>
-			<view class="bg_f9 clear" @click.stop>
-				<view class="payment-init-box h98 flex radius-10">
-					<view :class="['payment-init',passWord.length-1>=index&&'satisfy']" v-for="(item,index) in 6"
-						:key="item"></view>
-				</view>
-				<view class="payment-forget" v-show="forget">
-					<view class="txt_rg fs32 mar-rg-30" @click="forget">{{i18n.$validation.forgetPwd}}</view>
-					<!--忘记密码-->
-				</view>
-			</view>
-
-			<view class="payment-keyboard flex flex-center flex-wrap" @click.stop>
-				<view class="w_33 txt-c payment-numcell color_31" hover-class="payment-numcell-active"
-					hover-stay-time="300" v-for="item in nums" :key="item" @click="passWord += item">{{item}}</view>
-				<view class="payment-cancel w_33 lh98 h98 " @click=" passWord = passWord.slice(0,-1)">
-					<svg class="payment-cancel-item" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400.67 253">
-						<g>
-							<path d="M54.63,136.23,148.12,253V0L54.63,116.77A12.54,12.54,0,0,0,54.63,136.23Z" />
-							<path
-								d="M388,0H147.67V253h240a13,13,0,0,0,13-13V12.72A12.73,12.73,0,0,0,388,0ZM330.74,166.1a12,12,0,0,1-17,17l-39.6-39.6-39.6,39.6a12,12,0,0,1-17-17l39.6-39.6L217.6,86.9a12,12,0,1,1,17-17l39.6,39.6,39.6-39.6a12,12,0,0,1,17,17l-39.6,39.6Z" />
-						</g>
-					</svg>
-				</view>
-			</view>
-		</view>
-
-	</view>
+    
+    <z-popup  v-bind="$attr" v-model='showPayment' type="bottom">
+      <view class="paymentTitleBox lh98 bg_f9 txt-c bor-btm bor-e2" @click.stop>
+      		<!-- <view class="absolute-rg-center  size38 z_9999 mar-lf-30 color_97" @click="showPayment = !showPayment">{{i18n.cancel_txt}}</view> -->
+      		<!--取消-->
+      		<view class="color_13 paymentTitle">{{i18n.$validation.into_payPwd}}</view>
+      		<!--请输入支付密码-->
+      	</view>
+      	<view class="bg_f9 clear" @click.stop>
+      		<view class="payment-init-box h98 flex radius-10">
+      			<view :class="['payment-init',passWord.length-1>=index&&'satisfy']" v-for="(item,index) in 6"
+      				:key="item"></view>
+      		</view>
+      		<view class="payment-forget" v-show="forget">
+      			<view class="txt-rg fs32 mar-rg-30" @click="forget">{{i18n.$validation.forgetPwd}}</view>
+      			<!--忘记密码-->
+      		</view>
+      	</view>
+      
+      	<view class="payment-keyboard flex flex-center flex-wrap" @click.stop>
+      		<view class="w_33 txt-c payment-numcell color_31" hover-class="payment-numcell-active"
+      			hover-stay-time="300" v-for="item in nums" :key="item" @click="passWord += item">{{item}}</view>
+      		<view class="payment-cancel w_33 lh98 h98 " @click=" passWord = passWord.slice(0,-1)">
+      			<svg class="payment-cancel-item" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400.67 253">
+      				<g>
+      					<path d="M54.63,136.23,148.12,253V0L54.63,116.77A12.54,12.54,0,0,0,54.63,136.23Z" />
+      					<path
+      						d="M388,0H147.67V253h240a13,13,0,0,0,13-13V12.72A12.73,12.73,0,0,0,388,0ZM330.74,166.1a12,12,0,0,1-17,17l-39.6-39.6-39.6,39.6a12,12,0,0,1-17-17l39.6-39.6L217.6,86.9a12,12,0,1,1,17-17l39.6,39.6,39.6-39.6a12,12,0,0,1,17,17l-39.6,39.6Z" />
+      				</g>
+      			</svg>
+      		</view>
+      	</view>
+      
+    </z-popup>
 </template>
 
 <script>
@@ -129,38 +128,14 @@
 
 <style>
 	/* 仿支付宝 输入支付密码组件 */
-	.fixed {
-		position: fixed;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		top: 0;
-		z-index: 99999999999;
-	}
 
-	.paymentBox {
-		position: fixed;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		/* top: 0; */
-		z-index: 99999999999;
-		background-color: #E4E8F1;
-	}
+
 
 	.paymentTitle {
 		line-height: 98rpx;
 	}
 
-	.paymentBox::before {
-		content: "";
-		width: 100vw;
-		height: 100vh;
-		background: rgba(51, 51, 51, .4);
-		position: absolute;
-		bottom: 0;
-		left: 0;
-	}
+
 
 	.payment-init-box {
 		/* border:.13333vw solid #d2d2d2; */

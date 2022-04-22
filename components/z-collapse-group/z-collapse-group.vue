@@ -10,7 +10,7 @@
     const props = defineProps({
       // 数组[fase,true,true,false]
       modelValue: {
-        type: Object,
+        type: Array,
         default: ()=>{
           return [];
         }
@@ -22,10 +22,12 @@
       }
     })
     // 上下文
-    const { proxy } = getCurrentInstance();
+    // const { proxy } = getCurrentInstance();
     
     watch(()=>props.modelValue,(newval,oldval)=>{
       value = newval;
+      value.length=0;
+      value.push(...newval);
     })
     watch(()=>[...value],(newval,oldval)=>{
       // console.log('group++++++++++++');

@@ -57,7 +57,7 @@
   } from "vue";
   import {defer} from "../../utils/optimize.js";
   import {getElQuery} from "../../composition/public.js";
-      const { proxy } = getCurrentInstance();
+  const { proxy } = getCurrentInstance();
   const props = defineProps({
     // 按钮形状，circle（两边为半圆），square（带圆角）
     shape: {
@@ -73,6 +73,8 @@
       type: Boolean,
       default: false
     },
+    
+    
     // 是否禁用
     disable: {
       type: Boolean,
@@ -93,21 +95,29 @@
       type: Function,
       default: defer
     },
+    onClickBeforeModifiers: {
+      default: () => ({
+        once: false,
+        stayTime: 400,
+        // outTime: 1500,
+      }),
+    },
+    
     // 当异步时是否显示加载中
     showloading: {
       type: Boolean,
-      default: true,
+      default: false,
     },
-    // 接口调用后必须等待多少时间才可点击
-    stayTime: {
-      type: [Number, String],
-      // default: 0,
-    },
-    // 超出时间，后可以点击
-    outTime: {
-      type: [Number, String],
-      // default: 3000,
-    },
+    // // 接口调用后必须等待多少时间才可点击
+    // stayTime: {
+    //   type: [Number, String],
+    //   // default: 0,
+    // },
+    // // 超出时间，后可以点击
+    // outTime: {
+    //   type: [Number, String],
+    //   // default: 3000,
+    // },
 
   });
   
@@ -125,9 +135,24 @@
   let targetWidth = ref(0); // 波纹按钮节点信息
   let waveActive = ref(false); // 激活水波纹
   let isLoading = ref(false);
+  let isclick = false;
 
+  const isOnce =computed(()=>{
+    return props.onClickBeforeModifiers.once;
+  })
+  const stayTime = computed(()=>{
+    const stayTimeKeyList = Object.keys(props.onClickBeforeModifiers).filter(item=> item.indexOf('stayTime')>-1)
+    if(stayTimeKeyList.length>0){
+      let [,stayTime=500] = stayTimeKeyList[0].split('_');
+      return stayTime;
+    }else{
+      return 0;
+    }
+  });
 
   async function buttonClick(e) {
+   
+    
     // 如果是加载中或者禁用，直接退出
     if(isLoading.value||props.disabled){
       return ;
@@ -143,24 +168,28 @@
     if(props.showloading){
       isLoading.value = true
     }
+    if(isclick){
+      return ;
+    }
+    isclick = true;
     await props.onClickBefore();
-    // if (props.onClickBefore) {
-    //   // console.log('异步处理')
-    //   return unrepeat();
-    // }
+    // v-model:onClickBefore.once // 一定要加v-model 才能拿到once
+    console.warn('一定要加v-model 才能拿到once');
+    console.log(props.onClickBeforeModifiers,'8888888888888888')
+    if(isOnce.value){
+      isclick = true;
+    }
+    console.log(stayTime.value)
+    if(stayTime.value>0){
+      setTimeout(()=>{
+        isclick = false;
+      },stayTime.value);
+    }
+  
     if(props.showloading){
       isLoading.value = false
     }
-    // console.log('22222222222222');
-    
     emit('click');
-    // switch (props.type) {
-    //   // 链接成功，可以放送订阅
-    //   case 'navigation':
-    //     break;
-    //   default:
-    //     break;
-    // }
   }
   // 查询按钮的节点信息
   function getWaveQuery(e) {

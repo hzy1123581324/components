@@ -46,6 +46,6 @@ export function randomArraySort(array = []) {
  * @param {number} max 
  * @param {number} value
  */
-function range(min = 0, max = 0, value = 0) {
+export function range(min = 0, max = 0, value = 0) {
 	return Math.max(min, Math.min(max, Number(value)))
 }

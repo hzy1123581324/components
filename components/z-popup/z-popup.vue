@@ -342,6 +342,8 @@
 		padding-bottom: constant(safe-area-inset-bottom);
 		padding-bottom: env(safe-area-inset-bottom);
 		/* #endif */
+   flex-shrink: 0;
+   max-height: 100%;
 	}
 
 	.content-ani {

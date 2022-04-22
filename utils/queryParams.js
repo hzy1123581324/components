@@ -84,7 +84,12 @@ demo
  */
 export function parseParam(url) {
   // 将浏览器地址中 ‘?’ 后面的字符串取出来
-  const paramsStr = /.+\?(.+)$/.exec(url)[1];
+  let paramsStr;
+  if(url.indexOf('?')>-1){
+     paramsStr = /.+\?(.+)$/.exec(url)[1];
+  }else{
+    return {}
+  }
   // 将截取的字符串以 ‘&’ 分割后存到数组中
   const paramsArr = paramsStr.split('&');
   // 定义存放解析后的对象

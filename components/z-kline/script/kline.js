@@ -34,7 +34,7 @@ function alertError(title) {
 	})
 	try{
 		plus.nativeUI.toast(title, {
-			 icon:'/static/common/toast-error.png',
+			 icon:'https://shopicool.oss-cn-hongkong.aliyuncs.com/mobile/box-red-one/static/static/common/toast-error.png',
 			 style:'inline',
 			 verticalAlign:'top'
 		});

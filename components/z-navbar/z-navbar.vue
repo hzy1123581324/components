@@ -6,7 +6,7 @@
     <view :class="['navbar-fixed-box clear', border && 'navbar-border']">
       <view :class="['navbar-left', showBack && 'hasback']">
         <slot name="left">
-          <view class="navbar-left-icon" @click.native="goBack" v-if="showBack">
+          <view class="navbar-left-icon" @click="goBack" v-if="showBack">
             <z-icon :type="backIconName" class="back-icon" ></z-icon>
           </view>
           <z-avatar class="back-avatar" :src="src" mode="circle" :size="size" v-if="avatar"></z-avatar>

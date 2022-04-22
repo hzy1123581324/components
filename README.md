@@ -84,9 +84,6 @@
     │  ├─z-luckdraw   九宫格抽奖
     │  │     └─ z-luckdraw.vue
     │  │
-    │  ├─z-magnifier  放大镜
-    │  │     ├─ magnifier-original.vue
-    │  │     └─z-magnifier.vue
     │  │
     │  ├─z-meter  环形进度条
     │  │     └─ z-meter.vue
@@ -137,8 +134,6 @@
     │  │    ├─  popup.js
     │  │    └─  z-popup.vue
     │  │      
-    │  ├─z-preview-phone  手机模型
-    │  │     └─ z-preview-phone.vue
     │  │      
     │  ├─z-progress  线型进度条
     │  │      └─z-progress.vue

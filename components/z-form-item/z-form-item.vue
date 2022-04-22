@@ -43,7 +43,7 @@
   // 从z-form 传递下来
   const verificationResults = inject('verificationResults', null);
 
-  const formName = ref('');
+  let formName = ref('');
   // watch(()=>verificationResults,(newval,oldval)=>{
   //   console.log(newval);
   //   console.log('444444444');

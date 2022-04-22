@@ -4,7 +4,7 @@
           <slot name='prefix' :isOverlap="isOverlap"></slot>
         </view>
         
-        <textarea :class="['test-area-into',classStyle]" v-model="modelValue" :maxlength="maxlength" :auto-height="true" :auto-focus="true" @blur="textareaBlur"
+        <textarea :class="['test-area-into',classStyle]" v-model="currentValue" :maxlength="maxlength" :auto-height="true" :auto-focus="true" @blur="textareaBlur"
             :placeholder="placeholder" placeholder-class="placeholder-class" @input="change" v-if="showTextarea" />
         <view :class="['test-area-view',currentValue==''&&'placeholder-class',classStyle]"  v-show="!showTextarea"  @click="showTextarea = true,isOverlap=false">{{currentValue||placeholder}}</view>
     </view>

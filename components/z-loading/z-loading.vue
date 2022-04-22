@@ -2,7 +2,7 @@
     <view v-if="show" :class="['loading','loading-'+mode]" :style="[cricleStyle]"></view>
 </template>
 
-<script setup>
+<script>
     /**
      * loading 加载动画
      * @description 警此组件为一个小动画，目前用在zView的loadmore加载更多和switch开关等组件的正在加载状态场景。
@@ -19,25 +19,32 @@
      </style>
      */
     
-    const props = defineProps({
-      // 动画的类型
-      mode: {
+    export default {
+      props: {
+        // 动画的类型
+        mode: {
+            type: String,
+            default: 'circle',
+            validator: (value)=> {
+                // 这个值必须匹配下列字符串中的一个
+                return ['circle', 'flower'].indexOf(value) !== -1
+            }
+        },
+        show: {
+            type: Boolean,
+            default: true
+        },
+        cricleStyle: {
           type: String,
-          default: 'circle',
-          validator: (value)=> {
-              // 这个值必须匹配下列字符串中的一个
-              return ['circle', 'flower'].indexOf(value) !== -1
-          }
+          default: ''
+        }
       },
-      show: {
-          type: Boolean,
-          default: true
-      },
-      cricleStyle: {
-        type: String,
-        default: ''
+      setup(){
+        
       }
-    });
+    }
+    
+
   
 </script>
 

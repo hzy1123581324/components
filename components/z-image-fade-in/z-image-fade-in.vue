@@ -67,6 +67,7 @@
      width: 100%;
      height: 100%;
      border-radius: inherit;
+     pointer-events: none;
   }
   .image-target.active{
     opacity: 1;

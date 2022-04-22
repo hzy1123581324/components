@@ -9,7 +9,7 @@
 						animationDuration: animationDuration,
 						animationPlayState: animationPlayState,
 					}">
-          <text class="notice-text" @tap="click" :class="['type-' + type]">{{showText}}</text>
+          <text class="notice-text" @click="click" >{{showText}}</text>
         </view>
       </view>
       <view class="icon-wrap">
@@ -167,6 +167,7 @@
     display: flex;
     overflow: hidden;
     margin-left: 12rpx;
+    line-height: 1.3;
   }
 
   .right-icon {

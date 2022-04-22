@@ -36,7 +36,10 @@
 			// 显示的主题，success|error|primary|info|warning
 			type: {
 				type: String,
-				default: 'warning'
+				default: 'warning',
+        validator(value) {
+          return 'success|error|primary|info|warning'.split('|').indexOf(value)>-1
+        }
 			},
 			// 是否显示左侧的音量图标
 			volumeIcon: {

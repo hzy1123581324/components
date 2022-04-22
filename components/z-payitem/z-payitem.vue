@@ -2,12 +2,10 @@
 <template>
     <view class="pay-item">
         <view class="password-items">
-            <view :class="['password-item',pwd_.length>index&&'active']" v-for="(item,index) in 6" :key="item">
-                
-            </view>
+            <view :class="['password-item',modelValue.length>index&&'active']" v-for="(item,index) in maxlength" :key="item"></view>
         </view>
         <view class="pay-item-input">
-            <input class="pay-item-init" :type="inputType" maxlength="6" v-model="pwd_" @input="pwdChange" />
+            <input class="pay-item-init" :type="inputType"  :maxlength="maxlength" v-model="modelValue" @input="pwdChange" />
         </view>
     </view>
 </template>
@@ -18,9 +16,10 @@
      * @description  验证码密码输入框
      * @tutorial https://www.uviewui.com/components/button.html
      * @property {String} inputType 输入类型
-     * @property {String} pwd 用户输入的密码
+     * @property {String} modelValue 用户输入的密码
+     * @property {String} modelValue 用户输入的密码
      * @property {Boolean} keyboard  是否使用键盘
-     * @example <payItem class="payItem" :pwd.sync="pwd"></payItem>
+     * @example <payItem class="payItem" v-model="pwd"></payItem>
      * 
      * 修改样式,修改不成功，注意是否是优先级的问题
      * <style>
@@ -42,11 +41,22 @@
             inputType:{
                 type: String,
                 default: 'number',
+                validator(value) {
+                  return ['number','text'].indexOf(value)>-1;
+                }
             },
             // 用户输入的密码
-            pwd: {
+            modelValue: {
                 type: String,
                 default: '',
+            },
+            // 密码最大长度
+            maxlength: {
+              type: [Number,String],
+              default: 6,
+              validator(value){
+                return !isNaN(value);
+              }
             },
             // 是否使用键盘
             keyboard: {
@@ -56,26 +66,31 @@
 
             
         },
-        watch:{
-            pwd(newval){
-                this.pwd_ = newval;
-            }
-        },
-        data() {
-            return {
-                pwd_: '',
-            };
-        },
-        methods:{
-            pwdChange(e){
+        setup(prop,context){
+           function  pwdChange(e){
                 // console.log(e,'*************');
-                let pwd =e.detail.value;
+                // let pwd =e.detail.value;
                 // if(pwd.length==6){
-                    this.$emit('update:pwd', pwd);
+                    // context.emit('update:modelValue', e.detail.value);
                 // }
                 
-            },
+            }
+            
+            return {
+              pwdChange,
+            }
         }
+        // watch:{
+        //     pwd(newval){
+        //         this.pwd_ = newval;
+        //     }
+        // },
+        // data() {
+        //     return {
+        //         pwd_: '',
+        //     };
+        // },
+
     }
 </script>
 

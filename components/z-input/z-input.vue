@@ -87,7 +87,7 @@
     inject,
 
   } from "vue";
-
+  // 不用计算器属性是因为有可能不用v-model
   let defaultValue = ref("");
   // 密码是否可见
   let showPassword = ref(false);
@@ -196,15 +196,19 @@
     if (formName && formName.value == '' && props.name != '') {
       formName.value = props.name;
     }
+     // console.log('this is  onrelay1')
     if (props.modelValue) {
+      // console.log(props.modelValue);
+       // console.log('this is  onrelay2')
       defaultValue.value = props.modelValue;
     } else if (formValue && formValue[formName.value]) {
+      // console.log('this is  onrelay3')
       defaultValue.value = formValue[formName.value];
       isOverlap.value = false;
     }
-
-
   });
+  
+  
   watch(() => formValue && formValue[formName.value], (newval, oldval) => {
     if (newval != '' && !defaultValue.value) {
       defaultValue.value = formValue[formName.value];
@@ -218,10 +222,8 @@
     // 	clearTimeout(watchThrottle);
     // }
     // watchThrottle = setTimeout(() => {
-
     defaultValue.value = newval;
     // }, 100);
-
   })
   // 节流，每间隔500毫秒执行一次
   const inputThrottle =
@@ -240,6 +242,7 @@
   let cacheval = '';
   const inputThrottle2 =
     throttle(() => {
+      console.log(props,'******************8')
       // console.log('&&&&&&&&&&&&&777777777');
       emit("update:modelValue", cacheval);
 
@@ -247,6 +250,7 @@
   // 防抖，防止上面没有取到最新值
   const inputDebounce2 = debounce(() => {
     // console.log('&&&&&&&&&&&&&444444444');
+    console.log(props.modelValue,'***********111*******8')
     emit("update:modelValue", cacheval);
   }, 600);
   watch(defaultValue, (newval, oldval) => {
@@ -260,13 +264,16 @@
       validateField(formName.value, 'change');
     }
     cacheval = newval;
+    
     if (props.modelModifiers.defer) {
       // 节流，每间隔500毫秒执行一次
       inputThrottle2();
       // 防抖，防止上面没有取到最新值
       inputDebounce2();
+
     } else {
       emit("update:modelValue", newval)
+
     }
   });
 

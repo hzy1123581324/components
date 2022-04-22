@@ -54,6 +54,13 @@ export function isArray(value) {
 export function isObject(value) {
     return Object.prototype.toString.call(value) === '[object Object]'
 }
+
+/**
+ * 是否为空对象
+ */
+export function isEmptyObject(obj) {
+    return Object.keys(obj).length == 0;
+}
 /**
  * 验证日期格式
  */

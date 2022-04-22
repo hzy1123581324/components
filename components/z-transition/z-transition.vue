@@ -220,6 +220,8 @@
         transition-timing-function: ease;
         transition-duration: 0.3s;
         transition-property: transform, opacity;
+        display: flex;
+        flex-direction: var(--transition-direction,inherit);
     }
 
     .fade-in {

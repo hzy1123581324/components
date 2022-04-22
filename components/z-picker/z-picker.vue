@@ -317,6 +317,7 @@ function confirmHandler() {
   border-radius: var(--picker-radius, 0);
   overflow: var(--picker-overflow, hidden);
   --height: 98rpx;
+  width: var(--picker-width,100vw);
 }
 
 .picker-view {

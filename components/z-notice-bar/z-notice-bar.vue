@@ -1,7 +1,7 @@
 <template>
     <view class="u-notice-bar-wrap" v-if="isShow" >
         <block v-if="mode == 'horizontal' && isCircular">
-            <z-notice-row :type="type" :list="list" :volumeIcon="volumeIcon" :moreIcon="moreIcon"
+            <z-notice-row :list="list" :volumeIcon="volumeIcon" :moreIcon="moreIcon"
                  :closeIcon="closeIcon" :speed="speed"
                 :playState="playState" :padding="padding" @getMore="getMore" @close="close" @click="click">
                   <template v-slot:leftIcon>

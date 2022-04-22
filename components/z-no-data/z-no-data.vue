@@ -19,7 +19,6 @@
 <style scoped>
     
     .noData-box{
-        text-align: center;
         margin-top: 60rpx;
         text-align: center;
         display: flex;
