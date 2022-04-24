@@ -101,17 +101,12 @@ export function toast(title, duration = 1500) {
 }
 
 // 设置粘贴板
-export function setCopy(data = "") {
+export function setCopy(data = "",title='复制成功',duration = 2000) {
 
   uni.setClipboardData({
     data,
     success: () => {
-      uni.showToast({
-        title: "复制成功",
-        // title: $t("esm128"), //'复制成功',
-        duration: 2000,
-        icon: 'none'
-      });
+      toast(title,duration);
     }
   });
 }

@@ -195,7 +195,14 @@
     } else if (typeof props.onCustomBack === "function") {
       props.onCustomBack();
     } else {
-      uni.navigateBack();
+      // 只有一个页面，返回到首页
+      if(getCurrentPages().length==1){
+        uni.reLaunch({
+          url: "/"
+        })
+      }else{
+        uni.navigateBack();
+      }
     }
   }
   // let  navbarStyle = computed(()=>{

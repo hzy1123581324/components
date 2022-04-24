@@ -108,9 +108,13 @@
   let currentValue = ref(1);
 
   onMounted(() => {
+    let min = props.min;
+    let max = props.max;
+    min==-1&&(min=props.modelValue);
+    max==-1&&(max=props.modelValue);
     
-    currentValue.value = props.min==-1?range(props.modelValue,props.max,props.modelValue):range(props.min,props.max,props.modelValue);
-    console.log(currentValue.value,props.modelValue,'888888881122222221111111111')
+    currentValue.value = range(min,max,props.modelValue);
+    console.log(currentValue.value,props.modelValue,props.min,props.max,'888888881122222221111111111')
   });
   /// 监听v-model
   watch(

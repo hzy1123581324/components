@@ -1,12 +1,12 @@
 <template>
   <!-- 加v-bind="$attrs" 是因为父组件加了样式列会警告，同时可以继承样式类 -->
   <teleport to="body" v-bind="$attrs">
-    <view v-if="modelValue" v-bind="$attrs" :class="['popup', popupstyle]" @touchmove.stop.prevent>
+    <view v-if="modelValue" v-bind="$attrs" :class="['popup', popupstyle]" @touchmove.stop>
     	<z-transition class="mask" v-if="maskShow" :mode-class="['fade']" :duration="duration" :show="showTrans"
     		@click="onTap" />
     	<z-transition class="transition-block" :mode-class="ani" :styles="transClass" :duration="duration"
     		:show="showTrans" @click="onTap">
-    		<view class="popup-wrapper-box" @click.stop.prpen>
+    		<view class="popup-wrapper-box" @click.stop>
     			<slot></slot>
     		</view>
     	</z-transition>
