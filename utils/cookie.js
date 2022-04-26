@@ -1,29 +1,44 @@
 
-// cookie 操作
-export function setCookie(cname,cvalue,exdays){
-    var d = new Date();
-    d.setTime(d.getTime()+(exdays*24*60*60*1000));
-    var expires = "expires="+d.toGMTString();
-    document.cookie = cname+"="+cvalue+"; "+expires;
+// 设置cookie
+export  function setCookie(name,value,time="d30"){
+  const strsec = getsec(time);
+  const exp = new Date();
+  exp.setTime(exp.getTime() + strsec*1);
+  document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
 }
-export function getCookie(cname){
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0; i<ca.length; i++) {
-        var c = ca[i].trim();
-        if (c.indexOf(name)==0) { return c.substring(name.length,c.length); }
+
+
+//这是有设定过期时间的使用示例：
+//s20是代表20秒
+//h是指小时，如12小时则是：h12
+//d是天数，30天则：d30
+// setCookie(“name”,“hayden”,“s20”);
+function getsec(str){
+    // alert(str);
+    const str1=str.substring(1,str.length)*1; 
+    const str2=str.substring(0,1); 
+    if (str2=="s"){
+    return str1*1000;
+    }else if (str2=="h"){
+    return str1*60*60*1000;
+    }else if (str2=="d"){
+    return str1*24*60*60*1000;
     }
-    return "";
 }
-export function checkCookie(){
-    var user=getCookie("username");
-    if (user!=""){
-        alert("欢迎 " + user + " 再次访问");
-    }
-    else {
-        user = prompt("请输入你的名字:","");
-          if (user!="" && user!=null){
-            setCookie("username",user,30);
-        }
-    }
+// 根据name获取cookie对应的值
+export function getCookie(name){
+  let arr;
+  const reg = new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+  if(arr=document.cookie.match(reg)){
+    return unescape(arr[2]);
+  }else{
+    return null;
+  }
+}
+// 删除cookie
+export function delCookie(name){
+  const exp = new Date();
+  exp.setTime(exp.getTime() - 1);
+  const cval=getCookie(name);
+  if(cval!=null) document.cookie= name + "="+cval+";expires="+exp.toGMTString();
 }

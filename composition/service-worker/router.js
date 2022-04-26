@@ -1,5 +1,5 @@
-importScripts('/sw/match.js')
-importScripts('/sw/respond.js')
+importScripts('/components/z-view-ui/composition/service-worker/match.js')
+importScripts('/components/z-view-ui/composition/service-worker/respond.js')
 
 class Router {
   constructor () {

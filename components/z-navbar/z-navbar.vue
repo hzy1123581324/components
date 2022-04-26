@@ -331,7 +331,7 @@
     display: flex;
     /* #endif */
     align-items: center;
-    justify-content: center;
+    justify-content: var(--navbar-center-justify-content,center);
     // text-align: center;
   }
 

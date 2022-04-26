@@ -123,7 +123,11 @@
       currentValue.value = newval;
     }
   );
-
+  watch(()=>props.max,(newval,oldval)=>{
+    if(currentValue.value>newval){
+      currentValue.value = newval||props.min;
+    }
+  });
   watch(currentValue, (newval, oldval) => {
     if (newval == "" || (newval - props.min < 0 && props.min != -1)) {
       currentValue.value = props.min.value;

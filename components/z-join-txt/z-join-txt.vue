@@ -1,6 +1,6 @@
 <template>
     <view  class="join-txt-item" v-for="(item,index) in txtlist" :key="item+index">
-      <template class="" v-if="item.toLowerCase()==target.toLowerCase()">
+      <template v-if="item.toLowerCase()==target.toLowerCase()">
         <slot name="match" :text="item"></slot>
       </template>
       <template v-else>
@@ -36,6 +36,7 @@
         let target = props.target.toLowerCase();// 转换小写
         const list = [];
         let pointer = 0;
+        console.log(props.modelValue,'*****************')
         while(true){
          
           let nextPointer = template.indexOf(target,pointer);
