@@ -27,7 +27,7 @@
   </view>
 </template>
 
-<script setup>
+<script>
   /**
      * countDown 倒计时
      * @description 该组件一般使用于某个活动的截止时间上，通过数字的变化，给用户明确的时间感受，提示用户进行某一个行为操作。
@@ -48,140 +48,162 @@
          }
      </style>
      */
+
   import {
     ref,
     watch,
     onBeforeMount,
     onBeforeUnmount
   } from "vue";
-  const emit = defineEmits(['change', 'end']);
-  const props = defineProps({
-    // 倒计时的时间，秒为单位
-    timestamp: {
-      type: [Number, String],
-      default: 0
+  export default {
+    emits: ['change', 'end'],
+    props: {
+      // 倒计时的时间，秒为单位
+      timestamp: {
+        type: [Number, String],
+        default: 0
+      },
+      // 是否自动开始倒计时
+      autoplay: {
+        type: Boolean,
+        default: true
+      },
+      // 用英文冒号(colon)或者中文(zh)当做分隔符，false的时候为中文，如："11:22"或"11时22秒"
+      separator: {
+        type: String,
+        default: 'colon',
+        validator(value) {
+          return ['colon', 'zh'].indexOf(value) > -1;
+        }
+      },
+      // 是否显示数字框
+      showBorder: {
+        type: Boolean,
+        default: false
+      },
+
+      // 是否显示秒
+      showSeconds: {
+        type: Boolean,
+        default: true
+      },
+      // 是否显示分钟
+      showMinutes: {
+        type: Boolean,
+        default: true
+      },
+      // 是否显示小时
+      showHours: {
+        type: Boolean,
+        default: true
+      },
+      // 是否显示“天”
+      showDays: {
+        type: Boolean,
+        default: true
+      },
     },
-    // 是否自动开始倒计时
-    autoplay: {
-      type: Boolean,
-      default: true
-    },
-    // 用英文冒号(colon)或者中文(zh)当做分隔符，false的时候为中文，如："11:22"或"11时22秒"
-    separator: {
-      type: String,
-      default: 'colon',
-      validator(value) {
-        return ['colon', 'zh'].indexOf(value) > -1;
+    setup(props, {
+      emit
+    }) {
+
+      // 记录定时器id
+      let timer = ref('');
+      // 天的默认值
+      let d = ref('00');
+      // 小时的默认值
+      let h = ref('00');
+      // 分钟的默认值
+      let i = ref('00');
+      // 秒的默认值
+      let s = ref('00');
+      // 记录不停倒计过程中变化的秒数
+      let seconds = ref(0);
+      // 监听时间戳的变化
+      watch(() => props.timestamp, (newval, oldval) => {
+        // 如果倒计时间发生变化，清除定时器，重新开始倒计时
+        clearInterval(timer.vlaue);
+        // console.log(newVal,'调用了')
+        start();
+      });
+
+      onBeforeMount(() => {
+        clearInterval(timer.value);
+        console.log(props.timestamp,'*****')
+        props.autoplay && parseFloat(props.timestamp || 0) > 0 && start();
+      })
+      onBeforeUnmount(() => {
+        clearInterval(timer.value);
+        timer.value = null;
+      })
+      // 倒计时
+      function start() {
+        console.log(props.timestamp,'这个是要倒计时的值')
+        if (parseFloat(props.timestamp) <= 0) return;
+        seconds.value = Number(props.timestamp);
+        formatTime(seconds.value);
+        timer.value = setInterval(() => {
+          seconds.value--;
+          // 发出change事件
+          emit('change', seconds);
+          if (seconds.value < 0) {
+            return end();
+          }
+          formatTime(seconds.value);
+        }, 1000);
+
       }
-    },
-    // 是否显示数字框
-    showBorder: {
-      type: Boolean,
-      default: false
-    },
 
-    // 是否显示秒
-    showSeconds: {
-      type: Boolean,
-      default: true
-    },
-    // 是否显示分钟
-    showMinutes: {
-      type: Boolean,
-      default: true
-    },
-    // 是否显示小时
-    showHours: {
-      type: Boolean,
-      default: true
-    },
-    // 是否显示“天”
-    showDays: {
-      type: Boolean,
-      default: true
-    },
-  });
-  // 记录定时器id
-  let timer = ref('');
-  // 天的默认值
-  let d = ref('00');
-  // 小时的默认值
-  let h = ref('00');
-  // 分钟的默认值
-  let i = ref('00');
-  // 秒的默认值
-  let s = ref('00');
-  // 记录不停倒计过程中变化的秒数
-  let seconds = ref(0);
-  // 监听时间戳的变化
-  watch(() => props.timestamp, (newval, oldval) => {
-    // 如果倒计时间发生变化，清除定时器，重新开始倒计时
-    clearInterval(timer.vlaue);
-    // console.log(newVal,'调用了')
-    start();
-  });
-
-  onBeforeMount(() => {
-    clearInterval(timer.value);
-    props.autoplay && parseFloat(props.timestamp || 0) > 0 && start();
-  })
-  onBeforeUnmount(() => {
-    clearInterval(timer.value);
-    timer.value = null;
-  })
-  // 倒计时
-  function start() {
-    // console.log(this.timestamp,'这个是要倒计时的值')
-    if (parseFloat(props.timestamp) <= 0) return;
-    seconds.value = Number(props.timestamp);
-    formatTime(seconds.value);
-    timer.value = setInterval(() => {
-      seconds.value--;
-      // 发出change事件
-      emit('change', seconds);
-      if (seconds.value < 0) {
-        return end();
+      // 格式化时间
+      function formatTime(seconds) {
+        // 小于等于0的话，结束倒计时
+        seconds <= 0 && end();
+        let [day, hour, minute, second] = [0, 0, 0, 0];
+        day = Math.floor(seconds / (60 * 60 * 24));
+        // 判断是否显示“天”参数，如果不显示，将天部分的值，加入到小时中
+        // hour为给后面计算秒和分等用的(基于显示天的前提下计算)
+        hour = Math.floor(seconds / (60 * 60)) - day * 24;
+        // showHour为需要显示的小时
+        let showHour = null;
+        if (props.showDays) {
+          showHour = hour;
+        } else {
+          showHour = Math.floor(seconds / (60 * 60));
+        }
+        minute = Math.floor(seconds / 60) - hour * 60 - day * 24 * 60;
+        second = Math.floor(seconds) - day * 24 * 60 * 60 - hour * 60 * 60 - minute * 60;
+        // 如果小于10，在前面补上一个"0"
+        // day = day < 10 ? '0' + day : day;
+        // showHour = showHour < 10 ? '0' + showHour : showHour;
+        // minute = minute < 10 ? '0' + minute : minute;
+        // second = second < 10 ? '0' + second : second;
+        // padStart 前补零
+        d.value = String(day).padStart(2, '0');
+        h.value = String(showHour).padStart(2, '0');
+        i.value = String(minute).padStart(2, '0');
+        s.value = String(second).padStart(2, '0');
       }
-      formatTime(seconds.value);
-    }, 1000);
-
-  }
-
-  // 格式化时间
-  function formatTime(seconds) {
-    // 小于等于0的话，结束倒计时
-    seconds <= 0 && end();
-    let [day, hour, minute, second] = [0, 0, 0, 0];
-    day = Math.floor(seconds / (60 * 60 * 24));
-    // 判断是否显示“天”参数，如果不显示，将天部分的值，加入到小时中
-    // hour为给后面计算秒和分等用的(基于显示天的前提下计算)
-    hour = Math.floor(seconds / (60 * 60)) - day * 24;
-    // showHour为需要显示的小时
-    let showHour = null;
-    if (props.showDays) {
-      showHour = hour;
-    } else {
-      showHour = Math.floor(seconds / (60 * 60));
+      // 停止倒计时
+      function end() {
+        // 清除定时器
+        clearInterval(timer.value);
+        timer.value = null;
+        emit('end', {});
+      }
+      
+      
+      return {
+        end,
+        timer,
+        d,
+        h,
+        i,
+        s,
+        seconds,
+        start,
+        formatTime,
+      }
     }
-    minute = Math.floor(seconds / 60) - hour * 60 - day * 24 * 60;
-    second = Math.floor(seconds) - day * 24 * 60 * 60 - hour * 60 * 60 - minute * 60;
-    // 如果小于10，在前面补上一个"0"
-    // day = day < 10 ? '0' + day : day;
-    // showHour = showHour < 10 ? '0' + showHour : showHour;
-    // minute = minute < 10 ? '0' + minute : minute;
-    // second = second < 10 ? '0' + second : second;
-    // padStart 前补零
-    d.value = String(day).padStart(2, '0');
-    h.value = String(showHour).padStart(2, '0');
-    i.value = String(minute).padStart(2, '0');
-    s.value = String(second).padStart(2, '0');
-  }
-  // 停止倒计时
-  function end() {
-    // 清除定时器
-    clearInterval(timer.value);
-    timer.value = null;
-    emit('end', {});
   }
 </script>
 
@@ -195,14 +217,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding:var(--countdown-item-pad,unset);
+    padding: var(--countdown-item-pad, unset);
     white-space: nowrap;
     transform: translateZ(0);
     width: var(--countdown-item-size, 1em);
     height: var(--countdown-item-size, 1em);
-    border: var(--countdown-border,unset);
+    border: var(--countdown-border, unset);
     border-radius: var(--countdown-radius, var(--radius));
-    background-color: var(--countdown-bg-color,unset);
+    background-color: var(--countdown-bg-color, unset);
     background-image: var(--countdown-bg-img);
     box-shadow: var(--countdown-shadow);
   }
@@ -218,9 +240,9 @@
   .countdown-colon {
     display: flex;
     justify-content: center;
-    padding: var(---countdown-separator-pad,unset);
+    padding: var(---countdown-separator-pad, unset);
     line-height: 1;
-    font-weight: var(---countdown-separator-font-weight,inherit);
+    font-weight: var(---countdown-separator-font-weight, inherit);
     align-items: center;
     padding-bottom: 4rpx;
     font-size: var(---countdown-separator-font-size, inherit);

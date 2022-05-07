@@ -46,7 +46,7 @@
      * @event {Function} end 列表的消息每次被播放一个周期时触发，只有mode = vertical，或者mode = horizontal且is-circular = false时有效
      * @example <z-notice-bar :more-icon="true" :list="list"></z-notice-bar>
      */
-
+    import {computed} from 'vue';
     export default {
         name: "notice-bar",
 
@@ -151,31 +151,38 @@
                 default: true
             }
         },
-        computed: {
-            // 如果设置show为false，或者设置了noListHidden为true，且list长度又为零的话，隐藏组件
-            isShow() {
-                if (this.show == false || (this.noListHidden == true && this.list.length == 0)) return false;
-                else return true;
-            }
-        },
-        methods: {
-            // 点击通告栏
-            click(index) {
-                this.$emit('click', index);
-            },
-            // 点击关闭按钮
-            close() {
-                this.$emit('close');
-            },
-            // 点击更多箭头按钮
-            getMore() {
-                this.$emit('getMore');
-            },
-            // 滚动一个周期结束，只对垂直，或者水平步进形式有效
-            end() {
-                this.$emit('end');
-            }
+        setup(props,{emit}){
+          // 如果设置show为false，或者设置了noListHidden为true，且list长度又为零的话，隐藏组件
+          const isShow =  computed(()=>{
+            if (props.show == false || (props.noListHidden == true && props.list.length == 0)) return false;
+            else return true;
+          })
+          // 点击通告栏
+          function click(index) {
+              emit('click', index);
+          }
+          // 点击关闭按钮
+         function  close() {
+              emit('close');
+          }
+          // 点击更多箭头按钮
+          function getMore() {
+              emit('getMore');
+          }
+          // 滚动一个周期结束，只对垂直，或者水平步进形式有效
+          function end() {
+              emit('end');
+          }
+          return {
+            isShow,
+            click,
+            close,
+            getMore,
+            end,
+          }
         }
+ 
+
     };
 </script>
 

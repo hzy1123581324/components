@@ -41,8 +41,10 @@
      * @property {String} color 提示文字的颜色（默认#2979ff）
      * @example <read-more></read-more>
      */
+    import {ref,computed,watch,onMounted,getCurrentInstance} from 'vue';
     export default {
         name: "read-more",
+        emits:['showall'],
         props: {
             // 默认的显示占位高度，单位为rpx
             showHeight: {
@@ -81,77 +83,72 @@
             }
 
         },
-        watch: {
-            load(newval) {
-                // console.log(newval);
-                this.init();
+        setup(props,{emit}){
+          const { proxy } = getCurrentInstance();
+          let ActualHeight = ref(0);
+          let  showSwitch = ref(false);
+         let  eventHeight  = ref(0);
+          watch(()=>props.load,(newval,oldval)=>{
+            init();
+          })
+          let showAll = computed({
+            set(val){
+              emit('update:showall',val);
             },
-            showall(newval) {
-                this.showAll = newval;
+            get(){
+              return props.showall
             }
+          })
+           
+          const  contentStyle = computed(()=>{
+            return `height: ${ActualHeight.value}px;`
+          });
+          
+         const  globalStyle = computed(()=>{
+           return `${ color: props.color||''}`
+         });
+        function  init() {
+             let view = uni.createSelectorQuery().in(proxy).select('.content');
+             view.boundingClientRect(data => {
+                 // console.log("得到布局位置信息" + JSON.stringify(data));
+                 let limitHeight = uni.upx2px(props.showHeight);
+                 eventHeight.value = data.height;
+                 // 如果全部文本高度小于限制高度，拿文本高度
+                 if (data.height - limitHeight <= 0) {
+                     ActualHeight.value = data.height;
+                     showSwitch.value = false;
+                     // 文本高度大于限制高度，拿限制高度
+                 } else {
+                     ActualHeight.value = limitHeight;
+                     showSwitch.value = true;
+                 }
+         
+             }).exec();
+         },
+         // 展开或者收起
+        function toggleReadMore() {
+             showAll.value = !showAll.value;
+             if (showAll.value) {
+                 ActualHeight.value = eventHeight.value;
+             } else {
+                 ActualHeight.value = uni.upx2px(props.showHeight);
+             }
+         }
+         onMounted(()=>{
+           init();
+         })
+           return {
+             showAll,
+             globalStyle,
+             contentStyle,
+             init,
+             toggleReadMore,
+             ActualHeight,
+             showSwitch,
+             eventHeight,
+             
+           }
         },
-        computed: {
-
-            // 展开后无需阴影，收起时才需要阴影样式
-            innerShadowStyle() {
-                if (this.showMore) return {};
-                else return this.shadowStyle
-            },
-            contentStyle() {
-                let {
-                    ActualHeight
-                } = this;
-                return `height: ${ActualHeight}px;`
-            },
-            globalStyle() {
-                let {
-                    color,
-                } = this;
-                let colorStyle = color || '';
-                return `${colorStyle}`
-            }
-        },
-        data() {
-            return {
-                ActualHeight: 0,
-                showSwitch: false,
-                showAll: false,
-                eventHeight: 0,
-            };
-        },
-        mounted() {
-            this.init();
-            this.showAll = this.showall;
-        },
-        methods: {
-            init() {
-                let view = uni.createSelectorQuery().in(this).select('.content');
-                view.boundingClientRect(data => {
-                    // console.log("得到布局位置信息" + JSON.stringify(data));
-                    let limitHeight = uni.upx2px(this.showHeight);
-                    this.eventHeight = data.height;
-                    // 如果全部文本高度小于限制高度，拿文本高度
-                    if (data.height - limitHeight <= 0) {
-                        this.ActualHeight = data.height;
-                        this.showSwitch = false;
-                        // 文本高度大于限制高度，拿限制高度
-                    } else {
-                        this.ActualHeight = limitHeight;
-                        this.showSwitch = true;
-                    }
-
-                }).exec();
-            },
-            // 展开或者收起
-            toggleReadMore() {
-                this.showAll = !this.showAll;
-                if (this.showAll) {
-                    this.ActualHeight = this.eventHeight;
-                } else {
-                    this.ActualHeight = uni.upx2px(this.showHeight);
-                }
-            }
-        }
     };
 </script>
 

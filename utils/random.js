@@ -1,7 +1,7 @@
 // 随机操作
 
 /**
- * @description 取一个区间数
+ * @description 取一个区间随机数
  * @param {Number} min 最小值
  * @param {Number} max 最大值
  */
@@ -18,7 +18,12 @@ export function random(min, max) {
 //     return array.sort(() => Math.random() - 0.5);
 // }
 // 打乱数组
-export function randomArray(arr) {
+/**
+ * @description 打乱数组
+ * @param {array} arr 需要打乱的数组
+ * @return {array}
+ */
+export function randomArray(arr = []) {
     const newarr = []
     while (arr.length) {
         const ran = parseInt(Math.random() * arr.length)
@@ -45,7 +50,8 @@ export function randomArraySort(array = []) {
  * @param {number} min 
  * @param {number} max 
  * @param {number} value
+ * @return {number} 
  */
 export function range(min = 0, max = 0, value = 0) {
-	return Math.max(min, Math.min(max, Number(value)))
+    return Math.max(min, Math.min(max, Number(value)))
 }

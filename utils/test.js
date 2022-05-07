@@ -81,7 +81,15 @@ export function isDateISO(value) {
 export function isNumber(value) {
     return pattern.number.test(value)
 }
-
+/**
+ * 验证是否是数字
+ */
+export function isNum(value) {
+    if(!value){
+      return false;
+    }
+    return !isNaN(parseFloat(val));
+}
 /**
  * 验证整数
  */

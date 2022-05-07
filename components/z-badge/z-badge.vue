@@ -8,7 +8,7 @@
   /**
      * badge 数字角标
      * @description 数字角标一般和其它控件（列表、9宫格等）配合使用，用于进行数量提示，（注意父元素必须为相对定位）
-     * @tutorial 
+     * @tutorial https://www.zviewui.com/components/badge.html
      * @property {String, Number} num 数量 -1不显示，零显示红点，其他变现数字
      * @example <z-badge :num="num"></z-badge>
      * <style>
@@ -26,7 +26,9 @@
          }
      </style>
      */
-    import {computed} from 'vue';
+  import {
+    computed
+  } from 'vue';
   export default {
     name: 'z-badge',
     props: {
@@ -35,8 +37,10 @@
         default: "-1"
       }
     },
-    setup(props,{emit}){
-      const number = computed(()=>{
+    setup(props, {
+      emit
+    }) {
+      const number = computed(() => {
         if (props.num - 99 > 0) {
           return "99+";
         } else if (parseFloat(props.num) == 0) {
@@ -61,7 +65,7 @@
     content: attr(data-num);
     --size: 12rpx;
     --fs: 10rpx;
-    font-family: var(--badge-num-font-family,inherit);
+    font-family: var(--badge-num-font-family, inherit);
     position: absolute;
     display: flex;
     align-items: center;
@@ -78,10 +82,10 @@
     background-color: var(--badge-bg, #f55);
     color: var(--badge-color, #fff);
     font-size: var(--badge-font-size, var(--fs));
-    font-weight: var(--badge-weight,400);
+    font-weight: var(--badge-weight, 400);
     /* transform: translate(var(--badge-trans-x, -50%), var(--badge-trans-y, -50%)); */
     padding: var(--badge-pad, 0.5em);
     z-index: 3;
-    border-radius: var(--badge-radius,50%);
+    border-radius: var(--badge-radius, 50%);
   }
 </style>

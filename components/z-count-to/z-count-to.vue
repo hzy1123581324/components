@@ -1,5 +1,5 @@
 <template>
-  <view class="count-num">{{ displayValue }}</view>
+  <view class="count-num"><slot :num="displayValue">{{ displayValue }}</slot></view>
 </template>
 <script>
   /**
@@ -14,7 +14,7 @@
  * @property {Boolean} use-easing 滚动结束时，是否缓动结尾，见官网说明（默认true）
  * @property {String} separator 千位分隔符，见官网说明
  * @event {Function} end 数值滚动到目标值时触发
- * @example <z-count-to ref="countTo" :end-val="endVal" :autoplay="autoplay"></z-count-to>
+ * @example <z-count-to ref="countTo" v-model:end-val="endVal" v-model:autoplay="autoplay"></z-count-to>
  * <style>
     .count-to{
         --count-to-color:  数字滚动颜色 默认继承父元素
@@ -23,6 +23,23 @@
     }
  </style>
  */
+  import {
+    onMounted,
+    onBeforeMount,
+    onBeforeUnmount,
+    watch,
+    computed,
+    ref
+  } from 'vue';
+  import {
+    isNum
+  } from '../../utils/test.js';
+  // #ifdef H5
+   import '../../utils/requestAnimationFrame.js';
+  // #endif
+  // #ifndef H5
+   import {requestAnimationFrame,cancelAnimationFrame} from '../../utils/requestAnimationFrame.js'
+  // #endif
   export default {
     name: 'z-count-to',
     props: {
@@ -68,143 +85,133 @@
         default: ''
       }
     },
-    data() {
-      return {
-        localStartVal: this.startVal,
-        displayValue: this.formatNumber(this.startVal),
-        printVal: null,
-        paused: false, // 是否暂停
-        localDuration: Number(this.duration),
-        startTime: null, // 开始的时间
-        timestamp: null, // 时间戳
-        remaining: null, // 停留的时间
-        rAF: null,
-        lastTime: 0 // 上一次的时间
-      };
-    },
-    computed: {
-      countDown() {
-        return this.startVal > this.endVal;
-      }
-    },
-    watch: {
-      startVal() {
-        this.autoplay && this.start();
-      },
-      endVal() {
-        this.autoplay && this.start();
-      }
-    },
-    mounted() {
-      this.autoplay && this.start();
-    },
-    methods: {
-      easingFn(t, b, c, d) {
-        return (c * (-Math.pow(2, (-10 * t) / d) + 1) * 1024) / 1023 + b;
-      },
-      requestAnimationFrame(callback) {
-        const currTime = new Date().getTime();
-        // 为了使setTimteout的尽可能的接近每秒60帧的效果
-        const timeToCall = Math.max(0, 16 - (currTime - this.lastTime));
-        const id = setTimeout(() => {
-          callback(currTime + timeToCall);
-        }, timeToCall);
-        this.lastTime = currTime + timeToCall;
-        return id;
-      },
+    setup(props, {
+      emit
+    }) {
+      let localStartVal = props.startVal;
+      let displayValue = ref(0);
+      let printVal =  null;
+      let paused =  false; // 是否暂停
+      let localDuration =  Number(props.duration);
+      let startTime = null; // 开始的时间
+      let timestamp =  null; // 时间戳
+      let remaining =  null; // 停留的时间
+      let  rAF =  null;
+      let lastTime =  0 // 上一次的时间
 
-      cancelAnimationFrame(id) {
-        clearTimeout(id);
-      },
+      onBeforeMount(()=>{
+        displayValue.value = formatNumber(props.startVal);
+      })
+      onMounted(() => {
+        props.autoplay && start();
+      });
+      onBeforeUnmount(()=>{
+        cancelAnimationFrame(rAF);
+      })
+      
+      // 监听传入开始/结束值的变化
+      watch([() => props.startVal, () => props.endVal], (newval, oldval) => {
+        props.autoplay && start();
+      })
+      // 是否可以滚动
+      const countDown = computed(() => {
+        return props.startVal > props.endVal;
+      });
+
+      function easingFn(t, b, c, d) {
+        return (c * (-Math.pow(2, (-10 * t) / d) + 1) * 1024) / 1023 + b;
+      }
+
+      
       // 开始滚动数字
-      start() {
-        this.localStartVal = this.startVal;
-        this.startTime = null;
-        this.localDuration = this.duration;
-        this.paused = false;
-        this.rAF = this.requestAnimationFrame(this.count);
-      },
+    function start() {
+        localStartVal = props.startVal;
+        startTime = null;
+        localDuration = props.duration;
+        paused = false;
+        rAF = requestAnimationFrame(count);
+      }
+      
       // 暂定状态，重新再开始滚动；或者滚动状态下，暂停
-      reStart() {
-        if (this.paused) {
-          this.resume();
-          this.paused = false;
+     function reStart() {
+        if (paused) {
+          resume();
+          paused = false;
         } else {
-          this.stop();
-          this.paused = true;
+          stop();
+          paused = true;
         }
-      },
+      }
       // 暂停
-      stop() {
-        this.cancelAnimationFrame(this.rAF);
-      },
+      function stop() {
+        cancelAnimationFrame(rAF);
+      }
       // 重新开始(暂停的情况下)
-      resume() {
-        this.startTime = null;
-        this.localDuration = this.remaining;
-        this.localStartVal = this.printVal;
-        this.requestAnimationFrame(this.count);
-      },
+     function resume() {
+        startTime = null;
+        localDuration = remaining;
+        localStartVal = printVal;
+        requestAnimationFrame(count);
+      }
       // 重置
-      reset() {
-        this.startTime = null;
-        this.cancelAnimationFrame(this.rAF);
-        this.displayValue = this.formatNumber(this.startVal);
-      },
-      count(timestamp) {
-        if (!this.startTime) this.startTime = timestamp;
-        this.timestamp = timestamp;
-        const progress = timestamp - this.startTime;
-        this.remaining = this.localDuration - progress;
-        if (this.useEasing) {
-          if (this.countDown) {
-            this.printVal = this.localStartVal - this.easingFn(progress, 0, this.localStartVal - this.endVal,
-              this.localDuration);
+      function reset() {
+        startTime = null;
+        cancelAnimationFrame(rAF);
+        displayValue.value = formatNumber(props.startVal);
+      }
+      function count(oldTimestamp) {
+        if (!startTime) startTime = oldTimestamp;
+        timestamp = oldTimestamp;
+        const progress = oldTimestamp - startTime;
+        remaining = localDuration - progress;
+        if (props.useEasing) {
+          if (countDown.value) {
+            printVal = localStartVal - easingFn(progress, 0, localStartVal - props.endVal,
+              localDuration);
           } else {
-            this.printVal = this.easingFn(progress, this.localStartVal, this.endVal - this.localStartVal,
-              this.localDuration);
+            printVal = easingFn(progress, localStartVal, props.endVal - localStartVal,
+              localDuration);
           }
         } else {
-          if (this.countDown) {
-            this.printVal = this.localStartVal - (this.localStartVal - this.endVal) * (progress / this.localDuration);
+          if (countDown.value) {
+            printVal = localStartVal - (localStartVal - props.endVal) * (progress / localDuration);
           } else {
-            this.printVal = this.localStartVal + (this.endVal - this.localStartVal) * (progress / this.localDuration);
+            printVal = localStartVal + (props.endVal - localStartVal) * (progress / localDuration);
           }
         }
-        if (this.countDown) {
-          this.printVal = this.printVal < this.endVal ? this.endVal : this.printVal;
+        if (countDown.value) {
+          printVal = printVal < props.endVal ? props.endVal : printVal;
         } else {
-          this.printVal = this.printVal > this.endVal ? this.endVal : this.printVal;
+          printVal = printVal > props.endVal ? props.endVal : printVal;
         }
-        this.displayValue = this.formatNumber(this.printVal);
-        if (progress < this.localDuration) {
-          this.rAF = this.requestAnimationFrame(this.count);
+        // console.log(printVal);
+        displayValue.value = formatNumber(printVal);
+        if (progress < localDuration) {
+          rAF = requestAnimationFrame(count);
         } else {
-          this.$emit('end');
+          emit('end');
         }
-      },
-      // 判断是否数字
-      isNumber(val) {
-        return !isNaN(parseFloat(val));
-      },
-      formatNumber(num) {
+      }
+      function formatNumber(num) {
         // 将num转为Number类型，因为其值可能为字符串数值，调用toFixed会报错
         num = Number(num);
-        num = num.toFixed(Number(this.decimals));
+        num = num.toFixed(Number(props.decimals));
         num += '';
         const x = num.split('.');
         let x1 = x[0];
-        const x2 = x.length > 1 ? this.decimal + x[1] : '';
+        const x2 = x.length > 1 ? props.decimal + x[1] : '';
         const rgx = /(\d+)(\d{3})/;
-        if (this.separator && !this.isNumber(this.separator)) {
+        if (props.separator && !isNum(props.separator)) {
           while (rgx.test(x1)) {
-            x1 = x1.replace(rgx, '$1' + this.separator + '$2');
+            x1 = x1.replace(rgx, '$1' + props.separator + '$2');
           }
         }
         return x1 + x2;
-      },
-      destroyed() {
-        this.cancelAnimationFrame(this.rAF);
+      }
+      
+      
+      return {
+        displayValue
       }
     }
   };

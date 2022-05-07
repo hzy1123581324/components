@@ -154,14 +154,3 @@ export function round(num, ratio) {
 export function enableBoundaryChecking(flag = true) {
   _boundaryCheckingState = flag;
 }
-
-
-// export default {
-//   times,
-//   plus,
-//   minus,
-//   divide,
-//   round,
-//   enableBoundaryChecking,
-// };
-

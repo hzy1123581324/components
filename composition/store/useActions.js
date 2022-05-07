@@ -13,7 +13,7 @@ export function useActions(mapper=[],moduleName="",) {
     if (Object.prototype.toString.call(moduleName) === "[object String]" && moduleName.length > 0) {
         mapperFn = createNamespacedHelpers(moduleName).mapActions
     }
-    console.log(mapperFn,'%%%%%%%%%');
+    // console.log(mapperFn,'%%%%%%%%%');
     // console.log(useActionMapper(mapper, mapperFn));
     return useActionMapper(mapper, mapperFn)
 }

@@ -7,8 +7,8 @@
 <script>
   export default {
     name: 'z-form-create',
-    data(){
-      return {}
+    setup(){
+      
     }
   }
 </script>

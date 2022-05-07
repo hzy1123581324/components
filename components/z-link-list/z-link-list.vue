@@ -91,12 +91,9 @@
             }
 
         },
-        data() {
-            return {}
+        setup(){
+          
         },
-        methods: {
-
-        }
     }
 </script>
 

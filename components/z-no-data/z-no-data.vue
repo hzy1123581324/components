@@ -8,10 +8,11 @@
 <script>
     export default {
         name: 'no-data',
-        data(){
-            return {
-                noDataTxt: '暂无数据'
-            }
+        setup(){
+          let noDataTxt = ref('暂无数据');
+          return {
+            noDataTxt,
+          }
         }
     }
 </script>

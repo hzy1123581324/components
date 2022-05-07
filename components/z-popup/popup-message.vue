@@ -17,7 +17,7 @@
      * @property {String} message 消息提示文字
      * @property {String} duration 显示时间，设置为 0 则不会自动关闭
      */
-
+    import {getCurrentInstance,inject} from 'vue';
     export default {
         name: 'popupMessage',
         props: {
@@ -43,25 +43,29 @@
                 default: 3000
             }
         },
-        inject: ['popup'],
-        data() {
-            return {}
+        setup(props,{emit}){
+          const { proxy } = getCurrentInstance();
+          let popup = inject('popup');
+          let popuptimer = null;
+          popup.childrenMsg = proxy
+         function open() {
+              if (props.duration === 0) return
+              clearTimeout(popuptimer)
+              popuptimer = setTimeout(() => {
+                  popup.close()
+              }, props.duration)
+          },
+          function close() {
+              clearTimeout(popuptimer)
+          }
+          
+          // return {
+          //   open,
+          //   close
+          // }
         },
-        created() {
-            this.popup.childrenMsg = this
-        },
-        methods: {
-            open() {
-                if (this.duration === 0) return
-                clearTimeout(this.popuptimer)
-                this.popuptimer = setTimeout(() => {
-                    this.popup.close()
-                }, this.duration)
-            },
-            close() {
-                clearTimeout(this.popuptimer)
-            }
-        }
+
+
     }
 </script>
 <style lang="scss" scoped>

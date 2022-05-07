@@ -10,7 +10,7 @@
     </view>
 </template>
 
-<script setup>
+<script>
     /**
      * textarea 自定义多行文本框
      * @description 此组件一般用于解决textarea层级过高的问题
@@ -22,17 +22,9 @@
      */
     import {ref,inject,watch,onBeforeMount} from "vue";
     import {throttle,debounce} from '../../utils/optimize.js';
-    const emit = defineEmits(["update:modelValue"]);
-    let currentValue = ref("");
-    let showTextarea = ref(false);
-    // 从z-form 传递下来的数据
-    const formValue = inject('formValue',null);
-    const formName = inject('formName','');
-    // 检查某一个规则
-    const validateField = inject('validateField', null);
-    
-    
-    const props = defineProps({
+    export default {
+      emits:["update:modelValue"],
+      props:{
         autoFocus: {
             type: Boolean,
             default: true,
@@ -72,87 +64,106 @@
             return ['vertical', 'overlap'].indexOf(value) !== -1
           }
         },
-
-    });
-    let isOverlap = ref(true);
-    onBeforeMount(() => {
-      if (formName && formName.value == '' && props.name != '') {
-        formName.value = props.name;
-      }
-      console.log(formValue,formName.value,formValue[formName.value],'txtxtxtxtttttt')
-      if(props.modelValue){
-        currentValue.value = props.modelValue;
-      }else if(formValue&&formValue[formName.value]){
-        currentValue.value = formValue&&formValue[formName.value];
-        isOverlap.value = false;
-      }
-      
-      
-    });
-    watch(()=>formValue&&formValue[formName.value],(newval,oldval)=>{
-      if(newval!=''&& !currentValue.value){
-        currentValue.value = formValue[formName.value];
-        isOverlap.value = false;
-      }
-      // console.log('333333')
-    });
-    function change(e){
-        currentValue.value = e.detail.value;
-        // 传递到form
-        if(formValue){
-          formValue[props.name] = e.detail.value;
-        }
-    }
-    function clear(){
+      },
+      setup(props,{emit}){
+        let currentValue = ref("");
+        let showTextarea = ref(false);
+        // 从z-form 传递下来的数据
+        const formValue = inject('formValue',null);
+        const formName = inject('formName','');
+        // 检查某一个规则
+        const validateField = inject('validateField', null);
         
-    }
-    // 用于 v-mode.defer=""
-    // 节流，每间隔500毫秒执行一次
-    let cacheval = '';
-    const inputThrottle2 =
-      throttle(() => {
-        // console.log('&&&&&&&&&&&&&777777777');
-        emit("update:modelValue", cacheval);
-    
-      }, 500);
-    // 防抖，防止上面没有取到最新值
-    const inputDebounce2 = debounce(() => {
-      // console.log('&&&&&&&&&&&&&444444444');
-      emit("update:modelValue", cacheval);
-    }, 600);
-    watch(currentValue, (newval, oldval) => {
-      // console.log(newval);
-      // console.log('$$$$$$$$$$$');
-      if (formValue) {
-        formValue[formName.value] = newval;
-      }
-      // 检验规则
-      if (validateField) {
-        validateField(formName.value, 'change');
-      }
-      cacheval = newval;
-      if (props.modelModifiers.defer) {
+          
+        let isOverlap = ref(true);
+        onBeforeMount(() => {
+          if (formName && formName.value == '' && props.name != '') {
+            formName.value = props.name;
+          }
+          // console.log(formValue,formName.value,formValue[formName.value],'txtxtxtxtttttt')
+          if(props.modelValue){
+            currentValue.value = props.modelValue;
+          }else if(formValue&&formValue[formName.value]){
+            currentValue.value = formValue&&formValue[formName.value];
+            isOverlap.value = false;
+          }
+          
+          
+        });
+        watch(()=>formValue&&formValue[formName.value],(newval,oldval)=>{
+          if(newval!=''&& !currentValue.value){
+            currentValue.value = formValue[formName.value];
+            isOverlap.value = false;
+          }
+          // console.log('333333')
+        });
+        function change(e){
+            currentValue.value = e.detail.value;
+            // 传递到form
+            if(formValue){
+              formValue[props.name] = e.detail.value;
+            }
+        }
+        function clear(){
+            
+        }
+        // 用于 v-mode.defer=""
         // 节流，每间隔500毫秒执行一次
-        inputThrottle2();
+        let cacheval = '';
+        const inputThrottle2 =
+          throttle(() => {
+            // console.log('&&&&&&&&&&&&&777777777');
+            emit("update:modelValue", cacheval);
+        
+          }, 500);
         // 防抖，防止上面没有取到最新值
-        inputDebounce2();
-      } else {
-        emit("update:modelValue", newval)
-      }
-    });
-    
-    // 监听失去焦点事件
-    function textareaBlur() {
-      showTextarea.value = false;
-      isOverlap.value = currentValue.value == '';
-      if (formValue) {
-        formValue[formName.value] = currentValue.value || '';
-      }
-      // 检验规则
-      if (validateField) {
-        validateField(formName.value, 'blur');
+        const inputDebounce2 = debounce(() => {
+          // console.log('&&&&&&&&&&&&&444444444');
+          emit("update:modelValue", cacheval);
+        }, 600);
+        watch(currentValue, (newval, oldval) => {
+          // console.log(newval);
+          // console.log('$$$$$$$$$$$');
+          if (formValue) {
+            formValue[formName.value] = newval;
+          }
+          // 检验规则
+          if (validateField) {
+            validateField(formName.value, 'change');
+          }
+          cacheval = newval;
+          if (props.modelModifiers.defer) {
+            // 节流，每间隔500毫秒执行一次
+            inputThrottle2();
+            // 防抖，防止上面没有取到最新值
+            inputDebounce2();
+          } else {
+            emit("update:modelValue", newval)
+          }
+        });
+        
+        // 监听失去焦点事件
+        function textareaBlur() {
+          showTextarea.value = false;
+          isOverlap.value = currentValue.value == '';
+          if (formValue) {
+            formValue[formName.value] = currentValue.value || '';
+          }
+          // 检验规则
+          if (validateField) {
+            validateField(formName.value, 'blur');
+          }
+        }
+        return {
+          isOverlap,
+          currentValue,
+          textareaBlur,
+          change,
+          showTextarea,
+        }
       }
     }
+    
 </script>
 
 <style scoped>

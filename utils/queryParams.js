@@ -3,6 +3,7 @@
  * @param {*} data,对象
  * @param {*} isPrefix,是否自动加上"?"
  * @param {string} arrayFormat 规则 indices|brackets|repeat|comma
+ * @return {string} 返回拼接好的字符串 如 "name=1234&name3=1234"
  */
 export function queryParams(data = {}, isPrefix = true, arrayFormat = 'brackets') {
   let prefix = isPrefix ? '?' : ''
@@ -59,6 +60,7 @@ export function queryParams(data = {}, isPrefix = true, arrayFormat = 'brackets'
 /**
  * 获取某一项url参数
  * @param {*} data,对象
+ * @return {string} 
  */
 export function getUrlParam(url = window.location.search.substr(1), name) {
   if(url.indexOf('?')>-1){
@@ -78,9 +80,9 @@ demo
 */
 
 /**
- * url参数转对象
- * @param {*} data,对象
- * @param {*} isPrefix,是否自动加上"?"
+ * 返回参数对象
+ * @param {string} url,地址
+ * @return {object} 返回参数对象
  */
 export function parseParam(url) {
   // 将浏览器地址中 ‘?’ 后面的字符串取出来

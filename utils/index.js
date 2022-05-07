@@ -2,15 +2,7 @@ import * as test from './test.js'
 import {
     round
 } from './digit.js'
-/**
- * @description 如果value小于min，取min；如果value大于max，取max
- * @param {number} min 
- * @param {number} max 
- * @param {number} value
- */
-export function range(min = 0, max = 0, value = 0) {
-    return Math.max(min, Math.min(max, Number(value)))
-}
+
 
 /**
  * @description 用于获取用户传递值的px值  如果用户传递了"xxpx"或者"xxrpx"，取出其数值部分，如果是"xxxrpx"还需要用过uni.upx2px进行转换
@@ -30,21 +22,6 @@ export function getPx(value, unit = false) {
 }
 
 
-
-
-
-/**
- * @description 取一个区间数
- * @param {Number} min 最小值
- * @param {Number} max 最大值
- */
-export function random(min, max) {
-    if (min >= 0 && max > 0 && max >= min) {
-        const gab = max - min + 1
-        return Math.floor(Math.random() * gab + min)
-    }
-    return 0
-}
 
 
 
@@ -182,33 +159,6 @@ export function error(err) {
     }
 }
 
-
-
-// padStart 的 polyfill，因为某些机型或情况，还无法支持es7的padStart，比如电脑版的微信小程序
-// 所以这里做一个兼容polyfill的兼容处理
-if (!String.prototype.padStart) {
-    // 为了方便表示这里 fillString 用了ES6 的默认参数，不影响理解
-    String.prototype.padStart = (maxLength, fillString = ' ') => {
-        if (Object.prototype.toString.call(fillString) !== '[object String]') {
-            throw new TypeError(
-                'fillString must be String'
-            )
-        }
-        const str = this
-        // 返回 String(str) 这里是为了使返回的值是字符串字面量，在控制台中更符合直觉
-        if (str.length >= maxLength) return String(str)
-
-        const fillLength = maxLength - str.length
-        let times = Math.ceil(fillLength / fillString.length)
-        while (times >>= 1) {
-            fillString += fillString
-            if (times === 1) {
-                fillString += fillString
-            }
-        }
-        return fillString.slice(0, fillLength) + str
-    }
-}
 
 /**
  * @description 格式化时间
@@ -370,13 +320,6 @@ export function getDuration(value, unit = true) {
     return valueNum
 }
 
-/**
- * @description 日期的月或日补零操作
- * @param {String} value 需要补零的值
- */
-export function padZero(value) {
-    return `00${value}`.slice(-2)
-}
 
 /**
  * @description 在u-form的子组件内容发生变化，或者失去焦点时，尝试通知u-form执行校验方法

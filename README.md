@@ -212,7 +212,6 @@
     │   ├─ randomArray.js
     │   ├─ route.js
     │   ├─ test.js
-    │   ├─ timeFormat.js
     │   ├─ timeFrom.js
     │   ├─ toast.js
     │   ├─ trim.js

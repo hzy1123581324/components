@@ -48,6 +48,13 @@
     import carKeyboard from './car-keyboard.vue';
     export default {
         name: "keyboard",
+        emits:[
+          'change',
+          'input',
+          'confirm',
+          'cancel',
+          'backspace'
+        ],
         props: {
             // 键盘的类型，number-数字键盘，card-身份证键盘，car-车牌号键盘
             mode: {
@@ -112,55 +119,53 @@
             // z-index值
             zIndex: {
                 type: [Number, String],
-                default: ''
+                default: '9999'
             }
         },
-        data() {
-            return {
-                //show: false
-            }
+        setup(props,{emit}){
+         function change(e) {
+              emit('change', e);
+          },
+          // 键盘关闭
+         function popupClose() {
+              // 通过发送input这个特殊的事件名，可以修改父组件传给props的value的变量，也即双向绑定
+              emit('input', false);
+          },
+          // 输入完成
+          function onConfirm() {
+              this.popupClose();
+              emit('confirm');
+          },
+          // 取消输入
+         function onCancel() {
+              this.popupClose();
+              emit('cancel');
+          },
+          // 退格键
+         function backspace() {
+              emit('backspace');
+          },
+          // 关闭键盘
+          // close() {
+          //     this.show = false;
+          // },
+          // // 打开键盘
+          // open() {
+          //     this.show = true;
+          // }
+          
+          return {
+            change,
+            popupClose,
+            onConfirm,
+            onCancel,
+            backspace,
+          }
         },
         components: {
             numberKeyboard,
             carKeyboard
         },
-        computed: {
-            uZIndex() {
-                return this.zIndex ? this.zIndex : this.$u.zIndex.popup;
-            }
-        },
-        methods: {
-            change(e) {
-                this.$emit('change', e);
-            },
-            // 键盘关闭
-            popupClose() {
-                // 通过发送input这个特殊的事件名，可以修改父组件传给props的value的变量，也即双向绑定
-                this.$emit('input', false);
-            },
-            // 输入完成
-            onConfirm() {
-                this.popupClose();
-                this.$emit('confirm');
-            },
-            // 取消输入
-            onCancel() {
-                this.popupClose();
-                this.$emit('cancel');
-            },
-            // 退格键
-            backspace() {
-                this.$emit('backspace');
-            },
-            // 关闭键盘
-            // close() {
-            //     this.show = false;
-            // },
-            // // 打开键盘
-            // open() {
-            //     this.show = true;
-            // }
-        }
     }
 </script>
 

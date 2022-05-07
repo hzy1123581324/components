@@ -7,7 +7,7 @@
     </view>
 </template>
 
-<script setup>
+<script>
     /**
      * z-icon-shadow 
      * @description 图标变色，带透明度的图标

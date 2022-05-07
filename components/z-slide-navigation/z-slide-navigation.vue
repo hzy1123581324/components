@@ -1,7 +1,7 @@
 <template>
   <view class="slide-navigation-box">
-    <scroll-view id="scrollBox" :scroll-x="direction" :scroll-left='scollx' scroll-with-animation="true" class="slide-navigation-item"
-      :style="countStyle" @scroll="scrollChange">
+    <scroll-view id="scrollBox" :scroll-x="direction" :scroll-left='scollx' scroll-with-animation="true"
+      class="slide-navigation-item" :style="countStyle" @scroll="scrollChange">
       <view class="menu-item" v-for="(items,index) in _list" :key="index">
         <view hover-class="none" class="menu-box" v-for="item in items" :key="item.id" @tap="itemtap(item)">
           <navigator hover-class="none" :url="item[keyUrl]">
@@ -56,8 +56,15 @@
      </style>
      */
   let change_rate, move_type;
+  import {
+    nextTick,
+    reactive,
+    ref,
+    getCurrentInstance
+  } from 'vue';
   export default {
     name: 'slide-navigation',
+    emits: ['itemtap'],
     props: {
       list: {
         type: Array,
@@ -97,24 +104,20 @@
         default: 'url'
       }
     },
-    data() {
-      return {
-        movex: 0,
-        scollx: 0,
-        timer: null,
-        move_type: null,
-      };
-    },
-    created() {},
-    watch: {},
-    computed: {
+    setup(props, {
+      emit
+    }) {
+      const { proxy } = getCurrentInstance();
+      let scollx = ref(0);
+      let timer = null;
+      let move_type = null;
       // 处理传入数据 
-      _list() {
+      const _list = computed(() => {
         let {
           list,
           row,
           column
-        } = this;
+        } = props;
         let _list = [
           []
         ];
@@ -130,43 +133,42 @@
         }
         // console.log(_list,'处理后的数据')
         return _list;
-      },
+      });
+
       // 修改样式
-      countStyle() {
+      const countStyle = computed(() => {
         let {
           column,
           iconSize
-        } = this;
+        } = props;
         column = 100 / column;
         return `--item-width: ${column}%;`
-      },
+      })
       // 进度条样式
-      countProgressStyle() {
-        let column = (100 / this._list.length) || 30;
+      const countProgressStyle = computed(() => {
+        let column = (100 / props._list.length) || 30;
         return `width: ${column}%;`
-      }
-    },
-    mounted() {},
-    methods: {
-      itemtap(item) {
-        this.$emit('itemtap', item);
+      })
+
+      function itemtap(item) {
+        emit('itemtap', item);
       },
       // 移动进度条
-      movableChange(event) {
+      function movableChange(event) {
         // console.log(event,'888888888888888');
-        if (this.move_type && this.move_type != 'movable') {
+        if (move_type && move_type != 'movable') {
           return;
         }
-        this.move_type = 'movable';
-        clearTimeout(this.timer);
-        this.timer = setTimeout(() => {
-          this.move_type = null;
+        move_type = 'movable';
+        clearTimeout(movex.value);
+        movex.value = setTimeout(() => {
+          move_type = null;
         }, 600)
-        // this.movex = event.detail.x;
+        // movex.value = event.detail.x;
         if (!change_rate) {
           let top = 0;
-          let len = this._list.length;
-          const query = uni.createSelectorQuery().in(this);
+          let len = _list.length;
+          const query = uni.createSelectorQuery().in(proxy);
           query.select('#scrollBox').boundingClientRect(data => {
             // console.log("得到布局位置信息" + JSON.stringify(data));
             // console.log("节点离页面顶部的距离为" + data.top);
@@ -179,31 +181,34 @@
           // change_rate= uni.upx2px(120)/;
         }
 
-        this.$nextTick(() => {
-          this.scollx = event.detail.x / change_rate;
+        nextTick(() => {
+          scollx.value = event.detail.x / change_rate;
         })
-      },
+      }
 
-      scrollChange(event) {
+      function scrollChange(event) {
         // console.log(event);
-        if (this.move_type && this.move_type != 'scroll') {
+        if (move_type && move_type != 'scroll') {
           return;
         }
-        this.move_type = 'scroll';
-        clearTimeout(this.timer);
-        this.timer = setTimeout(() => {
-          this.move_type = null;
+        move_type = 'scroll';
+        clearTimeout(movex.value);
+        movex.value = setTimeout(() => {
+          move_type = null;
         }, 600)
-        let scollx = event.detail.scrollLeft;
+        let Scollx = event.detail.scrollLeft;
         if (!change_rate) {
           change_rate = uni.upx2px(120) / event.detail.scrollWidth;
         }
         // console.log(change_rate,'&&&&&&&&&&&&&&&&&&&')
-        this.$nextTick(() => {
-          this.movex = scollx * change_rate;
+        nextTick(() => {
+          movex.value = Scollx * change_rate;
         })
       }
+
     }
+
+
   }
 </script>
 

@@ -22,8 +22,10 @@
    *   </template>
    * </waterfall>
    */
+  import {computed} from 'vue';
   export default {
     name: "waterfall",
+    emits: ['point'],
     props: {
       column: {
         type: [String, Number],
@@ -36,32 +38,33 @@
         },
       },
     },
-
-    components: {},
-    computed: {
-      columnList() {
+    setup(props,{emit}){
+      const columnList = computed(()=>{
         let _list = [];
-        let column = this.column;
-
-        let list = this.list || [];
+        let column = props.column;
+        
+        let list = props.list || [];
         for (let i = 0; i < list.length; i++) {
           _list[i % column] || (_list[i % column] = []);
           _list[i % column].push(list[i]);
         }
-
+        
         return _list;
-      },
-    },
-    methods: {
-      //点击事件
-      point(item, rowindex, colindex) {
-        this.$emit('point', {
+      })
+      
+       //点击事件
+     function  point(item, rowindex, colindex) {
+        emit('point', {
           item,
           rowindex,
           colindex
         });
       }
-    },
+      return {
+        point,
+        columnList
+      }
+    }
   };
 </script>
 

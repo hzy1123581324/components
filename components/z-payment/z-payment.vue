@@ -61,6 +61,7 @@
         }
      </style>
      */
+    import {ref} from 'vue';
 	export default {
 		name: 'payment',
 		props: {
@@ -84,59 +85,47 @@
 				}
 			}
 		},
-		data() {
-			return {
-				showPayment: false,
-				passWord: '',
-				nums: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
-			}
-		},
-		mounted() {},
-		methods: {
-			getpayword() {
-				this.forget();
-			}
-		},
-		computed: {
+    setup(props,{emit}){
+      let showPayment = ref(false);
+      let passWord = ref('');
+      const nums =  ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+      
+      
+      showpayment(newval) {
+      	this.showPayment = newval;
+      },
+      showPayment(newval) {
+      	this.passWord = '';
+      	if (!newval) {
+      		this.$emit("update:showpayment", newval);
+      	}
+      },
+      passWord(newval) {
+      	if (newval.length >= 6) {
+      		this.pay && this.pay(newval);
+      		this.$emit("update:password", newval);
+      		this.$emit("passworded", newval);
+      		setTimeout(() => {
+      			this.showPayment = false;
+      		}, 500)
+      	}
+      
+      
+      }
+      return {
+        nums,
+        passWord
+      }
+    }
 
-		},
-		watch: {
-			showpayment(newval) {
-				this.showPayment = newval;
-			},
-			showPayment(newval) {
-				this.passWord = '';
-				if (!newval) {
-					this.$emit("update:showpayment", newval);
-				}
-			},
-			passWord(newval) {
-				if (newval.length >= 6) {
-					this.pay && this.pay(newval);
-					this.$emit("update:password", newval);
-					this.$emit("passworded", newval);
-					setTimeout(() => {
-						this.showPayment = false;
-					}, 500)
-				}
-
-
-			}
-		}
 	}
 </script>
 
-<style>
+<style scoped>
 	/* 仿支付宝 输入支付密码组件 */
-
-
-
 	.paymentTitle {
 		line-height: 98rpx;
 	}
-
-
-
 	.payment-init-box {
 		/* border:.13333vw solid #d2d2d2; */
 		box-shadow: 0 0 0 0.26667vw #e7e7e7;
@@ -144,13 +133,11 @@
 		overflow: hidden;
 		display: flex;
 	}
-
 	.payment-init-box .payment-init {
 		flex-grow: 1;
 		flex-shrink: 0;
 		position: relative;
 	}
-
 	.payment-init-box .payment-init.satisfy::before {
 		content: '';
 		width: 24rpx;
@@ -164,7 +151,6 @@
 		margin-top: -12rpx;
 
 	}
-
 	.payment-forget {
 		color: #2E74F3;
 		margin: 6vw 0 7.2vw;

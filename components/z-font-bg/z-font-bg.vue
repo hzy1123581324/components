@@ -4,7 +4,7 @@
     </view>
 </template>
 
-<script setup>
+<script>
     /**
      * font-bg 字体背景同色
      * @description 字体背景同色，只是背景色的透明度不一样
@@ -18,20 +18,28 @@
      *</style>
      */
     import {computed} from 'vue';
-    const props = defineProps({
+    export default {
+      props: {
         opacity: {
             type: [Number,String],
             default: 0,
         }
-    });
-    
-     const commontstyle = computed(()=>{
-      if(props.opacity){
-        return `--font-bg-opacity:${props.opacity};`
-      }else{
-        return '';
+      },
+      setup(props,){
+        const commontstyle = computed(()=>{
+          if(props.opacity){
+            return `--font-bg-opacity:${props.opacity};`
+          }else{
+            return '';
+          }
+        })
+        return {
+          commontstyle
+        }
       }
-    })
+    }
+
+     
 </script>
 
 <style scoped>

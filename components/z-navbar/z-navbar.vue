@@ -31,7 +31,7 @@
   </view>
 </template>
 
-<script setup>
+<script>
   /**
      * navbar 自定义导航栏
      * @description 此组件一般用于在特殊情况下，需要自定义导航栏的时候用到，一般建议使用uniapp自带的导航栏。
@@ -62,160 +62,180 @@
     
      </style>
      */
-
-  import {
-    ref,
-    computed,
-    onMounted,
-    nextTick
-  } from "vue";
-  import {
-    useStore
-  } from 'vuex';
-  import {jump} from '../../composition/public.js';
-  let statusheight = ref(0);
-  import {isArray} from "../../utils/test.js";
-
-  
-  const props = defineProps({
-    // 是否显示返回
-    showBack: {
-      type: Boolean,
-      default: true,
-    },
-    // 当值是true时，不占位
-    isFixed: {
-      type: Boolean,
-      default: false,
-    },
-    // 左边返回的图标
-    backIconName: {
-      type: String,
-      default: "icon-arrow-left",
-    },
-    backTxt: {
-      type: String,
-      default: "返回",
-    },
-    backicon: {
-      type: String,
-      default: "",
-    },
-    hasbacktxt: {
-      type: Boolean,
-      default: false,
-    },
-    // 命名不规范，以后废弃使用下面的 onCustomBack
-    customBack: {
-      type: [Function, null],
-      default: null,
-    },
-    // 自定义返回逻辑
-    onCustomBack: {
-      type: [Function, null],
-      default: null,
-    },
-    /// 是否显示底部边框
-    border: {
-      type: [String, Boolean],
-      default: false,
-    },
-    avatar: {
-      type: Boolean,
-      default: false,
-    },
-    // 右上角图标
-    actions: {
-      type: [Array,Boolean],
-      default: []
-    },
+    import {
+      ref,
+      computed,
+      onMounted,
+      nextTick
+    } from "vue";
+    import {
+      useStore
+    } from 'vuex';
+    import {jump} from '../../composition/public.js';
     
-    /// 上面头像的url
-    src: {
-      type: String,
-      default: "",
-    },
-    /// 上面头像的尺寸
-    size: {
-      type: [String, Number],
-      default: "default",
-    },
-  });
-  const emit = defineEmits(["navbarHeight"]);
-  // 图标生成
-  const actionsList = computed(()=>{
-    if( isArray(props.actions) && props.actions.length>0||props.actions===false){
-      return props.actions||[];
-    }else{
-      const store = useStore();
-      return store.state.actions||[]
-    }
-  });
-  onMounted(() => {
-    uni.getSystemInfo({
-      success: (res) => {
-        // 有些手机没有设置--status-bar-height
-        statusheight = res.statusBarHeight;
+    import {isArray} from "../../utils/test.js";
+    export default {
+      emits: ['navbarHeight'],
+      props:{
+        // 是否显示返回
+        showBack: {
+          type: Boolean,
+          default: true,
+        },
+        // 当值是true时，不占位
+        isFixed: {
+          type: Boolean,
+          default: false,
+        },
+        // 左边返回的图标
+        backIconName: {
+          type: String,
+          default: "icon-arrow-left",
+        },
+        backTxt: {
+          type: String,
+          default: "返回",
+        },
+        backicon: {
+          type: String,
+          default: "",
+        },
+        hasbacktxt: {
+          type: Boolean,
+          default: false,
+        },
+        // 命名不规范，以后废弃使用下面的 onCustomBack
+        customBack: {
+          type: [Function, null],
+          default: null,
+        },
+        // 自定义返回逻辑
+        onCustomBack: {
+          type: [Function, null],
+          default: null,
+        },
+        /// 是否显示底部边框
+        border: {
+          type: [String, Boolean],
+          default: false,
+        },
+        avatar: {
+          type: Boolean,
+          default: false,
+        },
+        // 右上角图标
+        actions: {
+          type: [Array,Boolean],
+          default: []
+        },
+        
+        /// 上面头像的url
+        src: {
+          type: String,
+          default: "",
+        },
+        /// 上面头像的尺寸
+        size: {
+          type: [String, Number],
+          default: "default",
+        },
       },
-    });
-    nextTick(() => {
-      uni
-        .createSelectorQuery()
-        .in()
-        .select(".navbar-fixed-box")
-        .fields({
-            size: true,
-            rect: true,
-            scrollOffset: true,
-          },
-          (data) => {
-            // console.log( "得到布局位置信息" + JSON.stringify(data));
-            // console.log("节点离页面顶部的距离为" + data.top);
-            if (data) {
-              // tabsScrollWidth = data.width;
-              emit("navbarHeight", data.height);
+      setup(props,{emit}){
+        let statusheight = ref(0);
+        // 图标生成
+        const actionsList = computed(()=>{
+          if( isArray(props.actions) && props.actions.length>0||props.actions===false){
+            return props.actions||[];
+          }else{
+            const store = useStore();
+            return store.state.actions||[]
+          }
+        });
+        onMounted(() => {
+          uni.getSystemInfo({
+            success: (res) => {
+              // 有些手机没有设置--status-bar-height
+              statusheight = res.statusBarHeight;
+            },
+          });
+          nextTick(() => {
+            uni
+              .createSelectorQuery()
+              .in()
+              .select(".navbar-fixed-box")
+              .fields({
+                  size: true,
+                  rect: true,
+                  scrollOffset: true,
+                },
+                (data) => {
+                  // console.log( "得到布局位置信息" + JSON.stringify(data));
+                  // console.log("节点离页面顶部的距离为" + data.top);
+                  if (data) {
+                    // tabsScrollWidth = data.width;
+                    emit("navbarHeight", data.height);
+                  }
+                }
+              )
+              .exec();
+          });
+        });
+        
+        function goBack() {
+          // 如果自定义了点击返回按钮的函数，则执行，否则执行返回逻辑
+          // customBack以后要废弃
+          // customBack以后要废弃
+          // customBack以后要废弃
+          // customBack以后要废弃
+          // customBack以后要废弃
+          // customBack以后要废弃
+          // customBack以后要废弃
+          if (typeof props.customBack === "function") {
+            props.customBack();
+          } else if (typeof props.onCustomBack === "function") {
+            props.onCustomBack();
+          } else {
+            // console.log(getCurrentPages(),'((((((((((()))))))))))');
+            // 只有一个页面，返回到首页
+            if(getCurrentPages().length==1){
+              if(uni.getStorageSync('lastRouter')){
+                // console.log(uni.getStorageSync('lastRouter').path);
+                uni.switchTab({
+                  url: uni.getStorageSync('lastRouter').path
+                })
+              }else{
+                uni.reLaunch({
+                  url: "/"
+                })
+              }
+              
+            }else{
+              uni.navigateBack();
             }
           }
-        )
-        .exec();
-    });
-  });
-
-  function goBack() {
-    // 如果自定义了点击返回按钮的函数，则执行，否则执行返回逻辑
-    // customBack以后要废弃
-    // customBack以后要废弃
-    // customBack以后要废弃
-    // customBack以后要废弃
-    // customBack以后要废弃
-    // customBack以后要废弃
-    // customBack以后要废弃
-    if (typeof props.customBack === "function") {
-      props.customBack();
-    } else if (typeof props.onCustomBack === "function") {
-      props.onCustomBack();
-    } else {
-      // 只有一个页面，返回到首页
-      if(getCurrentPages().length==1){
-        uni.reLaunch({
-          url: "/"
-        })
-      }else{
-        uni.navigateBack();
+        }
+        // let  navbarStyle = computed(()=>{
+        // 	//     let style = '';
+        // 	//     let {
+        // 	//         isFixed
+        // 	//     } = this;
+        // 	//     if (!isFixed) {
+        // 	//         style += '--navbar-fixed: relative';
+        // 	//     }
+        
+        // 	//     return style
+        // })
+        return {
+          goBack,
+          computed,
+          jump,
+          statusheight,
+          actionsList
+        }
       }
     }
-  }
-  // let  navbarStyle = computed(()=>{
-  // 	//     let style = '';
-  // 	//     let {
-  // 	//         isFixed
-  // 	//     } = this;
-  // 	//     if (!isFixed) {
-  // 	//         style += '--navbar-fixed: relative';
-  // 	//     }
-
-  // 	//     return style
-  // })
+  
+ 
 </script>
 
 <style scoped lang="scss">

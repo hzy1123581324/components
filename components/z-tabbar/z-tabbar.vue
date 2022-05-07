@@ -47,6 +47,8 @@
 
 <script>
 	export default {
+    name: 'tabbar',
+    emits:['change','update:modelValue'],
 		props: {
 			// 显示与否
 			show: {
@@ -111,50 +113,52 @@
 				default: true
 			},
 		},
-		data() {
-			return {
+    setup(props,{emit}){
+     async function clickHandler(index) {
+      	if(props.beforeSwitch && typeof(props.beforeSwitch) === 'function') {
+      		// 执行回调，同时传入索引当作参数
+      		let beforeSwitch = props.beforeSwitch(index);
+      		// 判断是否返回了promise
+      		if (!!beforeSwitch && typeof beforeSwitch.then === 'function') {
+      			await beforeSwitch.then(res => {
+      				// promise返回成功，
+      				switchTab(index);
+      			}).catch(err => {
+      				
+      			})
+      		} else if(beforeSwitch === true) {
+      			// 如果返回true
+      			switchTab(index);
+      		}
+      	} else {
+      		switchTab(index);
+      	}
+      }
+      // 切换tab
+     function switchTab(index) {
+      	// 发出事件和修改v-model绑定的值
+      	emit('change', index);
+      	emit('input', index);
+      }
+      // 计算角标的right值
+     function  getOffsetRight(count, isDot) {
+      	// 点类型，count大于9(两位数)，分别设置不同的right值，避免位置太挤
+      	if(isDot) {
+      		return -20;
+      	} else if(count > 9) {
+      		return -40;
+      	} else {
+      		return -30;
+      	}
+      }
+      
+      return {
+        clickHandler,
+        switchTab,
+        getOffsetRight,
+      }
+    }
 
-			}
-		},
-		methods: {
-			async clickHandler(index) {
-				if(this.beforeSwitch && typeof(this.beforeSwitch) === 'function') {
-					// 执行回调，同时传入索引当作参数
-					let beforeSwitch = this.beforeSwitch(index);
-					// 判断是否返回了promise
-					if (!!beforeSwitch && typeof beforeSwitch.then === 'function') {
-						await beforeSwitch.then(res => {
-							// promise返回成功，
-							this.switchTab(index);
-						}).catch(err => {
-							
-						})
-					} else if(beforeSwitch === true) {
-						// 如果返回true
-						this.switchTab(index);
-					}
-				} else {
-					this.switchTab(index);
-				}
-			},
-			// 切换tab
-			switchTab(index) {
-				// 发出事件和修改v-model绑定的值
-				this.$emit('change', index);
-				this.$emit('input', index);
-			},
-			// 计算角标的right值
-			getOffsetRight(count, isDot) {
-				// 点类型，count大于9(两位数)，分别设置不同的right值，避免位置太挤
-				if(isDot) {
-					return -20;
-				} else if(count > 9) {
-					return -40;
-				} else {
-					return -30;
-				}
-			}
-		}
 	}
     
     /*

@@ -6,10 +6,10 @@
 	</picker-view-column>
 </template>
 
-<script setup>
-	const props = defineProps({
-		
-	})
+<script>
+	export default {
+    
+  }
 </script>
 
 <style lang="scss" scoped>

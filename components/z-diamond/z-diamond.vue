@@ -4,7 +4,7 @@
     </view>
 </template>
 
-<script setup>
+<script >
     /**
      * navbar 菱形，梯形组件
      * @description ''

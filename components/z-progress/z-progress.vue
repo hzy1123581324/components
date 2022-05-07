@@ -5,7 +5,7 @@
   </view>
 </template>
 
-<script setup>
+<script>
   /**
 	 * lineProgress 线型进度条
 	 * @description 展示操作或任务的当前进度，比如上传文件，是一个线形的进度条。
@@ -30,29 +30,33 @@
         }
      </style>
 	 */
-
-  const props = defineProps({
-    // 进度百分比，数值
-    percent: {
-      type: [Number, String],
-      default: 0
+  export default {
+    props: {
+      // 进度百分比，数值
+      percent: {
+        type: [Number, String],
+        default: 0
+      },
+      // 是否在进度条内部显示百分比的值
+      showPercent: {
+        type: Boolean,
+        default: false
+      },
+      // 是否显示条纹
+      striped: {
+        type: Boolean,
+        default: false
+      },
+      // 条纹是否显示活动状态
+      stripedActive: {
+        type: Boolean,
+        default: false
+      }
     },
-    // 是否在进度条内部显示百分比的值
-    showPercent: {
-      type: Boolean,
-      default: false
-    },
-    // 是否显示条纹
-    striped: {
-      type: Boolean,
-      default: false
-    },
-    // 条纹是否显示活动状态
-    stripedActive: {
-      type: Boolean,
-      default: false
+    setup(props,{emit}){
+      
     }
-  })
+  }
 </script>
 
 <style scoped>

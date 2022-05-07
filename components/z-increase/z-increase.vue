@@ -24,7 +24,7 @@
   </view>
 </template>
 
-<script setup>
+<script >
   import {
     Mul,
     Add,
@@ -66,7 +66,10 @@
        * }
        * </style>
       */
-  const props = defineProps({
+  
+  export default {
+    emits:["update:modelValue", "change"],
+    props:{
     min: {
       type: [String, Number],
       default: 1,
@@ -103,92 +106,105 @@
       type: Function,
       default: defer,
     },
-  });
-  const emit = defineEmits(["update:modelValue", "change"]);
-  let currentValue = ref(1);
-
-  onMounted(() => {
-    let min = props.min;
-    let max = props.max;
-    min==-1&&(min=props.modelValue);
-    max==-1&&(max=props.modelValue);
-    
-    currentValue.value = range(min,max,props.modelValue);
-    console.log(currentValue.value,props.modelValue,props.min,props.max,'888888881122222221111111111')
-  });
-  /// 监听v-model
-  watch(
-    () => props.modelValue,
-    (newval, oldval) => {
-      currentValue.value = newval;
-    }
-  );
-  watch(()=>props.max,(newval,oldval)=>{
-    if(currentValue.value>newval){
-      currentValue.value = newval||props.min;
-    }
-  });
-  watch(currentValue, (newval, oldval) => {
-    if (newval == "" || (newval - props.min < 0 && props.min != -1)) {
-      currentValue.value = props.min.value;
-    }
-    emit("update:modelValue", newval);
-  });
-  const candel = computed(() => {
-    return currentValue.value - props.min > 0 || props.min == -1;
-  });
-  const canadd = computed(() => {
-    return props.max - currentValue.value > 0 || props.max == -1;
-  });
-
-  // 输入框失去焦点
-  function intoBlur(e) {
-    let val = e.target.value;
-    let {
-      min,
-      max
-    } = props;
-    if (!val) {
-      val = min;
-    }
-    if (val - max > 0) {
-      val = max;
-    }
-    currentValue.value = val;
-  }
-
-  // 点击加号
-  async function addFun() {
-    // console.log(props);
-    console.warn('使用onChangeBefore需要+1')
-    props.onChangeBefore().then((res) => {
-      if (canadd.value) {
-        currentValue.value = Add(currentValue.value, props.step);
-        nextTick(()=>{
-          emit("change",currentValue.value);
-        })
+  },
+    setup(props,{emit}){
+      let currentValue = ref(1);
+      
+      onMounted(() => {
+        let min = props.min;
+        let max = props.max;
+        min==-1&&(min=props.modelValue);
+        max==-1&&(max=props.modelValue);
+        
+        currentValue.value = range(min,max,props.modelValue);
+        // console.log(currentValue.value,props.modelValue,props.min,props.max,'888888881122222221111111111')
+      });
+      /// 监听v-model
+      watch(
+        () => props.modelValue,
+        (newval, oldval) => {
+          currentValue.value = newval;
+        }
+      );
+      watch(()=>props.max,(newval,oldval)=>{
+        if(currentValue.value>newval){
+          currentValue.value = newval||props.min;
+        }
+      });
+      watch(currentValue, (newval, oldval) => {
+        if (newval == "" || (newval - props.min < 0 && props.min != -1)) {
+          currentValue.value = props.min.value;
+        }
+        emit("update:modelValue", newval);
+      });
+      const candel = computed(() => {
+        return currentValue.value - props.min > 0 || props.min == -1;
+      });
+      const canadd = computed(() => {
+        return props.max - currentValue.value > 0 || props.max == -1;
+      });
+      
+      // 输入框失去焦点
+      function intoBlur(e) {
+        let val = e.target.value;
+        let {
+          min,
+          max
+        } = props;
+        if (!val) {
+          val = min;
+        }
+        if (val - max > 0) {
+          val = max;
+        }
+        currentValue.value = val;
       }
       
-    });
-  }
-  // 点击减号
-  async function delFun() {
-    console.warn('使用onChangeBefore需要-1')
-    props
-      .onChangeBefore()
-      .then((res) => {
-        // (Num - min > 0 && (Num = Sub(Num, step)))
-        if (candel.value) {
-          currentValue.value = Sub(currentValue.value, props.step);
-          nextTick(()=>{
-            emit("change",currentValue.value);
+      // 点击加号
+      async function addFun() {
+        // console.log(props);
+        console.warn('使用onChangeBefore需要+1')
+        props.onChangeBefore().then((res) => {
+          if (canadd.value) {
+            currentValue.value = Add(currentValue.value, props.step);
+            nextTick(()=>{
+              emit("change",currentValue.value);
+            })
+          }
+          
+        });
+      }
+      // 点击减号
+      async function delFun() {
+        console.warn('使用onChangeBefore需要-1')
+        props
+          .onChangeBefore()
+          .then((res) => {
+            // (Num - min > 0 && (Num = Sub(Num, step)))
+            if (candel.value) {
+              currentValue.value = Sub(currentValue.value, props.step);
+              nextTick(()=>{
+                emit("change",currentValue.value);
+              })
+            }
           })
-        }
-      })
-      .catch((err) => {
-        // console.log(err);
-      });
-  }
+          .catch((err) => {
+            // console.log(err);
+          });
+      }
+      return {
+        delFun,
+        candel,
+        currentValue,
+        intoBlur,
+        addFun,
+        canadd,
+  
+      }
+    }
+  }   
+  
+  
 </script>
 
 <style scoped>

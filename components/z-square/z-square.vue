@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<script setup>
+<script>
   /**
    * square  正方形
    * @description 仅用css制作正方形
@@ -35,7 +35,6 @@
           return "";
         }
       })
-
       return {
         squareStyle
       }

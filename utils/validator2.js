@@ -522,13 +522,13 @@ const rules = {
  */
 
 function string(rule, value, callback, source, options) {
-  console.log(rule.required,'ppppppppppp')
+  // console.log(rule.required,'ppppppppppp')
     const errors = []
     const validate = rule.required || !rule.required && source.hasOwnProperty(rule.field)
-    console.log(isEmptyValue(value, 'string'),'999999999999999');
+    // console.log(isEmptyValue(value, 'string'),'999999999999999');
     if (validate) {
         if (isEmptyValue(value, 'string') && !rule.required) {
-            console.log('%%%%%%5')
+            // console.log('%%%%%%5')
             return callback()
         }
 

@@ -9,7 +9,7 @@
 						animationDuration: animationDuration,
 						animationPlayState: animationPlayState,
 					}">
-          <text class="notice-text" @click="click" >{{showText}}</text>
+          <text class="notice-text" @click="click">{{showText}}</text>
         </view>
       </view>
       <view class="icon-wrap">
@@ -23,7 +23,15 @@
   </view>
 </template>
 <script>
+  import {
+    ref,
+    nextTick,
+    onMounted,
+    watch,
+    getCurrentInstance
+  } from 'vue';
   export default {
+    emits: ["click", "close", "getMore"],
     props: {
       // 显示的内容，数组
       list: {
@@ -69,85 +77,99 @@
         default: 'play'
       },
     },
-    data() {
-      return {
-        textWidth: 0, // 滚动的文字宽度
-        boxWidth: 0, // 供文字滚动的父盒子的宽度，和前者一起为了计算滚动速度
-        animationDuration: '10s', // 动画执行时间
-        animationPlayState: 'paused', // 动画的开始和结束执行
-        showText: '' // 显示的文本
-      };
-    },
-    watch: {
-      list: {
-        immediate: true,
-        handler(val) {
-          this.showText = val.join('，');
-          this.$nextTick(() => {
-            this.initSize();
-          });
-        }
-      },
-      playState(val) {
-        if (val == 'play') this.animationPlayState = 'running';
-        else this.animationPlayState = 'paused';
-      },
-      speed(val) {
-        this.initSize();
-      }
-    },
-    mounted() {
-      this.$nextTick(() => {
-        this.initSize();
-      });
-    },
-    methods: {
-      initSize() {
+    setup(props, {
+      emit
+    }) {
+      const {
+        proxy
+      } = getCurrentInstance();
+      let textWidth = 0; // 滚动的文字宽度
+      let boxWidth = 0; // 供文字滚动的父盒子的宽度，和前者一起为了计算滚动速度
+      let animationDuration = ref('10s'); // 动画执行时间
+      let animationPlayState = ref('paused'); // 动画的开始和结束执行
+      let showText = ref(''); // 显示的文本
+      onMounted(() => {
+        showText.value = props.list.join('，');
+        nextTick(() => {
+          initSize();
+        })
+      })
+
+      function initSize() {
+
         let query = [],
           boxWidth = 0,
           textWidth = 0;
         let textQuery = new Promise((resolve, reject) => {
           uni.createSelectorQuery()
-            .in(this)
+            .in(proxy)
             .select(`#notice-content`)
             .boundingClientRect()
             .exec(ret => {
-              this.textWidth = ret[0].width;
+              textWidth = ret[0].width;
               resolve();
             });
         });
         query.push(textQuery);
         Promise.all(query).then(() => {
+          // console.log(textWidth,'555555%%%%%%%%%%%%%%%%%')
           // 根据t=s/v(时间=路程/速度)，这里为何不需要加上#notice-box的宽度，因为中设置了.notice-content样式中设置了padding-left: 100%
           // 恰巧计算出来的结果中已经包含了#notice-box的宽度
-          this.animationDuration = `${this.textWidth / uni.upx2px(this.speed)}s`;
+          animationDuration.value = `${textWidth / uni.upx2px(props.speed)}s`;
           // 这里必须这样开始动画，否则在APP上动画速度不会改变(HX版本2.4.6，IOS13)
-          this.animationPlayState = 'paused';
+          animationPlayState.value = 'paused';
           setTimeout(() => {
-            if (this.playState == 'play' && this.autoplay) this.animationPlayState = 'running';
+            if (props.playState == 'play' && props.autoplay) animationPlayState.value = 'running';
           }, 10);
         });
-      },
+      }
       // 点击通告栏
-      click(index) {
-        this.$emit('click');
-      },
+      function click(index) {
+        emit('click');
+      }
       // 点击关闭按钮
-      close() {
-        this.$emit('close');
-      },
+      function close() {
+        emit('close');
+      }
       // 点击更多箭头按钮
-      getMore() {
-        this.$emit('getMore');
+      function getMore() {
+        emit('getMore');
+      }
+      watch(showText,(newval,oldval)=>{
+        nextTick(() => {
+          // console.log('%%%%%%%%%%%%3333333')
+          initSize();
+        })
+      })
+      watch(() => props.list, (newval, oldval) => {
+        showText.value = newval.join('，');
+        // 在这里会在页面隐藏后触发，导致重新今日页面后无动画效果
+      })
+      watch(() => props.speed, (newval, oldval) => {
+        initSize();
+      })
+      watch(() => props.playState, (newval, oldval) => {
+        if (newval == 'play') animationPlayState.value = 'running';
+        else animationPlayState.value = 'paused';
+      })
+
+      return {
+        animationDuration,
+        animationPlayState,
+        showText,
+        click,
+        close,
+        getMore,
       }
     }
+
   };
 </script>
 
 <style scoped>
   .notice-bar {
     --pad: 18rpx 24rpx;
-    padding:var(--notice-pad,var(--pad));
+    padding: var(--notice-pad, var(--pad));
     overflow: hidden;
   }
 

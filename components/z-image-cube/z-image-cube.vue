@@ -5,7 +5,7 @@
     </div>
   </div>
 </template>
-<script setup>
+<script>
   /**
      * ImageCube 图片魔方
      * @description 根据传入数量改变
@@ -28,29 +28,36 @@
   import {
     computed
   } from 'vue';
-  const props = defineProps({
-    list: {
-      type: Array
-    }
-  });
-  const _list = computed(() => {
-    let list = props.list || [];
-    let len = props.list.length;
-    list.forEach((item, index) => {
-      // console.log(item, index);
-      if (index == 0) {
-        item.type = "large";
-      } else if (index == 1 && len - 1 == index) {
-        item.type == "large";
-      } else if (index > 0 && len - 1 == index) {
-        item.type = "middle";
-      } else {
-        item.type = "small";
+  export default {
+    props:{
+      list: {
+        type: Array,
       }
-      return item;
-    });
-    return list;
-  });
+    },
+    setup(props,){
+      const _list = computed(() => {
+        let list = props.list || [];
+        let len = props.list.length;
+        list.forEach((item, index) => {
+          // console.log(item, index);
+          if (index == 0) {
+            item.type = "large";
+          } else if (index == 1 && len - 1 == index) {
+            item.type == "large";
+          } else if (index > 0 && len - 1 == index) {
+            item.type = "middle";
+          } else {
+            item.type = "small";
+          }
+          return item;
+        });
+        return list;
+      });
+      
+      return _list;
+    }
+  }
+  
 </script>
 <style scoped>
   .image-cube-box {

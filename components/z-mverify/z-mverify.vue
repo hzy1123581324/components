@@ -25,6 +25,7 @@
                 isVerify: false
             }
         },
+        
         name: 'sunui-mverify',
         methods: {
             moveStart(e) {

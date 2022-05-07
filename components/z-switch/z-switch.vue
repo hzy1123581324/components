@@ -7,7 +7,7 @@
     </view>
 </template>
 
-<script setup>
+<script>
     /**
      * switch 开关选择器
      * @description 选择开关一般用于只有两个选择，且只能选其一的场景。
@@ -42,10 +42,9 @@
     import {
         ref
     } from "vue";
-
-    let loading = ref(false);
-    const emit =  defineEmits(['update:modelValue','change'])
-    const props = defineProps({
+    export default {
+      emits:['update:modelValue','change'],
+      props: {
         // 传入异步方法
         onChangeBefore: {
             type: Function,
@@ -76,22 +75,32 @@
             type: [Number, String, Boolean],
             default: false
         },
-
-    })
-    async function onClick() {
-        if (props.disabled) {
-            return;
+      },
+      setup(props){
+        let loading = ref(false);
+          
+        
+        async function onClick() {
+            if (props.disabled) {
+                return;
+            }
+            loading.value = true;
+            await props.onChangeBefore();
+            loading.value = false;
+            // 使手机产生短促震动，微信小程序有效，APP(HX 2.6.8)和H5无效
+            if (props.vibrateShort) {
+                uni.vibrateShort();
+            }
+            emit('update:modelValue', !props.modelValue);
+            emit('change', props.modelValue ? props.activeValue : props.inactiveValue);
         }
-        loading.value = true;
-        await props.onChangeBefore();
-        loading.value = false;
-        // 使手机产生短促震动，微信小程序有效，APP(HX 2.6.8)和H5无效
-        if (props.vibrateShort) {
-            uni.vibrateShort();
+        return {
+          loading,
+          onClick
         }
-        emit('update:modelValue', !props.modelValue);
-        emit('change', props.modelValue ? props.activeValue : props.inactiveValue);
+      }
     }
+    
 </script>
 
 <style scoped>

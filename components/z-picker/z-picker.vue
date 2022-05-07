@@ -1,7 +1,7 @@
 <template>
   <!-- 添加这层是因为在组件直接加class失效 -->
   <view class="w_100">
-    <view class="picker-inset" @click="_handlBefore">
+    <view class="picker-inset" @click="handlBefore">
       <slot :isopen="show"></slot>
     </view>
     <z-popup v-model="show" type="bottom" >
@@ -57,14 +57,12 @@
   </view>
 </template>
 
-<script setup>
+<script>
 import { ref, reactive, computed, nextTick, isReactive, watch } from "vue";
 import { isObject } from "../../utils/test.js";
 import { defer, debounce } from "../../utils/optimize.js";
-
-let show = ref(false);
-
-const props = defineProps({
+export default {
+  props:{
   /// 展开组件前钩子函数
   onShowbefore: {
     type: Function,
@@ -125,13 +123,8 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
-});
-
-let currentIndex = reactive([]);
-/// 当前要操作的列
-let currentColumn = ref(0);
-
-let emit = defineEmits([
+},
+emits:[
   "change",
   "update:manualShow",
   "update:current",
@@ -139,165 +132,193 @@ let emit = defineEmits([
   "update:manualIndex",
   "confirm",
   "cancel",
-]);
+],
+  setup(props,{emit}){
+    let show = ref(false);
+    
+    
+    
+    let currentIndex = reactive([]);
+    /// 当前要操作的列
+    let currentColumn = ref(0);
+    
+    
+    
+    // 监听
+    // watch(()=>[...props.current],(newval,oldval)=>{
+    //   console.log(newval,'77777777777777777777777777');
+    //   currentIndex.length= 0 ;
+    //   console.log(isReactive(currentIndex));
+    //   console.log(currentIndex);
+    //   currentIndex.push(...newval);
+    //   console.log(currentIndex);
+    // })
+    // watch(()=>[...currentIndex],(newval,oldval)=>{
+    
+    //   console.log(currentIndex);
+    //   console.log('见阿斯顿发科技阿楼上的咖啡机阿楼上的咖啡机阿拉士大夫');
+    //   console.log(currentIndex);
+    //   // emit('update:current',currentIndex.value)
+    // })
+    
+    watch(show, (newval, oldval) => {
+      emit("update:manualShow", newval);
+      // emit('update:current',currentIndex.value)
+    });
+    /// 手动控制显示隐藏
+    watch(
+      () => props.manualShow,
+      (newval, oldval) => {
+        show.value = newval;
+      }
+    );
+    
+    // watch(()=>[...currentIndex],(newval,oldval)=>{
+    //   // console.log('$$$$$$$$$$1111111111111111');
+    //   // console.log(newval);
+    //   // console.log(oldval);
+    // })
+    
+    /// 手动控制显示的列
+    watch(
+      () => props.manualIndex,
+      (newval, oldval) => {
+        // console.log('manualIndex',newval);
+        currentColumn.value = newval;
+      }
+    );
+    
+    watch(currentColumn, (newval, oldval) => {
+      // console.log('currentColumn',newval);
+      emit("update:manualIndex", newval);
+    });
+    let rangeData = computed(() => {
+      // console.log('@@@@@@@@@@@');
+      const arrt = [];
+      let pointer = 0;
+      let pointerList = props.range;
+      if (props.range.length == 0) {
+        return [];
+      }
+      while (true) {
+        arrt[pointer] = pointerList;
+        ///
+        pointerList = pointerList[currentIndex[pointer] || 0][props.rangeChildrenKey] || [];
+        pointer++;
+        if (pointerList.length == 0) {
+          break;
+        }
+      }
+      // console.log(arrt);
+      // console.log('&&&&&&&&&&&&&&&&&&&');
+      // 当数组发生改变时currentColumn有可能超出当前数组的长度
+    
+      return arrt;
+    });
+    
+    watch(rangeData, (newval, oldval) => {
+      // console.log('!!!!!!!!!!!!!!!!!!');
+      if (newval.length - 1 < currentColumn.vlaue) {
+        currentColumn.value = newval.length - 1;
+      }
+      if (currentColumn.value + 1 <= newval.length - 1) {
+        currentColumn.value++;
+        currentIndex[currentColumn.value] = 0;
+      }
+    });
+    
+    // true 显示上一步，false 显示取消
+    let isPrevious = computed(() => {
+      return currentColumn.value != 0 && rangeData.value.length > props.column;
+    });
+    // true 显示下一步，false 显示确认
+    let isNext = computed(() => {
+      return (
+        currentColumn.value < rangeData.value.length - 1 &&
+        rangeData.value.length > props.column
+      );
+    });
+    
+    function exportData() {
+      let arrt = [];
+      for (let i = 0; i < rangeData.value.length; i++) {
+        // console.log(i);
+        arrt.push({
+          index: currentIndex[i] || 0,
+          data: {
+            ...rangeData.value[i][currentIndex[i] || 0],
+          },
+        });
+      }
+      return arrt;
+    }
+    // 获取item需要显示的文字，判别为对象还是文本
+    function getItemText(item) {
+      if (isObject(item)) {
+        return item[props.rangeKey];
+      } else {
+        return item;
+      }
+    }
+    
+    /// 展示前钩子函数，常用于异步接口调用数据
+    function handlBefore() {
+      if (show.value) {
+        return props.onClosebefore().then((res) => {
+          show.value = false;
+        });
+      } else {
+        return props.onShowbefore().then((res) => {
+          show.value = true;
+        });
+      }
+    }
+    
+    function bindChange(e) {
+      // console.log(e);
+      // console.log('###################');
+      currentIndex.length = 0;
+      // console.log(currentIndex);
+      // console.log(e.detail.value);
+      // e.detail.value[currentColumn.value+1] = 0;
+      // console.log(JSON.stringify(e.detail.value));
+      currentIndex.push(...e.detail.value);
+      // console.log(currentIndex);
+      // debounce(()=>{
+      // emit('update:current',currentIndex);
+      // },500)
+      emit("change", []);
+      // console.log("$$$$$$$$");
+    }
+    
+    /// 点击了取消按钮
+    function closeHandler() {
+      emit("cancel", "");
+      handlBefore();
+    }
+    /// 点击了确认按钮
+    function confirmHandler() {
+      emit("confirm", exportData());
+      handlBefore();
+    }
+    return {
+      handlBefore,
+      show,
 
-// 监听
-// watch(()=>[...props.current],(newval,oldval)=>{
-//   console.log(newval,'77777777777777777777777777');
-//   currentIndex.length= 0 ;
-//   console.log(isReactive(currentIndex));
-//   console.log(currentIndex);
-//   currentIndex.push(...newval);
-//   console.log(currentIndex);
-// })
-// watch(()=>[...currentIndex],(newval,oldval)=>{
-
-//   console.log(currentIndex);
-//   console.log('见阿斯顿发科技阿楼上的咖啡机阿楼上的咖啡机阿拉士大夫');
-//   console.log(currentIndex);
-//   // emit('update:current',currentIndex.value)
-// })
-
-watch(show, (newval, oldval) => {
-  emit("update:manualShow", newval);
-  // emit('update:current',currentIndex.value)
-});
-/// 手动控制显示隐藏
-watch(
-  () => props.manualShow,
-  (newval, oldval) => {
-    show.value = newval;
-  }
-);
-
-// watch(()=>[...currentIndex],(newval,oldval)=>{
-//   // console.log('$$$$$$$$$$1111111111111111');
-//   // console.log(newval);
-//   // console.log(oldval);
-// })
-
-/// 手动控制显示的列
-watch(
-  () => props.manualIndex,
-  (newval, oldval) => {
-    // console.log('manualIndex',newval);
-    currentColumn.value = newval;
-  }
-);
-
-watch(currentColumn, (newval, oldval) => {
-  // console.log('currentColumn',newval);
-  emit("update:manualIndex", newval);
-});
-let rangeData = computed(() => {
-  // console.log('@@@@@@@@@@@');
-  const arrt = [];
-  let pointer = 0;
-  let pointerList = props.range;
-  if (props.range.length == 0) {
-    return [];
-  }
-  while (true) {
-    arrt[pointer] = pointerList;
-    ///
-    pointerList = pointerList[currentIndex[pointer] || 0][props.rangeChildrenKey] || [];
-    pointer++;
-    if (pointerList.length == 0) {
-      break;
+      closeHandler,
+      isNext,
+      confirmHandler,
+      currentColumn,
+      currentIndex,
+      bindChange,
+      rangeData,
+      rangeData,
+      getItemText,
+      isPrevious,
     }
   }
-  // console.log(arrt);
-  // console.log('&&&&&&&&&&&&&&&&&&&');
-  // 当数组发生改变时currentColumn有可能超出当前数组的长度
-
-  return arrt;
-});
-
-watch(rangeData, (newval, oldval) => {
-  // console.log('!!!!!!!!!!!!!!!!!!');
-  if (newval.length - 1 < currentColumn.vlaue) {
-    currentColumn.value = newval.length - 1;
-  }
-  if (currentColumn.value + 1 <= newval.length - 1) {
-    currentColumn.value++;
-    currentIndex[currentColumn.value] = 0;
-  }
-});
-
-// true 显示上一步，false 显示取消
-let isPrevious = computed(() => {
-  return currentColumn.value != 0 && rangeData.value.length > props.column;
-});
-// true 显示下一步，false 显示确认
-let isNext = computed(() => {
-  return (
-    currentColumn.value < rangeData.value.length - 1 &&
-    rangeData.value.length > props.column
-  );
-});
-
-function exportData() {
-  let arrt = [];
-  for (let i = 0; i < rangeData.value.length; i++) {
-    // console.log(i);
-    arrt.push({
-      index: currentIndex[i] || 0,
-      data: {
-        ...rangeData.value[i][currentIndex[i] || 0],
-      },
-    });
-  }
-  return arrt;
-}
-// 获取item需要显示的文字，判别为对象还是文本
-function getItemText(item) {
-  if (isObject(item)) {
-    return item[props.rangeKey];
-  } else {
-    return item;
-  }
 }
 
-/// 展示前钩子函数，常用于异步接口调用数据
-function _handlBefore() {
-  if (show.value) {
-    return props.onClosebefore().then((res) => {
-      show.value = false;
-    });
-  } else {
-    return props.onShowbefore().then((res) => {
-      show.value = true;
-    });
-  }
-}
-
-function bindChange(e) {
-  // console.log(e);
-  // console.log('###################');
-  currentIndex.length = 0;
-  // console.log(currentIndex);
-  // console.log(e.detail.value);
-  // e.detail.value[currentColumn.value+1] = 0;
-  // console.log(JSON.stringify(e.detail.value));
-  currentIndex.push(...e.detail.value);
-  // console.log(currentIndex);
-  // debounce(()=>{
-  // emit('update:current',currentIndex);
-  // },500)
-  emit("change", []);
-  // console.log("$$$$$$$$");
-}
-
-/// 点击了取消按钮
-function closeHandler() {
-  emit("cancel", "");
-  _handlBefore();
-}
-/// 点击了确认按钮
-function confirmHandler() {
-  emit("confirm", exportData());
-  _handlBefore();
-}
 </script>
 
 <style lang="scss" scoped>

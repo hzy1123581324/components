@@ -26,8 +26,11 @@
     let timer;
     let start = 0;
     let save = 0;
+    import {ref,watch,computed,provide,onMounted} from 'vue';
+    import {onPageScroll} from '@dcloudio/uni-app';
     export default {
         name: "rolling",
+        emits:['scrolltoupper','scrolltolower'],
         props: {
             // 距离底部多少触发上拉加载更多事件
             lower: {
@@ -40,170 +43,126 @@
                 default: 'rgba(0,0,0,.3)'
             }
         },
-        data() {
-            return {
-                canclick: true,
-                tset: 12341234123,
-                maxScrollTop: 0,
-                scrollTop: 0,
-                // 顶部底部阴影高度
-                showTopShadow: 0,
-                showBtnShadow: 0,
-                transition: '', //过渡效果
-                rect: {}, //组件信息
-            };
-        },
-        provide: function() {
-            return {
-                getScrollTop: this.sendScroolTop,
-                getParentRect: this.sendParentRect,
+        setup(props,{emit}){
+          
+         let  maxScrollTop = ref(0);
+         let scrollTop = ref(0);
+          // 顶部底部阴影高度
+         let  showTopShadow = ref(0);
+         let  showBtnShadow = ref(0);
+         let  transition = ref(''); //过渡效果
+         let rect =  {}; //组件信息
+          const { proxy } = getCurrentInstance();
+          const roolingStyle = computed(()=>{
+            let Shadow = ''
+            if (props.shadow !== 'none') {
+                Shadow = `--shadow-color:${props.shadow}`
+            } else {
+                Shadow = '--shadow-color:transparent'
             }
-        },
-        onLoad() {},
-        created() {
-            // this.getRace();
-        },
-        mounted() {
-            // this.setmaxScroll();
-            this.getRace();
-        },
-
-        onPageScroll: function(object) {
+            return `--shadow-btn:${showBtnShadow.value||0}px;--shadow-top:${showTopShadow.value||0}px;--transition:${transition.value||'none'};${Shadow};`
+          })
+          // 设置最大滚动距离
+          async function  setmaxScroll() {
+              let height = 0;
+              const query = uni.createSelectorQuery().in(proxy);
+              await query.select('.scroll-box').boundingClientRect(data => {
+                  height = data.height;
+              }).exec();
+              await query.select('.scroll-contaner').boundingClientRect(data => {
+                  maxScrollTop.value = data.height - height;
+              }).exec();
+          }
+          async function  getRace() {
+              let rect;
+              const query = uni.createSelectorQuery().in(proxy);
+              await query.select('#rollingBox').boundingClientRect(data => {
+                  // console.log('888888888888888888888888888888',data);
+                  rect = data;
+              }).exec();
+              return rect;
+          }
+          // 滑动落脚点
+         function  start(e) {
+              // console.log(e, '开始滑动++++++++');
+              setmaxScroll();
+              start = e.changedTouches[0].clientY;
+              save = scrollTop.value;
+              transition.value = '';
+              // console.log(start,'666666')
+          }
+          // scrollChange(event) {
+          //     console.log(JSON.stringify(this.$refs), '8484848484848484');
+          //     scrollTop.value = this.$refs.scrollBox.scrollTop;
+          // },
+          // 滑动中
+         function  move(e) {
+              // console.log(e);
+              let move = e.changedTouches[0].clientY;
+              // console.log(save + start - move, save + start - move - maxScrollTop, '查看数据查看数据');
+              // 下拉刷新
+              if (save + start - move <= 0) {
+                  // console.log('步骤111111');
+                  if (Math.abs(save + start - move) < 40) {
+                      showTopShadow.value = Math.abs(save + start - move);
+                  } else {
+                      showTopShadow.value = 40;
+                  }
+                  scrollTop.value = 0;
+                  // 下拉刷新动作
+              } else if ((save + start - move >= 0) && (save + start - move - maxScrollTop.value <= 0)) {
+                  // 在可移动范围移动
+                  // console.log(save, move, maxScrollTop, '步骤22222');
+                  scrollTop.value = save + start - move;
+              } else {
+                  // console.log('步骤333333');
+                  // 上拉加载更多
+      
+                  if (Math.abs(save + start - move - maxScrollTop) < 40) {
+                      showBtnShadow.value = Math.abs(save + start - move - maxScrollTop);
+                  } else {
+                      showBtnShadow.value = 40;
+                  }
+            
+                  scrollTop.value = maxScrollTop;
+              }
+          }
+          
+         function  end(e) {
+              // console.log(e);
+              save = null;
+              transition.value = 'all ease-in-out 0.4s 0s';
+              if (showTopShadow.value > 0) {
+                  // 触发下拉刷新
+                  emit('scrolltoupper')
+              }
+              if (showBtnShadow.value > 0) {
+                  // 触发下拉刷新
+                  emit('scrolltolower')
+              }
+              setTimeout(() => {
+                  showBtnShadow.value = 0;
+                  showTopShadow.value = 0;
+              }, 100);
+          }
+          onMounted(()=>{
+            getRace();
+          })
+          onPageScroll(()=>{
             clearTimeout(timer) // 每次滚动前 清除一次
-            that.canSwip = false;
+            canSwip = false;
             timer = setTimeout(function() {
                 // console.log('滚动结束了');
-                that.canSwip = true;
+                canSwip = true;
             }, 500);
-        },
-        onReady() {
-            // observer = uni.createIntersectionObserver(this);
+          })
+          provide('getScrollTop',scrollTop);
+          provide('getParentRect',rect);
+          return {
+            
+          }
+        }
 
-            // observer.relativeTo('.scroll-box',{top: 10}).observe('.lookbox', (res) => {
-            //   // if (res.intersectionRatio > 0 && !this.appear) {
-            //   //   this.appear = true;
-            //   // } else if (!res.intersectionRatio > 0 && this.appear) {
-            //   //   this.appear = false;
-            //   // }
-            //   console.log(res,'99999999999+++++++++++');
-            // })
-
-        },
-        methods: {
-            // 设置最大滚动距离
-            async setmaxScroll() {
-                let height = 0;
-                const query = uni.createSelectorQuery().in(this);
-                await query.select('.scroll-box').boundingClientRect(data => {
-                    height = data.height;
-                }).exec();
-                await query.select('.scroll-contaner').boundingClientRect(data => {
-                    this.maxScrollTop = data.height - height;
-                }).exec();
-            },
-            //向子组件发送this.scrollTop
-            sendScroolTop() {
-                return this.scrollTop;
-            },
-            sendParentRect() {
-                return this.rect;
-            },
-            async getRace() {
-                let rect;
-                const query = uni.createSelectorQuery().in(this);
-                await query.select('#rollingBox').boundingClientRect(data => {
-                    // console.log('888888888888888888888888888888',data);
-                    this.rect = data;
-                }).exec();
-                return rect;
-            },
-            // 滑动落脚点
-            start(e) {
-                // console.log(e, '开始滑动++++++++');
-                this.setmaxScroll();
-                start = e.changedTouches[0].clientY;
-                save = this.scrollTop;
-                this.transition = '';
-                // console.log(start,'666666')
-            },
-            // scrollChange(event) {
-            //     console.log(JSON.stringify(this.$refs), '8484848484848484');
-            //     this.scrollTop = this.$refs.scrollBox.scrollTop;
-            // },
-            // 滑动中
-            move(e) {
-                // console.log(e);
-                let move = e.changedTouches[0].clientY;
-                let {
-                    scrollTop,
-                    maxScrollTop
-                } = this;
-                // console.log(save + start - move, save + start - move - maxScrollTop, '查看数据查看数据');
-                // 下拉刷新
-                if (save + start - move <= 0) {
-                    // console.log('步骤111111');
-                    if (Math.abs(save + start - move) < 40) {
-                        this.showTopShadow = Math.abs(save + start - move);
-                    } else {
-                        this.showTopShadow = 40;
-                    }
-                    this.scrollTop = 0;
-                    // 下拉刷新动作
-                } else if ((save + start - move >= 0) && (save + start - move - maxScrollTop <= 0)) {
-                    // 在可移动范围移动
-                    // console.log(save, move, maxScrollTop, '步骤22222');
-                    this.scrollTop = save + start - move;
-                } else {
-                    // console.log('步骤333333');
-                    // 上拉加载更多
-                    let showBtnShadow = 0;
-                    if (Math.abs(save + start - move - maxScrollTop) < 40) {
-                        showBtnShadow = Math.abs(save + start - move - maxScrollTop);
-                    } else {
-                        showBtnShadow = 40;
-                    }
-                    this.showBtnShadow = showBtnShadow;
-                    this.scrollTop = maxScrollTop;
-                }
-            },
-
-            end(e) {
-                // console.log(e);
-                save = null;
-                this.transition = 'all ease-in-out 0.4s 0s';
-                if (this.showTopShadow > 0) {
-                    // 触发下拉刷新
-                    this.$emit('scrolltoupper')
-                }
-                if (this.showBtnShadow > 0) {
-                    // 触发下拉刷新
-                    this.$emit('scrolltolower')
-                }
-                setTimeout(() => {
-                    this.showBtnShadow = 0;
-                    this.showTopShadow = 0;
-
-                }, 100);
-            }
-        },
-        watch: {},
-        computed: {
-            roolingStyle() {
-                let {
-                    showTopShadow,
-                    showBtnShadow,
-                    transition,
-                    shadow
-                } = this;
-                let Shadow = ''
-                if (shadow !== 'none') {
-                    Shadow = `--shadow-color:${shadow}`
-                } else {
-                    Shadow = '--shadow-color:transparent'
-                }
-                return `--shadow-btn:${showBtnShadow||0}px;--shadow-top:${showTopShadow||0}px;--transition:${transition||'none'};${Shadow};`
-            }
-        },
     };
 </script>
 

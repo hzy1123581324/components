@@ -24,7 +24,15 @@
 </template>
 
 <script>
+  import {computed,ref,reactive,} from 'vue';
 	export default {
+    name:'notice-column',
+    emits:[
+      'click',
+      'close',
+      'getMore',
+      'end',
+    ],
 		props: {
 			// 显示的内容，数组
 			list: {
@@ -128,64 +136,65 @@
 				default: '18rpx 24rpx'
 			}
 		},
-		computed: {
-			// 计算字体颜色，如果没有自定义的，就用uview主题颜色
-			computeColor() {
-				if (this.color) return this.color;
-				// 如果是无主题，就默认使用content-color
-				else if (this.type == 'none') return '#606266';
-				else return this.type;
-			},
-			// 文字内容的样式
-			textStyle() {
-				let style = {};
-				if (this.color) style.color = this.color;
-				else if (this.type == 'none') style.color = '#606266';
-				style.fontSize = this.fontSize + 'rpx';
-				return style;
-			},
-			// 垂直或者水平滚动
-			vertical() {
-				if (this.mode == 'horizontal') return false;
-				else return true;
-			},
-			// 计算背景颜色
-			computeBgColor() {
-				if (this.bgColor) return this.bgColor;
-				else if (this.type == 'none') return 'transparent';
-			}
-		},
-		data() {
-			return {
-				// animation: false
-			};
-		},
-		methods: {
-			// 点击通告栏
-			click(index) {
-				this.$emit('click', index);
-			},
-			// 点击关闭按钮
-			close() {
-				this.$emit('close');
-			},
-			// 点击更多箭头按钮
-			getMore() {
-				this.$emit('getMore');
-			},
-			change(e) {
-				let index = e.detail.current;
-				if (index == this.list.length - 1) {
-					this.$emit('end');
-				}
-			}
-		}
+    setup(props,{emit}){
+      // 计算字体颜色，如果没有自定义的，就用uview主题颜色
+     const  computeColor = computed(()=>{
+       if (props.color) return props.color;
+       // 如果是无主题，就默认使用content-color
+       else if (props.type == 'none') return '#606266';
+       else return props.type;
+     })
+      // 文字内容的样式
+     const  textStyle =computed(()=>{
+       let style = {};
+       if (props.color) style.color = props.color;
+       else if (props.type == 'none') style.color = '#606266';
+       style.fontSize = props.fontSize + 'rpx';
+       return style;
+     })
+      // 垂直或者水平滚动
+     const  vertical = computed(()=>{
+       if (props.mode == 'horizontal') return false;
+       else return true;
+     });
+      // 计算背景颜色
+     const  computeBgColor = computed(()=>{
+       if (props.bgColor) return props.bgColor;
+       else if (props.type == 'none') return 'transparent';
+     })
+      // 点击通告栏
+    function click(index) {
+      	emit('click', index);
+      }
+      // 点击关闭按钮
+     function close() {
+      	emit('close');
+      }
+      // 点击更多箭头按钮
+      function getMore() {
+      	emit('getMore');
+      }
+     function change(e) {
+      	let index = e.detail.current;
+      	if (index == props.list.length - 1) {
+      		emit('end');
+      	}
+      }
+      return {
+        computeColor,
+        textStyle,
+        vertical,
+        computeBgColor,
+        click,
+        close,
+        getMore,
+        change,
+      }
+    }
 	};
 </script>
 
-<style lang="scss" scoped>
-	// @import "../../libs/css/style.components.scss";
-
+<style  scoped>
 	.u-notice-bar {
 		width: 100%;
 		display: flex;

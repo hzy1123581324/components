@@ -71,8 +71,10 @@
 	 * @event {Function} click 点击轮播图时触发
 	 * @example <z-swiper :list="list" mode="dot" indicator-pos="bottomRight"></z-swiper>
 	 */
+  import {ref,watch,computed,onMounted} from 'vue';
 	export default {
 		name: "z-swiper",
+    emits:['click','change'],
 		props: {
 			// 轮播图的数据,格式如：[{image: 'xxxx', title: 'xxxx'}，{image: 'yyyy', title: 'yyyy'}]，其中title字段可选
 			list: {
@@ -171,68 +173,79 @@
 				}
 			}
 		},
-		watch: {
-			// 如果外部的list发生变化，判断长度是否被修改，如果前后长度不一致，重置uCurrent值，避免溢出
-			list(nVal, oVal) {
-				if(nVal.length !== oVal.length) this.uCurrent = 0;
+    setup(props,{emit}){
+      function listClick(index) {
+				emit('click', index);
 			},
-			// 监听外部current的变化，实时修改内部依赖于此测uCurrent值，如果更新了current，而不是更新uCurrent，
-			// 就会错乱，因为指示器是依赖于uCurrent的
-			current(n) {
-				this.uCurrent = n;
-			}
-		},
-		data() {
-			return {
-				uCurrent: this.current // 当前活跃的swiper-item的index
-			};
-		},
-		computed: {
-			justifyContent() {
-				if (this.indicatorPos == 'topLeft' || this.indicatorPos == 'bottomLeft') return 'flex-start';
-				if (this.indicatorPos == 'topCenter' || this.indicatorPos == 'bottomCenter') return 'center';
-				if (this.indicatorPos == 'topRight' || this.indicatorPos == 'bottomRight') return 'flex-end';
-			},
-            alignItems(){
-                if (this.indicatorPos == 'topLeft' || this.indicatorPos == 'bottomLeft') return 'flex-start';
-                if (this.indicatorPos == 'topCenter' || this.indicatorPos == 'bottomCenter') return 'center';
-                if (this.indicatorPos == 'topRight' || this.indicatorPos == 'bottomRight') return 'flex-end';
-            },
-			titlePaddingBottom() {
-				let tmp = 0;
-				if (this.mode == 'none') return '12rpx';
-				if (['bottomLeft', 'bottomCenter', 'bottomRight'].indexOf(this.indicatorPos) >= 0 && this.mode == 'number') {
-					tmp = '60rpx';
-				} else if (['bottomLeft', 'bottomCenter', 'bottomRight'].indexOf(this.indicatorPos) >= 0 && this.mode != 'number') {
-					tmp = '40rpx';
-				} else {
-					tmp = '12rpx';
-				}
-				return tmp;
-			},
-			// 因为uni的swiper组件的current参数只接受Number类型，这里做一个转换
-			elCurrent() {
-				return Number(this.current);
-			}
-		},
-		methods: {
-			listClick(index) {
-				this.$emit('click', index);
-			},
-			change(e) {
+			function change(e) {
 				let current = e.detail.current;
-				this.uCurrent = current;
+				uCurrent.value = current;
 				// 发出change事件，表示当前自动切换的index，从0开始
-				this.$emit('change', current);
+				emit('change', current);
 			},
 			// 头条小程序不支持animationfinish事件，改由change事件
 			// 暂不监听此事件，因为不再给swiper绑定uCurrent属性
-			animationfinish(e) {
+			function animationfinish(e) {
 				// #ifndef MP-TOUTIAO
 				// this.uCurrent = e.detail.current;
 				// #endif
 			}
-		}
+      // 监听外部current的变化，实时修改内部依赖于此测uCurrent值，如果更新了current，而不是更新uCurrent，
+      // 就会错乱，因为指示器是依赖于uCurrent的
+      const uCurrent = computed({
+        set(val){
+          emit('update:current',val);
+        },
+        get(){
+          return props.current;
+        }
+      });
+      
+     const  justifyContent = computed(()=>{
+       if (props.indicatorPos == 'topLeft' || props.indicatorPos == 'bottomLeft') return 'flex-start';
+       if (props.indicatorPos == 'topCenter' || props.indicatorPos == 'bottomCenter') return 'center';
+       if (props.indicatorPos == 'topRight' || props.indicatorPos == 'bottomRight') return 'flex-end';
+     });
+     
+      const alignItems = computed(()=>{
+        if (props.indicatorPos == 'topLeft' || props.indicatorPos == 'bottomLeft') return 'flex-start';
+        if (props.indicatorPos == 'topCenter' || props.indicatorPos == 'bottomCenter') return 'center';
+        if (props.indicatorPos == 'topRight' || props.indicatorPos == 'bottomRight') return 'flex-end';
+      })
+     const titlePaddingBottom = computed(()=>{
+        let tmp = 0;
+        if (props.mode == 'none') return '12rpx';
+        if (['bottomLeft', 'bottomCenter', 'bottomRight'].indexOf(props.indicatorPos) >= 0 && props.mode == 'number') {
+        	tmp = '60rpx';
+        } else if (['bottomLeft', 'bottomCenter', 'bottomRight'].indexOf(props.indicatorPos) >= 0 && props.mode != 'number') {
+        	tmp = '40rpx';
+        } else {
+        	tmp = '12rpx';
+        }
+        return tmp;
+      });
+      // 因为uni的swiper组件的current参数只接受Number类型，这里做一个转换
+     const  elCurrent= computed(()=>{
+       return Number(props.current);
+     })
+      
+      // 如果外部的list发生变化，判断长度是否被修改，如果前后长度不一致，重置uCurrent值，避免溢出
+      watch(()=>props.list, (newval,oldval)=>{
+        if(newval.length !== oldval.length) uCurrent.value = 0;
+      })
+      return {
+        uCurrent,
+        justifyContent,
+        alignItems,
+        titlePaddingBottom,
+        elCurrent,
+        listClick,
+        change,
+        animationfinish,
+      }
+    },
+
+
 	};
 </script>
 

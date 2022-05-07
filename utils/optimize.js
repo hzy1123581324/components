@@ -1,18 +1,29 @@
 // 性能优化优化
 
-/// 防抖
-export function debounce(fn,wait) {
+
+/**
+ * @description 防抖 一段时间内只执行一次
+ * @param {Function} fn
+ * @param {Number} delay
+ * @return {Function}
+ */
+export function debounce(fn,delay = 500) {
     let timeout = null; // 创建一个标记用来存放定时器的返回值
     return (res)=> {      
         clearTimeout(timeout); //清除定时器
         //创建新的 setTimeout
         timeout = setTimeout(()=>{
             fn(res);
-        }, wait);
+        }, delay);
     };
 }
 
-// 节流
+/**
+ * @description 节流 每隔一段时间执行一次
+ * @param {Function} fn
+ * @param {Number} delay
+ * @return {Function}
+ */
 export function throttle(fn, delay=500) {
     let canRun = true;//通过闭包保存该变量
     // console.log('999999999999++++');

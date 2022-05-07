@@ -34,138 +34,131 @@
                 }
             }
         },
-        data() {
-            return {
-
+        setup(props,{emit}){
+          
+          const _text = computed(()=>{
+            let {
+                type,
+                value
+            } = props;
+            if (type == 'chinese') {
+                return changeNumMoneyToChinese(value) || ''
+            } else if (type == "comma") {
+                return parseFloat(value).toLocaleString() || ''
             }
-        },
-        mounted() {
-
-        },
-        methods: {
-
-        },
-        watch: {
-
-        },
-        methods: {
-            // 数字转简写中文
-            changeNumMoneyToSimplifiedChinese(n) {
-                var cnum = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
-                var s = '';
-                n = '' + n; // 数字转为字符串
-            
-                for (var i = 0; i < n.length; i++) {
-                    s += cnum[parseInt(n.charAt(i))];
-                }
-            
-                return s;
-            },
-            // 数字转繁体中文
-            changeNumMoneyToChinese(money) {
-                let cnNums = new Array("零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"); //汉字的数字
-                let cnIntRadice = new Array("", "拾", "佰", "仟"); //基本单位
-                let cnIntUnits = new Array("", "万", "亿", "兆"); //对应整数部分扩展单位
-                let cnDecUnits = new Array("角", "分", "毫", "厘"); //对应小数部分单位
-                let cnInteger = "整"; //整数金额时后面跟的字符
-                let cnIntLast = "元"; //整型完以后的单位
-                let maxNum = 999999999999999.9999; //最大处理的数字
-                let IntegerNum; //金额整数部分
-                let DecimalNum; //金额小数部分
-                let ChineseStr = ""; //输出的中文金额字符串
-                let parts; //分离金额后用的数组，预定义    
-                let Symbol = ""; //正负值标记
-                if (money == "") {
-                    return "";
-                }
-
-                money = parseFloat(money);
-                if (money >= maxNum) {
-                    alert('超出最大处理数字');
-                    return "";
-                }
-                if (money == 0) {
-                    ChineseStr = cnNums[0] + cnIntLast + cnInteger;
-                    return ChineseStr;
-                }
-                if (money < 0) {
-                    money = -money;
-                    Symbol = "负 ";
-                }
-                money = money.toString(); //转换为字符串
-                if (money.indexOf(".") == -1) {
-                    IntegerNum = money;
-                    DecimalNum = '';
-                } else {
-                    parts = money.split(".");
-                    IntegerNum = parts[0];
-                    DecimalNum = parts[1].substr(0, 4);
-                }
-                if (parseInt(IntegerNum, 10) > 0) { //获取整型部分转换
-                    let zeroCount = 0;
-                    let IntLen = IntegerNum.length;
-                    for (let i = 0; i < IntLen; i++) {
-                        let n = IntegerNum.substr(i, 1);
-                        let p = IntLen - i - 1;
-                        let q = p / 4;
-                        let m = p % 4;
-                        if (n == "0") {
-                            zeroCount++;
-                        } else {
-                            if (zeroCount > 0) {
-                                ChineseStr += cnNums[0];
-                            }
-                            zeroCount = 0; //归零
-                            ChineseStr += cnNums[parseInt(n)] + cnIntRadice[m];
-                        }
-                        if (m == 0 && zeroCount < 4) {
-                            ChineseStr += cnIntUnits[q];
-                        }
-                    }
-                    ChineseStr += cnIntLast;
-                    //整型部分处理完毕
-                }
-                if (DecimalNum != '') { //小数部分
-                    let decLen = DecimalNum.length;
-                    for (let i = 0; i < decLen; i++) {
-                        let n = DecimalNum.substr(i, 1);
-                        if (n != '0') {
-                            ChineseStr += cnNums[Number(n)] + cnDecUnits[i];
-                        }
-                    }
-                }
-                if (ChineseStr == '') {
-                    ChineseStr += cnNums[0] + cnIntLast + cnInteger;
-                } else if (DecimalNum == '') {
-                    ChineseStr += cnInteger;
-                }
-                ChineseStr = Symbol + ChineseStr;
-
-                return ChineseStr;
-            },
-            // 数字加逗号的第二个方法
-            format_number(n) {
-                var b = parseInt(n).toString();
-                var len = b.length;
-                if (len <= 3) {
-                    return b;
-                }
-                var r = len % 3;
-                return r > 0 ? b.slice(0, r) + "," + b.slice(r, len).match(/\d{3}/g).join(",") : b.slice(r, len).match(/\d{3}/g).join(
-                    ",");
-            }
-        },
-        computed: {
-            _text() {
-                let {
-                    type
-                } = this;
-                if (type == 'chinese') {
-                    return changeNumMoneyToChinese(this.value) || ''
-                } else if (type == "comma") {
-                    return parseFloat(this.value).toLocaleString() || ''
-                }
-            }
+          });
+          
+          // 数字转简写中文
+         function changeNumMoneyToSimplifiedChinese(n) {
+              var cnum = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+              var s = '';
+              n = '' + n; // 数字转为字符串
+          
+              for (var i = 0; i < n.length; i++) {
+                  s += cnum[parseInt(n.charAt(i))];
+              }
+          
+              return s;
+          }
+          // 数字转繁体中文
+        function  changeNumMoneyToChinese(money) {
+              let cnNums = new Array("零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"); //汉字的数字
+              let cnIntRadice = new Array("", "拾", "佰", "仟"); //基本单位
+              let cnIntUnits = new Array("", "万", "亿", "兆"); //对应整数部分扩展单位
+              let cnDecUnits = new Array("角", "分", "毫", "厘"); //对应小数部分单位
+              let cnInteger = "整"; //整数金额时后面跟的字符
+              let cnIntLast = "元"; //整型完以后的单位
+              let maxNum = 999999999999999.9999; //最大处理的数字
+              let IntegerNum; //金额整数部分
+              let DecimalNum; //金额小数部分
+              let ChineseStr = ""; //输出的中文金额字符串
+              let parts; //分离金额后用的数组，预定义    
+              let Symbol = ""; //正负值标记
+              if (money == "") {
+                  return "";
+              }
+          
+              money = parseFloat(money);
+              if (money >= maxNum) {
+                  alert('超出最大处理数字');
+                  return "";
+              }
+              if (money == 0) {
+                  ChineseStr = cnNums[0] + cnIntLast + cnInteger;
+                  return ChineseStr;
+              }
+              if (money < 0) {
+                  money = -money;
+                  Symbol = "负 ";
+              }
+              money = money.toString(); //转换为字符串
+              if (money.indexOf(".") == -1) {
+                  IntegerNum = money;
+                  DecimalNum = '';
+              } else {
+                  parts = money.split(".");
+                  IntegerNum = parts[0];
+                  DecimalNum = parts[1].substr(0, 4);
+              }
+              if (parseInt(IntegerNum, 10) > 0) { //获取整型部分转换
+                  let zeroCount = 0;
+                  let IntLen = IntegerNum.length;
+                  for (let i = 0; i < IntLen; i++) {
+                      let n = IntegerNum.substr(i, 1);
+                      let p = IntLen - i - 1;
+                      let q = p / 4;
+                      let m = p % 4;
+                      if (n == "0") {
+                          zeroCount++;
+                      } else {
+                          if (zeroCount > 0) {
+                              ChineseStr += cnNums[0];
+                          }
+                          zeroCount = 0; //归零
+                          ChineseStr += cnNums[parseInt(n)] + cnIntRadice[m];
+                      }
+                      if (m == 0 && zeroCount < 4) {
+                          ChineseStr += cnIntUnits[q];
+                      }
+                  }
+                  ChineseStr += cnIntLast;
+                  //整型部分处理完毕
+              }
+              if (DecimalNum != '') { //小数部分
+                  let decLen = DecimalNum.length;
+                  for (let i = 0; i < decLen; i++) {
+                      let n = DecimalNum.substr(i, 1);
+                      if (n != '0') {
+                          ChineseStr += cnNums[Number(n)] + cnDecUnits[i];
+                      }
+                  }
+              }
+              if (ChineseStr == '') {
+                  ChineseStr += cnNums[0] + cnIntLast + cnInteger;
+              } else if (DecimalNum == '') {
+                  ChineseStr += cnInteger;
+              }
+              ChineseStr = Symbol + ChineseStr;
+          
+              return ChineseStr;
+          }
+          // 数字加逗号的第二个方法
+        function   format_number(n) {
+              var b = parseInt(n).toString();
+              var len = b.length;
+              if (len <= 3) {
+                  return b;
+              }
+              var r = len % 3;
+              return r > 0 ? b.slice(0, r) + "," + b.slice(r, len).match(/\d{3}/g).join(",") : b.slice(r, len).match(/\d{3}/g).join(
+                  ",");
+          }
+          return {
+            changeNumMoneyToSimplifiedChinese,
+            changeNumMoneyToChinese,
+            format_number,
+            _text
+          }
         }
     }
 </script>

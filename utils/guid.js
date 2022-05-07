@@ -8,7 +8,7 @@
  * @param {Boolean} firstU 将返回的首字母置为"u"
  * @param {Nubmer} radix 生成uuid的基数(意味着返回的字符串都是这个基数),2-二进制,8-八进制,10-十进制,16-十六进制
  */
-function guid(len = 32, firstU = true, radix = null) {
+export function guid(len = 32, firstU = true, radix = null) {
     let chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
     let uuid = [];
     radix = radix || chars.length;
@@ -38,4 +38,3 @@ function guid(len = 32, firstU = true, radix = null) {
     }
 }
 
-export default guid;

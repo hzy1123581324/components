@@ -4,7 +4,7 @@
  * @param {string} endColor 结束的颜色
  * @param {number} step 颜色等分的份额
  * */
-function colorGradient(startColor = 'rgb(0, 0, 0)', endColor = 'rgb(255, 255, 255)', step = 10) {
+export function colorGradient(startColor = 'rgb(0, 0, 0)', endColor = 'rgb(255, 255, 255)', step = 10) {
     let startRGB = hexToRgb(startColor, false); //转换为rgb数组模式
     let startR = startRGB[0];
     let startG = startRGB[1];
@@ -29,7 +29,7 @@ function colorGradient(startColor = 'rgb(0, 0, 0)', endColor = 'rgb(255, 255, 25
 }
 
 // 将hex表示方式转换为rgb表示方式(这里返回rgb数组模式)
-function hexToRgb(sColor, str = true) {
+export function hexToRgb(sColor, str = true) {
     let reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
     sColor = sColor.toLowerCase();
     if (sColor && reg.test(sColor)) {
@@ -59,7 +59,7 @@ function hexToRgb(sColor, str = true) {
 };
 
 // 将rgb表示方式转换为hex表示方式
-function rgbToHex(rgb) {
+export function rgbToHex(rgb) {
     let _this = rgb;
     let reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
     if (/^(rgb|RGB)/.test(_this)) {
@@ -91,10 +91,4 @@ function rgbToHex(rgb) {
     } else {
         return _this;
     }
-}
-
-export default {
-    colorGradient,
-    hexToRgb,
-    rgbToHex
 }

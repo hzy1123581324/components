@@ -5,6 +5,7 @@
 </template>
 
 <script>
+  import {ref,computed,onMounted} from 'vue';
     export default {
         name: "semiCircle",
         props: {
@@ -17,47 +18,36 @@
                 default: '1.6',
             }
         },
-        data() {
-            return {
-                width: 0,
-                height: 0,
-            };
-        },
-        watch: {},
-        computed: {
-            // uZIndex() {
-            //     return this.zIndex ? this.zIndex : this.$u.zIndex.sticky;
-            // }
-            stickyStyle() {
-                let {
-                    height,
-                    width,
-                    radian
-                } = this;
-                let radius = width * this.radian; //半径
-                let percentage = (height - radius) / height * 100;
-                let bg_str =
-                    `radial-gradient(circle at 50% ${percentage}%,${this.bg} 0,${this.bg} ${radius}px,rgba(0, 0, 0, 0) ${radius}px)`;
-                return {
-                    "background-image": [
-                        "-moz-" + bg_str,
-                        "-webkit-" + bg_str,
-                        "-o-" + bg_str,
-                        bg_str,
-                    ]
-                }
-            },
-
-
-        },
-        mounted() {
-            const query = uni.createSelectorQuery().in(this);
+        setup(props,{emit}){
+          const { proxy } = getCurrentInstance();
+          let width = ref(0);
+          let height= ref(0);
+          onMounted(()=>{
+            const query = uni.createSelectorQuery().in(proxy);
             query.select('.semiCircle').boundingClientRect(data => {
-                this.height = data.height;
-                this.width = data.width;
+                height.value = data.height;
+                width.value = data.width;
             }).exec();
-        },
-        methods: {}
+          })
+          const stickyStyle = computed(()=>{
+            let radius = width.value * props.radian; //半径
+            let percentage = (height.value - radius) / height.value * 100;
+            let bg_str =
+                `radial-gradient(circle at 50% ${percentage}%,${props.bg} 0,${props.bg} ${radius}px,rgba(0, 0, 0, 0) ${radius}px)`;
+            return {
+                "background-image": [
+                    "-moz-" + bg_str,
+                    "-webkit-" + bg_str,
+                    "-o-" + bg_str,
+                    bg_str,
+                ]
+            }
+          })
+          return {
+            width,
+            height,
+          }
+        }
     };
 </script>
 

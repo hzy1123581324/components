@@ -107,7 +107,7 @@ export function base64ToPath(base64) {
 		bitmap.loadBase64Data(base64, () => {
 			//自定义文件名
 			const [, format, bodyData] = /data:image\/(\w+);base64,(.*)/.exec(base64) || [];
-			console.log('format', format)
+			// console.log('format', format)
 			if (!format) {
 				reject(new Error('ERROR_BASE64SRC_PARSE'))
 			}
